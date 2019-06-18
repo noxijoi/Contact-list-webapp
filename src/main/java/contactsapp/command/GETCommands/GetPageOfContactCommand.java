@@ -1,5 +1,6 @@
-package contactsapp.command;
+package contactsapp.command.GETCommands;
 
+import contactsapp.command.Command;
 import contactsapp.core.entity.Contact;
 import contactsapp.dao.DaoException;
 import contactsapp.service.ContactService;
@@ -30,7 +31,7 @@ public class GetPageOfContactCommand implements Command {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (DaoException e) {
-            // какие татусы ставить,прям сложно
+
             resp.setStatus(400);
         } catch (NamingException e) {
             e.printStackTrace();

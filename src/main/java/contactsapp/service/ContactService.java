@@ -2,6 +2,8 @@ package contactsapp.service;
 
 import contactsapp.core.entity.Contact;
 import contactsapp.dao.*;
+import contactsapp.dao.connectionmanager.ConManager;
+import contactsapp.dao.connectionmanager.ConnectionManager;
 
 import javax.naming.NamingException;
 import java.io.IOException;
@@ -53,7 +55,7 @@ public class ContactService implements Service<Contact>{
     public List<Contact> getPage(int recordsForPage, int lastRecordId) throws DaoException {
         List<Contact> page = new ArrayList<>();
         try(Connection connection = connectionManager.getConnection()) {
-            dao.getPage(connection, recordsForPage, lastRecordId);
+            dao.getPage(connection, recordsForPage);
         } catch (SQLException e) {
             throw new DaoException(e);
         }

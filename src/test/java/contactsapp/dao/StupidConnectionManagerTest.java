@@ -1,12 +1,11 @@
 package contactsapp.dao;
 
+import contactsapp.dao.connectionmanager.StupidConnectionManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class StupidConnectionManagerTest {
 

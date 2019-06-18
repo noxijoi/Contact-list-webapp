@@ -1,5 +1,6 @@
 package contactsapp.dao;
 
+import contactsapp.dao.connectionmanager.HikariConnectionManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

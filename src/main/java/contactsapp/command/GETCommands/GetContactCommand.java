@@ -1,7 +1,9 @@
 package contactsapp.command.GETCommands;
 
 import contactsapp.command.Command;
+import contactsapp.core.entity.Contact;
 import contactsapp.service.ContactService;
+import contactsapp.utils.JSONParser;
 
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +23,10 @@ public class GetContactCommand implements Command {
         }
         try {
             ContactService service = new ContactService();
-            service.getById(contactN);
+            Contact contact = service.getById(contactN);
+            JSONParser parser = new JSONParser();
+            String contactJson = parser.contactToJSON(contact);
+            resp.getWriter().write(contactJson);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NamingException e) {

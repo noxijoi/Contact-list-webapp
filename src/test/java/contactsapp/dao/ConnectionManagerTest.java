@@ -1,5 +1,6 @@
 package contactsapp.dao;
 
+import contactsapp.dao.connectionmanager.ConnectionManager;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -7,8 +8,6 @@ import javax.naming.NamingException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ConnectionManagerTest {
 

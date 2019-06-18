@@ -8,7 +8,7 @@ import java.util.List;
 
 public abstract class AbstractDao<T extends Identified,PK extends Number> implements GenericDao{
 
-    private DaoBuilder<T> builder;
+    public DaoBuilder<T> builder;
 
     public AbstractDao(){
 
@@ -18,6 +18,7 @@ public abstract class AbstractDao<T extends Identified,PK extends Number> implem
 
         this.builder = builder;
     }
+
 
     @Override
     public List getAll(Connection connection) throws DaoException {
@@ -44,7 +45,9 @@ public abstract class AbstractDao<T extends Identified,PK extends Number> implem
         T result;
         String query = getSelectByIdQuery();
         try(PreparedStatement statement = connection.prepareStatement(query)){
+            statement.setInt(1, (Integer) number);
             ResultSet rs = statement.executeQuery();
+            rs.next();
             result = builder.buildSingle(rs);
         } catch (SQLException e) {
             throw new DaoException(e);

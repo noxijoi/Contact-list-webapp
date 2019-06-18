@@ -2,7 +2,6 @@ package contactsapp.controller;
 
 import contactsapp.command.Command;
 import contactsapp.command.CommandManager;
-import contactsapp.dao.ConnectionManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,7 +22,6 @@ public class HomeController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Command command = commandManager.getGETCommand(req.getRequestURI());
         command.execute(req,resp);
-        super.doGet(req, resp);
     }
 
     @Override

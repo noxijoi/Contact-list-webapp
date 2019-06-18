@@ -1,4 +1,4 @@
-package contactsapp.dao;
+package contactsapp.dao.connectionmanager;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Connection;
 import java.util.Properties;
 
-public class ConnectionManager  implements ConManager{
+public class ConnectionManager  implements ConManager {
     private static volatile ConnectionManager instance;
     private static BasicDataSource ds ;
     private ConnectionManager(){

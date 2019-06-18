@@ -12,6 +12,7 @@ public class Attachment implements Identified<Integer> {
     Date downloadTime;
     String comment;
 
+    public Attachment(){}
     @Override
     public Integer getId() {
         return id;

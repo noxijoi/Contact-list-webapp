@@ -1,4 +1,6 @@
-package contactsapp.dao;
+package contactsapp.dao.connectionmanager;
+
+import contactsapp.dao.connectionmanager.ConManager;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

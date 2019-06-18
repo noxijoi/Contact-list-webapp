@@ -12,7 +12,7 @@ public class AttachmentBuilder implements DaoBuilder<Attachment> {
     @Override
     public Attachment buildSingle(ResultSet rs) throws SQLException {
         Attachment attachment = new Attachment();
-        attachment.setId(rs.getInt("attach_id"));
+        attachment.setId(rs.getInt("id"));
         attachment.setOwnerId(rs.getInt("owner_id"));
         attachment.setFilePath(rs.getString("path"));
         attachment.setDownloadTime(rs.getDate("download_time"));

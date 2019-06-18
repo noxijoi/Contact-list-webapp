@@ -1,6 +1,7 @@
 package contactsapp.dao;
 
 import contactsapp.core.entity.Attachment;
+import contactsapp.dao.daobilder.AttachmentBuilder;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -9,9 +10,15 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class AttachmentDao extends AbstractDao<Attachment, Integer>{
+
+    public AttachmentDao(){
+        super(new AttachmentBuilder());
+    }
+
+
     @Override
     protected String getDeleteQuery() {
-        return "DELETE FROM attachment WHERE attach_id = ?;";
+        return "DELETE FROM attachment WHERE id = ?;";
     }
 
     @Override
@@ -19,7 +26,8 @@ public class AttachmentDao extends AbstractDao<Attachment, Integer>{
         return "UPDATE attachment SET path = ?" +
                 "SET name = ?" +
                 "SET download_time = ?" +
-                "SET comment = ?;";
+                "SET comment = ?" +
+                "WHERe id = ?;";
     }
 
     @Override
@@ -32,19 +40,21 @@ public class AttachmentDao extends AbstractDao<Attachment, Integer>{
     protected String getSelectAllQuery() {
         return "SELECT * FROM attachment";
     }
-    private String getSelectByOwnerIdQuery(){
-        return "SELECT * FROM attachment WHERE owner_id = ?";
-    }
 
     @Override
     protected String getSelectByIdQuery() {
         return "SELECT * FROM attachment WHERE attach_id = ?";
     }
 
+    private String getSelectByOwnerIdQuery(){
+        return "SELECT * FROM attachment WHERE owner_id = ?";
+    }
+
+
+
     @Override
     protected void prepareDeleteStatement(PreparedStatement statement, Identified object) throws SQLException {
-        Attachment attachment = (Attachment) object;
-        statement.setInt(1,attachment.getId());
+        statement.setInt(1, object.getId());
     }
 
     @Override
@@ -57,6 +67,7 @@ public class AttachmentDao extends AbstractDao<Attachment, Integer>{
         Date sqlDate = Date.valueOf(date);
         statement.setDate(3, sqlDate);
         statement.setString(4, attachment.getComment());
+        statement.setInt(5, attachment.getId());
     }
 
     @Override

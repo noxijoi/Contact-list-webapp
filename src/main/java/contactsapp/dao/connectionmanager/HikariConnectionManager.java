@@ -1,17 +1,15 @@
-package contactsapp.dao;
+package contactsapp.dao.connectionmanager;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import contactsapp.utils.PropertyManager;
-import org.apache.commons.dbcp.BasicDataSource;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class HikariConnectionManager implements ConManager{
+public class HikariConnectionManager implements ConManager {
     private static volatile HikariConnectionManager instance;
 
     private static HikariConfig config;

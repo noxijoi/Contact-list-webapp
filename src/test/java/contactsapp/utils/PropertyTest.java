@@ -1,6 +1,5 @@
 package contactsapp.utils;
 
-import contactsapp.dao.ConnectionManager;
 import org.junit.Test;
 
 import java.util.Properties;

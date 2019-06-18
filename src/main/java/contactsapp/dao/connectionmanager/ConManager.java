@@ -1,4 +1,4 @@
-package contactsapp.dao;
+package contactsapp.dao.connectionmanager;
 
 import java.sql.SQLException;
 import java.sql.Connection;

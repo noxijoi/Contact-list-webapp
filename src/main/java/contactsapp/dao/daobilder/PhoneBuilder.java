@@ -13,13 +13,13 @@ public class PhoneBuilder implements DaoBuilder<Phone> {
     @Override
     public Phone buildSingle(ResultSet rs) throws SQLException {
         Phone phone  = new Phone();
-        phone.setCountryCode(rs.getString("country_code"));
-        phone.setId(rs.getInt("number_id"));
+        phone.setId(rs.getInt("id"));
         phone.setOwnerId(rs.getInt("owner_id"));
+        phone.setCountryCode(rs.getString("country_code"));
         phone.setOperatorCode(rs.getString("operator_code"));
         phone.setNumber(rs.getString("number"));
-        phone.setType(PhoneType.valueOf(rs.getString("type")));
-
+        phone.setType(PhoneType.valueOf(rs.getString("type").toUpperCase()));
+        phone.setComment(rs.getString("comment"));
         return phone;
     }
 
