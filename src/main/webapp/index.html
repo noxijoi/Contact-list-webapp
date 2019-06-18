@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Маскалева контакты</title>
+    <link href="css/style.css" rel="stylesheeet" type="text/css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="js/script.js"></script>
+
+    <meta charset="UTF-8">
+</head>
+<body>
+<nav class="navbar navbar-toggleable-md fixed-top navbar-inverse ">
+    <a class="navbar-brand" >Книга контактов. Маскалева</a>
+
+</nav>
+
+<form class="contact-list d-flex justify-content-center">
+    <div class="container center-block">
+    </div>
+    <div class="button-group-vertical col-md-1" role="group" aria-label="Basic example">
+        <button class="add-button btn btn-secondary sm" onclick="openAddForm()">
+            <img src="img/add.png" alt="add">
+        </button>
+        <button class="delete-button btn btn-secondary sm">
+            <img src="img/remove.png" alt="remove"/>
+        </button>
+        <button class="mail-to-button btn btn-secondary sm">
+            <img src="img/mailto.png" alt="mailto"/>
+        </button>
+    </div>
+    <div class="container col-md-10">
+        <table id="main-contact-table " class="table-striped table-bordered">
+            <tr class="table-header">
+                <th></th>
+                <th class="col-md-4 ">Имя</th>
+                <th class="col-md-2">Дата рождения</th>
+                <th class="col-md-6">Адрес</th>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" value="1">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" value="2">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" value="3">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" value="4">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" value="5">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" value="6">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" value="7">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" value="8">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" value="9">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" value="10">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" value="11">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" value="12">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" value="13">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" value="14">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" value="15">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link" onclick="firstPage()">First</a></li>
+        <li class="page-item"><a class="page-link" onclick="prevPage()">Previous</a></li>
+        <li class="page-item"><a class="page-link" onclick="nextPage()">Next</a></li>
+        <li class="page-item"><a class="page-link" onclick="lastPage()">Last</a></li>
+    </ul>
+
+</form>
+
+
+</main>
+
+<footer>
+
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/script.js"></script>
+    <script src="../js/classes.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <header class="header">Новый контакт</header>
+    <form class="create-contact-form">
+        <!-- name inputs -->
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label for="first-name-input">Имя* </label>
+                <input type="text" id="first-name-input" class="form-control" required>
+            </div>
+
+            <div class="form-group col-md-2">
+                <label for="last-name-input">Фамилия* </label>
+                <input type="text" id="last-name-input" class="form-control" required>
+            </div>
+
+            <div class="form-group col-md-2">
+                <label for="parent-name-input">Отчество* </label>
+                <input type="text" id="parent-name-input" class="form-control" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="birth-date-input">Дата рождения </label>
+            <div class="input-group">
+                <input type="date" id="birth-date-input" class="form-control">
+                <span class="input-group-addon">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <caption>Пол</caption>
+            <label class="radio-inline"><input type="radio" name="sex" value="M">Мужской</label>
+            <label class="radio-inline"><input type="radio" name="sex" value="F">Женский</label>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label for="company-input">Компания</label>
+                <input type="text" id="company-input" class="form-control sm">
+            </div>
+
+            <div class="form-group col-md-2">
+                <label for="marital-status-input">Семейное положение</label>
+                <select id="marital-status-input" class="form-control">
+                    <option value="married">женат/замужем</option>
+                    <option value="single">холост/не замужем</option>
+                    <option value="divorce">разведен/разведена</option>
+                    <option value="widowed">вдовец/вдова</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="web-site-input">Веб-сайт</label>
+                <input type="text" id="web-site-input" class="form-control">
+            </div>
+
+            <div clas="form-group col-md-3">
+                <label for="email-input">Email*</label>
+                <input type="text" id="email-input" class="form-control" required>
+            </div>
+        </div>
+
+<!--Address input subform-->
+        <div class="address-form form-row">
+            <div class="form-group col-md-2">
+                <label for="country-input">Cтрана</label>
+                <input type="text" id="country-input" class="form-control">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="city-input">Город</label>
+                <input type="text" id="city-input" class="form-control">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="street-input">Улица</label>
+                <input type="text" id="street-input" class="form-control">
+            </div>
+            <div class="form-group col-md-1">
+                <label for="home-input">Дом</label>
+                <input type="text" id="home-input" class="form-control">
+            </div>
+            <div class="form-group col-md-1">
+                <label for="appart-input">Квартира</label>
+                <input type="text" id="appart-input" class="form-control">
+            </div>
+            <div class="form-group col-md-1">
+                <label for="index-input">Индекс</label>
+                <input type="text" id="index-input" class="form-control">
+            </div>
+        </div>
+        <input type="button" class="btn btn-success" value="Добавить" onclick="addContact()">
+        <input type="button" class="btn btn-default" value="Отменить" onclick="toMainPage()">
+    </form>
+</div>
+
+</body>
+</html>
