@@ -73,14 +73,15 @@ var dataForSidenavAdd = {
 document.addEventListener('DOMContentLoaded', function(){
     START_LOCATION = document.location;
     render("main", dataForMainTable);
-    initEventListenerForTableView();
     render("sidenav",{isTableView:true});
+    initEventListenerForTableView();
     initRouter();
 });
 
 function openAddForm(){
     render("main", {isContactForm:true});
     render("sidenav", dataForSidenavAdd);
+    initEventListenersForContactView();
 }
 
 function initRouter(){
@@ -102,13 +103,13 @@ function initEventListenerForTableView(){
 
     //pagination
     var paginationEl = document.querySelector(".pagination");
-    var firstPageEl = paginationEl.querySelector("first-page");
+    var firstPageEl = paginationEl.querySelector(".first-page");
     firstPageEl.addEventListener('click', toFirstPage);
-    var prevPageEl = paginationEl.querySelector("prev-page");
+    var prevPageEl = paginationEl.querySelector(".prev-page");
     prevPageEl.addEventListener('click', toPrevPage);
-    var nextPageEl = paginationEl.querySelector("next-page");
+    var nextPageEl = paginationEl.querySelector(".next-page");
     nextPageEl.addEventListener('click', toNextPage);
-    var lastPageEl = paginationEl.querySelector("last-page");
+    var lastPageEl = paginationEl.querySelector(".last-page");
     lastPageEl.addEventListener('click', toLastPage);
 
     //tablebuttons
@@ -119,7 +120,7 @@ function initEventListenerForTableView(){
     var mailtoButton = document.querySelector(".mailto-button");
     mailtoButton.addEventListener('click',mailtoChoosen);
 
-    var searchButton = document.getElementById("paranSearchButton");
+    var searchButton = document.getElementById("paramSearchButton");
     searchButton.addEventListener('click', searchWithParams);
 
 
@@ -162,7 +163,7 @@ function initEventListenerForTableView(){
 }
 
 function initEventListenersForContactView(){
-    var okButton = document.querySelector(".contack-ok");
+    var okButton = document.querySelector(".contact-ok");
     okButton.addEventListener('click', confirmContact);
     var cancelButton = document.querySelector(".contact-cancel");
     cancelButton.addEventListener('click', cancelContact);
@@ -193,6 +194,34 @@ function initEventListenersForContactView(){
     addPhoneButton.addEventListener('click', addAttach);
     var deletePhonesButton = document.querySelector(".phonebuttons .delete-button");
     deletePhonesButton.addEventListener('click', deleteAttach);
+
+    //modal window initialisation
+    //phonemodal
+    var phoneModal = document.getElementById("phoneModal");
+    var openPhoneModalButton = document.querySelector(".phonebuttons .add-button");
+    openPhoneModalButton.addEventListener('click',function(){
+        phoneModal.style.display ="block";
+    })
+    var closePhoneModalButtons = phoneModal.querySelectorAll(".close-modal");
+    closePhoneModalButtons.forEach(function(btn){
+        btn.addEventListener('click', function(){
+            phoneModal.style.display="none"
+        });
+    });
+    //attachmentmodal
+    var attachModal = document.getElementById("attachModal");
+    var openAttachModalButton = document.querySelector(".attachbuttons .add-button");
+    openAttachModalButton.addEventListener('click',function(){
+        attachModal.style.display ="block";
+    })
+    var closeAttachModalButtons = attachModal.querySelectorAll(".close-modal");
+    closeAttachModalButtons.forEach(function(btn){
+        btn.addEventListener('click',function(){
+             attachModal.style.display="none"
+        });
+    });
+
+
 
     function editAvatar(){}
 

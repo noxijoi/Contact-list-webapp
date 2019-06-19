@@ -165,7 +165,7 @@
                                 <button class="delete-button btn btn-outline-primary">
                                     <img src="img/remove.png" alt="remove"/>
                                 </button>
-                                <button class="mail-to-button btn btn-outline-primary">
+                                <button class="mailto-button btn btn-outline-primary">
                                     <img src="img/mailto.png" alt="mailto"/>
                                 </button>
                             </div>
@@ -278,6 +278,7 @@
             {{#isContactForm}}
             <div class="container-fluid">
                 <h3 class="h3">Телефонные номера</h3>
+                <!-- Форма для телефонных номеров -->
                 <div class="button-group phonebuttons" role="group" aria-label="Basic example">
                         <button class="add-button btn btn-outline-primary ">
                             <img src="img/add.png" alt="add" class="sidenav-button-img">
@@ -303,7 +304,42 @@
                         {{/phones}}
                 </table>
             </div>
+            <!-- Модальное окно для добавления/редактирования номера -->
+            <div id="phoneModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">Телефонный номер</div>
+                    <div class="container">
+                        <div class="form-row">
+                            <div class="form-group col-2">
+                                <label for="countrycode">Код страны</label>
+                                <input type="text" id="countrycode" class="form-cotrol">
+                            </div>
+                            <div class="form-group col-2">
+                                <label for="operatorCode">Код оператора</label>
+                                <input type="text" class="form-control" id="operatorCode">
+                            </div>
+                            <div class="form-group col-2">
+                                <label for="number">Номер</label>
+                                <input type="text" class="form-control" id="number">
+                            </div>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="phoneType" value="HOME" id="homeRadio">
+                            <label for="homeRadio">Домашний</label>
+                            <input class="form-check-input" type="radio" name="phoneType" value="MOBILE" id="mobileRadio">
+                            <label for="homeRadio">Мобильный</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="phoneComment">Комментарий</label>
+                            <input class="form-control" type="text" id="phoneComment">
+                        </div>
+                        <button class="btn btn-primary close-modal" id="confirmPhone" >ОК</button>
+                        <button claas="btn btn-outline-primary close-modal" id="cancelPhone">Отменить</button>
+                    </div>
+                </div>
+            </div>
             <div class="container-fluid">
+                <!-- Форма для присоединений-->
                 <h3 class="h3">Файлы</h3>
                 <div class="button-group attachbuttons" role="group" aria-label="Basic example">
                         <button class="add-button btn btn-outline-primary ">
@@ -323,14 +359,31 @@
                         {{#attachs}}
                             <tr>
                                 <td><input type="checkbox" value="{{attachId}}"></td>
-                                <td class="nameCell"><button class="btn btn-link">{{name}}</td>
+                                <td class="nameCell"><button class="btn btn-link">{{name}}</button></td>
                                 <td>{{date}}</td>
                                 <td>{{comment}}</td>
                             </tr>
                         {{/attachs}}
                 </table>
-            </div>    
-
+            </div>  
+            <!--Модальное окно для присоединений-->  
+            <div id="attachModal" class="modal">
+                    <div class="modal-content">
+                        <h3 class="h3">Файл</h3>
+                        <div class="container">
+                            <div class="form-group">
+                                <label for="addFile">Выберите файл</label>
+                                <input type="file" id="addFile" class="form-cotrol-file">
+                            </div>
+                            <div class="form-group">
+                                <label for="attachComment">Комментарий</label>
+                                <input class="form-control" type="text" id="attachComment">
+                            </div>
+                            <button class="btn btn-primary close-modal" id="confirmAttach" >ОК</button>
+                            <button claas="btn btn-outline-primary close-modal" id="cancelAttach">Отменить</button>
+                        </div>
+                    </div>
+                </div>
             {{/isContactForm}}
         </script>
     </div>
