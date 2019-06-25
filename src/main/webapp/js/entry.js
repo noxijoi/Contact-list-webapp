@@ -1,10 +1,6 @@
 "use strict"
-var START_LOCATION;
-const PAGE_SIZE = 15;
 
-//TODO realease pagination functions, add/delete/mailto-buttons
 var dataForMainTable = {
-    isTableView: "true",
     contacts: [
         {
             id:"1",
@@ -39,7 +35,6 @@ var dataForMainTable = {
     ]
 };
 var dataForSidenavAdd = {
-    isContactForm:"true",
     phones:[
         {
             phoneId: 1,
@@ -70,26 +65,14 @@ var dataForSidenavAdd = {
         }
     ]
 }
-document.addEventListener('DOMContentLoaded', function(){
-    START_LOCATION = document.location;
-    render("main", dataForMainTable);
-    render("sidenav",{isTableView:true});
-    initEventListenerForTableView();
-    initRouter();
+
+
+document.addEventListener('DOMContentLoaded', function(){ 
+    if(!location.hash){
+        location.hash += "page/1";
+        location.search +="size=20";
+    }
 });
-
-function openAddForm(){
-    render("main", {isContactForm:true});
-    render("sidenav", dataForSidenavAdd);
-    initEventListenersForContactView();
-}
-
-function initRouter(){
-    window.addEventListener('beforeunload', function(){
-
-    })
-}
-
 
 
 function initEventListenerForTableView(){
@@ -98,7 +81,7 @@ function initEventListenerForTableView(){
     var tableEl = document.getElementById("main-table");
     var contactCells = tableEl.querySelectorAll(".nameCell");
     contactCells.forEach(function(element){
-        element.addEventListener('click',openContact);
+        element.addEventListener('click', openContact);
     });
 
     //pagination
@@ -128,7 +111,6 @@ function initEventListenerForTableView(){
         var parentRow = event.target.parentNode;
         var checkBoxEl = parentRow.querySelector(".checkContact");
         var id = checkBoxEl.value;
-        //TODO /contacts/{id};
     }
     
     

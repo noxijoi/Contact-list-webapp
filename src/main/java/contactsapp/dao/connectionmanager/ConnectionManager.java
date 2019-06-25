@@ -52,7 +52,7 @@ public class ConnectionManager  implements ConManager {
         ds.setMinIdle(5);
         ds.setMaxIdle(10);
         ds.setDriverClassName(driverClassName);
-        ds.setMaxOpenPreparedStatements(100);
+        ds.setMaxOpenPreparedStatements(10);
     }
 
 

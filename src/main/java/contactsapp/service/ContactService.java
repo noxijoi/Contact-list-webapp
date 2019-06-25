@@ -52,10 +52,10 @@ public class ContactService implements Service<Contact>{
         return contact;
     }
 
-    public List<Contact> getPage(int recordsForPage, int lastRecordId) throws DaoException {
+    public List<Contact> getPage(int pageN, int pageSize) throws DaoException {
         List<Contact> page = new ArrayList<>();
         try(Connection connection = connectionManager.getConnection()) {
-            dao.getPage(connection, recordsForPage);
+            page = dao.getPage(connection, pageN, pageSize);
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -75,6 +75,22 @@ public class ContactService implements Service<Contact>{
     }
 
     public void insert(Contact contact) {
+        try(Connection connection = connectionManager.getConnection()){
+            dao.insert(connection, contact);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public int getRecordsNum() {
+        int num = 0;
+        try(Connection connection = connectionManager.getConnection()){
+            num = dao.getTableSize(connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return num;
     }
 }

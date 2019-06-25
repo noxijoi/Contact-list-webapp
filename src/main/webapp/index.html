@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="js/entry.js"></script>
     <script src="js/view.js"></script>
+    <script src="js/classes.js"></script>
+    <script src="js/core.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
 
 </head>
@@ -23,267 +25,280 @@
 
         <div class="col-8" id="main">
         </div>
-        <script id="mainTemplate" type="text/template">
-            <!-- отображает форму добавления и редактирования контакта -->
-                {{#isContactForm}}
-                <div class = "container">
-                    <div class="row">
-                        <div class="header col-10">Контакт</div>
-                        <div class="col-2">
-                            <button class="btn rounded-circle avatar"><img src="img/user.png" alt="avatar" class=""md-avatar rounded-circle contact-avatar"></button>
-                        </div>        
-                    </div>
-                    <form class="contact-form">
-                        <!-- name inputs -->
-                        <div class="row">
-                            <div class="form-group col-2">
-                                <label for="first-name-input">Имя* </label>
-                                <input type="text" id="first-name-input" class="form-control" required>
-                            </div>
-                        
-                            <div class="form-group col-2">
-                                <label for="last-name-input">Фамилия* </label>
-                                <input type="text" id="last-name-input" class="form-control" required>
-                            </div>
-                        
-                            <div class="form-group col-2">
-                                <label for="parent-name-input">Отчество* </label>
-                                <input type="text" id="parent-name-input" class="form-control" required>
-                            </div>
-                        </div>
-                    
-                        <div class="form-group">
-                            <label for="birth-date-input">Дата рождения </label>
-                            <div class="input-group">
-                                <input type="date" id="birth-date-input" class="form-control">
-                                <span class="input-group-addon">
-                                    <i class="glyphicon glyphicon-calendar"></i>
-                                </span>
-                            </div>
-                        </div>
-                    
-                        <div class="form-group">
-                            <capton>Пол</capton>
-                            <label class="radio-inline"><input type="radio" name="sex" value="M">Мужской</label>
-                            <label class="radio-inline"><input type="radio" name="sex" value="F">Женский</label>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-2">
-                                <label for="company-input">Компания</label>
-                                <input type="text" id="company-input" class="form-control sm">
-                            </div>
-                        
-                            <div class="form-group col-2">
-                                <label for="marital-status-input">Семейное положение</label>
-                                <select id="marital-status-input" class="form-control">
-                                    <option value="married">женат/замужем</option>
-                                    <option value="single">холост/не замужем</option>
-                                    <option value="divorce">разведен/разведена</option>
-                                    <option value="widowed">вдовец/вдова</option>
-                                </select>
-                            </div>
-                        </div>
-                    
-                        <div class="form-row">
-                            <div class="form-group col-3">
-                                <label for="web-site-input">Веб-сайт</label>
-                                <input type="text" id="web-site-input" class="form-control">
-                            </div>
-                        
-                            <div clas="form-group col-3">
-                                <label for="email-input">Email*</label>
-                                <input type="text" id="email-input" class="form-control" required>
-                            </div>
-                        </div>
-                    
-                    <!--Address input subform-->
-                        <div class="address-form form-row">
-                            <div class="form-group col-2">
-                                <label for="country-input">Cтрана</label>
-                                <input type="text" id="country-input" class="form-control">
-                            </div>
-                            <div class="form-group col-2">
-                                <label for="city-input">Город</label>
-                                <input type="text" id="city-input" class="form-control">
-                            </div>
-                            <div class="form-group col-2">
-                                <label for="street-input">Улица</label>
-                                <input type="text" id="street-input" class="form-control">
-                            </div>
-                            <div class="form-group col-1">
-                                <label for="home-input">Дом</label>
-                                <input type="text" id="home-input" class="form-control">
-                            </div>
-                            <div class="form-group col-1">
-                                <label for="appart-input">Квартира</label>
-                                <input type="text" id="appart-input" class="form-control">
-                            </div>
-                            <div class="form-group col-1">
-                                <label for="index-input">Индекс</label>
-                                <input type="text" id="index-input" class="form-control">
-                            </div>
-                        </div>
-                        <input type="button" class="btn btn-success contact-ok" value="Добавить" onclick="addContact()">
-                        <input type="button" class="btn btn-default contact-cancel" value="Отменить" onclick="toMainPage()">
-                    </form>
-                </div>
-                {{/isContactForm}}
-            <!--  отображает таблицу с контактами. просмотр и поиск -->
-            
-                {{#isTableView}}
-                <div class="container-fluid col-7">
-                    <table id="main-table" class="table-striped table-bordered fluid">
-                        <tr class="table-header">
-                            <th></th>
-                            <th scope="col-4">Имя</th>
-                            <th scope="col-2">Дата рождения</th>
-                            <th scope="col-6">Адрес</th>
-                        </tr>
-                        {{#contacts}}
-                            <tr>
-                                <td><input type="checkbox"  class="checkContact" value="{{id}}"></td>
-                                <td class="nameCell">{{fullName.fName}} {{fullName.lName}} {{fullName.pName}}</td>
-                                <td>{{bDate}}</td>
-                                <td>{{address.country}} {{address.city}} {{address.street}} {{address.house}}</td>
-                            </tr>
-                        {{/contacts}}
-                    </table>
-                    <nav class="page navigation">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item"><a class="page-link first-page" >&lt&lt</a></li>
-                            <li class="page-item"><a class="page-link prev-page" >&lt</a></li>
-                            <li class="page-item"><a class="page-link next-page" >&gt</a></li>
-                            <li class="page-item"><a class="page-link last-page" >&gt&gt</a></li>
-                        </ul>
-                    </nav>
-                </div> 
-                <div class="col-1">
-                        <div class="button-group-vertical col-1 tablebuttons" role="group" aria-label="Basic example">
-                                <button class="add-button btn btn-outline-primary" onclick="openAddForm()">
-                                    <img src="img/add.png" alt="add">
-                                </button>
-                                <button class="delete-button btn btn-outline-primary">
-                                    <img src="img/remove.png" alt="remove"/>
-                                </button>
-                                <button class="mailto-button btn btn-outline-primary">
-                                    <img src="img/mailto.png" alt="mailto"/>
-                                </button>
-                            </div>
-                </div>
-                {{/isTableView}}
-        </script>
         <div class="col-4 sidenav" id="sidenav">
         </div>
-        <script id="sidenavTemplate" type="text/template">
-            {{#isTableView}}
-                <div class="container">
-                    <h3 class="h3">Поиск</h3>
-                    <form class="search-form">
-                        <div class="form-group-row">
-                            <label for="fName" class="col col-form-label">Имя</label>
+
+
+
+
+        <script id="editContactTemplate" type="text/template">
+            <div class = "container">
+                <div class="row">
+                    <div class="header col-10">Контакт</div>
+                    <div class="col-2">
+                        <button class="btn rounded-circle avatar">
+                            <a href="#/avatar">
+                                <img src="img/user.png" alt="avatar" class="md-avatar rounded-circle contact-avatar">
+                            </a>
+                        </button>
+                    </div>        
+                </div>
+                <form class="contact-form">
+                    <!-- name inputs -->
+                    <div class="row">
+                        <div class="form-group col-2">
+                            <label for="first-name-input">Имя* </label>
+                            <input type="text" id="first-name-input" class="form-control" value="{{fullName.firstName}}" required>
+                        </div>
+                    
+                        <div class="form-group col-2">
+                            <label for="last-name-input">Фамилия* </label>
+                            <input type="text" id="last-name-input" class="form-control" value="{{fullName.lastName}}" required>
+                        </div>
+                    
+                        <div class="form-group col-2">
+                            <label for="parent-name-input">Отчество* </label>
+                            <input type="text" id="parent-name-input" class="form-control" value="{{fullName.parentName}}" required>
+                        </div>
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="birth-date-input">Дата рождения </label>
+                        <div class="input-group">
+                            <input type="date" id="birth-date-input" class="form-control" value="{{birthDate}}">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                
+                    <div class="form-group">
+                        <caption>Пол</caption>
+                        <label class="radio-inline"><input type="radio" name="sex" value="MALE" {{#isMale}} checked {{/isMale}} >Мужской</label>
+                        <label class="radio-inline"><input type="radio" name="sex" value="FEMALE" {{^isMale}} checked {{/isMale}}>Женский</label>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-2">
+                            <label for="company-input">Компания</label>
+                            <input type="text" id="company-input" class="form-control sm" value="{{company}}">
+                        </div>
+                    <!-- проставить значение в js, ибо неудобно-->
+                        <div class="form-group col-2">
+                            <label for="marital-status-input">Семейное положение</label>
+                            <select id="marital-status-input" class="form-control">
+                                <option value="MARRIED">женат/замужем</option>
+                                <option value="SINGLE">холост/не замужем</option>
+                                <option value="DIVORSED">разведен/разведена</option>
+                                <option value="WIDOVED">вдовец/вдова</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                            <label for="nationality-input">Гражданство</label>
+                            <input type="text" id="nationality-input" class="form-control" value="{{nationality}}">
+                        </div>
+                    <div class="form-row">
+                        <div class="form-group col-3">
+                            <label for="web-site-input">Веб-сайт</label>
+                            <input type="text" id="website-input" class="form-control" value="{{website}}">
+                        </div>
+                    
+                        <div clas="form-group col-3">
+                            <label for="email-input">Email*</label>
+                            <input type="text" id="email-input" class="form-control" required value="{{email}}">
+                        </div>
+                    </div>
+                
+                <!--Address input subform-->
+                    <div class="address-form form-row">
+                        <div class="form-group col-2">
+                            <label for="country-input">Cтрана</label>
+                            <input type="text" id="country-input" class="form-control" value="{{address.country}}">
+                        </div>
+                        <div class="form-group col-2">
+                            <label for="city-input">Город</label>
+                            <input type="text" id="city-input" class="form-control" value="{{address.city}}">
+                        </div>
+                        <div class="form-group col-2">
+                            <label for="street-input">Улица</label>
+                            <input type="text" id="street-input" class="form-control" value="{{address.street}}">
+                        </div>
+                        <div class="form-group col-1">
+                            <label for="house-input">Дом</label>
+                            <input type="text" id="house-input" class="form-control" value="{{address.house}}">
+                        </div>
+                        <div class="form-group col-1">
+                            <label for="index-input">Индекс</label>
+                            <input type="text" id="index-input" class="form-control" value="{{address.index}}">
+                        </div>
+                    </div>
+                    <input type="button" class="btn btn-success contact-ok" value="Добавить" onclick="addContact()">
+                    <input type="button" class="btn btn-secondary contact-cancel" value="Отменить" onclick="toMainPage()">
+                </form>
+            </div>
+        </script>
+
+        <script id="contactsTableTempate" type="text/template">
+            <div class="container-fluid col-7">
+                <!--Таблица-->
+                <table id="main-table" class="table-striped table-bordered fluid">
+                    <tr class="table-header">
+                        <th></th>
+                        <th scope="col-4">Имя</th>
+                        <th scope="col-2">Дата рождения</th>
+                        <th scope="col-6">Адрес</th>
+                    </tr>
+                    {{#contacts}}
+                        <tr>
+                            <td><input type="checkbox"  class="checkContact" value="{{id}}"></td>
+                            <td class="nameCell"><a href="#{{id}}"> {{fullName.firstName}} {{fullName.lastName}} {{fullName.parentName}}</a></td>
+                            <td>{{birthDate}}</td>
+                            <td>{{address.country}} {{address.city}} {{address.street}} {{address.house}}</td>
+                        </tr>
+                    {{/contacts}}
+                </table>
+                <!--страницокнопки-->
+                <nav class="page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item"><a class="page-link first-page" href="#/page/1" >&lt&lt</a></li>
+                        <li class="page-item"><a class="page-link prev-page"  href="#/page/{{prevPage}}">&lt</a></li>
+                        <li class="page-item"><a class="page-link next-page"  href="#/page/{{nextPage}}">&gt</a></li>
+                        <li class="page-item"><a class="page-link last-page"  href="#/page/{{nextPage}}">&gt&gt</a></li>
+                    </ul>
+                </nav>
+            </div> 
+            <!--кнопки-->
+            <div class="col-1">
+                    <div class="button-group-vertical col-1 tablebuttons" role="group" aria-label="Basic example">
+                            <button class="add-button btn btn-outline-primary">
+                                <a href="#add">
+                                    <img src="img/add.png" alt="add">
+                                </a>
+                            </button>
+                            <button class="delete-button btn btn-outline-primary">
+                                <img src="img/remove.png" alt="remove"/>
+                            </button>
+                            <button class="mailto-button btn btn-outline-primary">
+                                <a href="#mailto">
+                                    <img src="img/mailto.png" alt="mailto"/>
+                                </a>
+                            </button>
+                    </div>
+            </div>
+        </script>
+
+        <script id="searchBarTemplate" type="text/template">
+
+            <div class="container">
+                <h3 class="h3">Поиск</h3>
+                <form class="search-form">
+                    <div class="form-group-row">
+                        <label for="fName" class="col col-form-label">Имя</label>
+                        <div class="col">
+                            <input type="text" class="form-control" id="fName" value="{{fullName.firstName}}">
+                        </div>
+                    </div>
+                    <div class="form-group-row">
+                            <label for="lName" class="col col-form-label">Фамилия</label>
                             <div class="col">
-                                <input type="text" class="form-control" id="fName">
+                                <input type="text" class="form-control" id="lName" value="{{fullName.lastName}}">
+                            </div>
+                    </div>
+                    <div class="form-group-row">
+                            <label for="pName" class="col col-form-label">Отчество</label>
+                            <div class="col">
+                                <input type="text" class="form-control" id="pName" value="{{fullName.parentName}}">
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="bDateSearch" class="col col-form-label">Дата рождения</label>
+                        <div class="input-group" id="bDateSearch">
+                            <input type="text" class="form-control" id="dateFrom" placeholder="От" value="{{bDateFrom}}">
+                            <input type="text" class="form-control" id="dateTo" placeholder="До" value="{{bDateTo}}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                            <label  class="col col-form-label">Пол</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="maleRadio" value="male" {{#isMale}} checked {{/isMale}}>
+                                <label class="form-check-label" for="maleRadio">
+                                  Мужской
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="femaleRadio" value="female" {{^isMale}} checked {{/isMale}}>
+                                <label class="form-check-label" for="femaleRadio">
+                                  Женский
+                                </label>
+                            </div>
+                    </div>
+                    <!-- Семейное положение-->
+                    <div class="form-check">
+                            <input class="form-check-input" name="maritalStatus" type="checkbox" value="SINGLE" id="singleCheck">
+                            <label class="form-check-label" for="singleCheck">
+                              Холост/незамужем
+                            </label>
+                    </div>
+                    <div class="form-check">
+                            <input class="form-check-input" name="maritalStatus" type="checkbox" value="MARRIED" id="marriedCheck">
+                            <label class="form-check-label" for="marriedCheck">
+                              Женат/замужем
+                            </label>
+                    </div>
+                    <div class="form-check">
+                            <input class="form-check-input" name="maritalStatus" type="checkbox" value="DIVORSED" id="divorsedCheck">
+                            <label class="form-check-label" for="divorsedCheck">
+                             Разведен/Разведена
+                            </label>
+                    </div>
+                    <div class="form-check">
+                            <input class="form-check-input" name="maritalStatus" type="checkbox" value="WIDOVED" id="widowedCheck">
+                            <label class="form-check-label" for="widowedCheck">
+                              Вдовец/вдова
+                            </label>
+                    </div>
+                    <!--Адрес-->
+                    <div class="form-group-row">
+                            <label for="country" class="col col-form-label">Страна</label>
+                            <div class="col">
+                                <input type="text" class="form-control" id="country" value="{{address.country}}">
                             </div>
                         </div>
                         <div class="form-group-row">
-                                <label for="lName" class="col col-form-label">Фамилия</label>
+                                <label for="city" class="col col-form-label">Город</label>
                                 <div class="col">
-                                    <input type="text" class="form-control" id="lName">
+                                    <input type="text" class="form-control" id="city" value="{{address.city}}">
                                 </div>
                         </div>
                         <div class="form-group-row">
-                                <label for="pName" class="col col-form-label">Отчество</label>
+                                <label for="street" class="col col-form-label">Улица</label>
                                 <div class="col">
-                                    <input type="text" class="form-control" id="pName" >
+                                    <input type="text" class="form-control" id="street" value="{{address.street}}">
                                 </div>
                         </div>
-                        <div class="form-group">
-                            <label for="bDateSearch" class="col col-form-label">Дата рождения</label>
-                            <div class="input-group" id="bDateSearch">
-                                <input type="text" class="form-control" id="dateFrom" placeholder="От">
-                                <input type="text" class="form-control" id="dateTo" placeholder="До">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                                <label  class="col col-form-label">Пол</label>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="exampleRadios" id="maleRadio" value="male">
-                                    <label class="form-check-label" for="maleRadio">
-                                      Мужской
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="exampleRadios" id="femaleRadio" value="female">
-                                    <label class="form-check-label" for="femaleRadio">
-                                      Женский
-                                    </label>
-                                </div>
-                        </div>
-                        <!-- Семейное положение-->
-                        <div class="form-check">
-                                <input class="form-check-input" name="maritalStatus" type="checkbox" value="single" id="singleCheck">
-                                <label class="form-check-label" for="singleCheck">
-                                  Холост/незамужем
-                                </label>
-                        </div>
-                        <div class="form-check">
-                                <input class="form-check-input" name="maritalStatus" type="checkbox" value="married" id="marriedCheck">
-                                <label class="form-check-label" for="marriedCheck">
-                                  Женат/замужем
-                                </label>
-                        </div>
-                        <div class="form-check">
-                                <input class="form-check-input" name="maritalStatus" type="checkbox" value="divorsed" id="divorsedCheck">
-                                <label class="form-check-label" for="divorsedCheck">
-                                 Разведен/Разведена
-                                </label>
-                        </div>
-                        <div class="form-check">
-                                <input class="form-check-input" name="maritalStatus" type="checkbox" value="widowed" id="widowedCheck">
-                                <label class="form-check-label" for="widowedCheck">
-                                  Вдовец/вдова
-                                </label>
-                        </div>
-                        <!--Адрес-->
                         <div class="form-group-row">
-                                <label for="country" class="col col-form-label">Страна</label>
+                                <label for="street" class="col col-form-label">Дом</label>
                                 <div class="col">
-                                    <input type="text" class="form-control" id="country">
+                                    <input type="text" class="form-control" id="house" value="{{address.house}}">
                                 </div>
-                            </div>
-                            <div class="form-group-row">
-                                    <label for="city" class="col col-form-label">Город</label>
-                                    <div class="col">
-                                        <input type="text" class="form-control" id="city">
-                                    </div>
-                            </div>
-                            <div class="form-group-row">
-                                    <label for="street" class="col col-form-label">Улица</label>
-                                    <div class="col">
-                                        <input type="text" class="form-control" id="street" >
-                                    </div>
-                            </div>
-                            <div class="form-group-row">
-                                    <label for="street" class="col col-form-label">Дом</label>
-                                    <div class="col">
-                                        <input type="text" class="form-control" id="house" >
-                                    </div>
-                            </div>
-                            <input type="button" class="btn btn-primary" id="paramSearchButton" value="Поиск">
+                        </div>
+                        <input type="button" class="btn btn-primary" id="paramSearchButton" value="Поиск">
 
-                    </form>
-                </div>      
-            {{/isTableView}}
+                </form>
+            </div>
+        </script>
 
-            {{#isContactForm}}
+        <script id="phonesAttachBarTemplate" type="text/template">
             <div class="container-fluid">
                 <h3 class="h3">Телефонные номера</h3>
                 <!-- Форма для телефонных номеров -->
                 <div class="button-group phonebuttons" role="group" aria-label="Basic example">
                         <button class="add-button btn btn-outline-primary ">
-                            <img src="img/add.png" alt="add" class="sidenav-button-img">
+                            <a href="#{{ownerId}}/addphone">
+                                <img src="img/add.png" alt="add" class="sidenav-button-img">
+                            </a>
                         </button>
-                        <button class="delete-button btn btn-outline-primary ">
+                        <button class="delete-button btn btn-outline-primary">
                             <img src="img/remove.png" alt="remove" class="sidenav-button-img"/>
                         </button>
                 </div>
@@ -296,8 +311,12 @@
                         </tr>
                         {{#phones}}
                             <tr>
-                                <td><input type="checkbox" value="{{phoneId}}"></td>
-                                <td class="nameCell">{{code}} {{operatorCode}} {{number}}</td>
+                                <td><input type="checkbox" value="{{id}}"></td>
+                                <td class="nameCell">
+                                    <a href="#phone/{{id}}">
+                                        {{countryCode}} {{operatorCode}} {{number}}
+                                    </a>
+                                </td>
                                 <td>{{type}}</td>
                                 <td>{{comment}}</td>
                             </tr>
@@ -312,26 +331,26 @@
                         <div class="form-row">
                             <div class="form-group col-2">
                                 <label for="countrycode">Код страны</label>
-                                <input type="text" id="countrycode" class="form-cotrol">
+                                <input type="text" id="country-code-input" class="form-cotrol" value="{{countryCode}}">
                             </div>
                             <div class="form-group col-2">
                                 <label for="operatorCode">Код оператора</label>
-                                <input type="text" class="form-control" id="operatorCode">
+                                <input type="text" class="form-control" id="operator-code-input" value="{{operatorCode}}">
                             </div>
                             <div class="form-group col-2">
                                 <label for="number">Номер</label>
-                                <input type="text" class="form-control" id="number">
+                                <input type="text" class="form-control" id="number-input">
                             </div>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="phoneType" value="HOME" id="homeRadio">
+                            <input class="form-check-input" type="radio" name="phoneType" value="HOME" id="homeRadio" {{#isHome}} checked {{/isHome}}>
                             <label for="homeRadio">Домашний</label>
-                            <input class="form-check-input" type="radio" name="phoneType" value="MOBILE" id="mobileRadio">
+                            <input class="form-check-input" type="radio" name="phoneType" value="MOBILE" id="mobileRadio" {{^isHome}} checked {{/isHome}}>
                             <label for="homeRadio">Мобильный</label>
                         </div>
                         <div class="form-group">
                             <label for="phoneComment">Комментарий</label>
-                            <input class="form-control" type="text" id="phoneComment">
+                            <input class="form-control" type="text" id="phone-comment-input" value="{{comment}}">
                         </div>
                         <button class="btn btn-primary close-modal" id="confirmPhone" >ОК</button>
                         <button claas="btn btn-outline-primary close-modal" id="cancelPhone">Отменить</button>
@@ -384,8 +403,36 @@
                         </div>
                     </div>
                 </div>
-            {{/isContactForm}}
         </script>
+
+        <script id="mailToMainTemplate" type="text/template">
+            <div class="form-group">
+                <label for="mailText">Текст сообщения</label>
+                <textarea class="form-control" id="mailText" rows="5">
+                </textarea>
+            </div>
+            <button class="btn btn-primary" id="sendMail">Отправить
+            </button>
+            <button class ="btn btn-secondary" id="cancelMail">Отменить
+            </button>
+        </script>
+
+        <script id="mailToSettingsTemplate" type="text/template">
+                <div class="container-fluid" id="mailSettings">
+                    <div class="form-group">
+                        <label for="reciever">Кому</label>
+                        <input class="form-control" type="text" id="reciever">
+                    </div>
+                    <div class="form-group">
+                            <label for="reciever">Тема</label>
+                            <input class="form-control" type="text" id="topic">
+                    </div>
+                </div>
+        </script>
+
+        <script id="emptyTemplate" type="text/template">
+        </script>
+
     </div>
 
 

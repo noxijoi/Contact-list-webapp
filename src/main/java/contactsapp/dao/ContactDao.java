@@ -5,11 +5,9 @@ import contactsapp.core.entity.Contact;
 import contactsapp.core.entity.FullName;
 import contactsapp.dao.daobilder.ContactBuilder;
 
-import javax.management.relation.RelationSupport;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ContactDao extends AbstractDao<Contact, Integer> {
@@ -60,21 +58,19 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
         statement.setString(1, name.getFirstName());
         statement.setString(2, name.getLastName());
         statement.setString(3, name.getParentName());
-        DateFormat format  = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        String date = format.format(contact.getBirthDate());
-        Date sqlDate = Date.valueOf(date);
+        Date sqlDate = new Date(contact.getBirthDate().getTime());
         statement.setDate(4, sqlDate);
         statement.setString(5,contact.getSex().toString());
         statement.setString(6, contact.getNationality());
         statement.setString(7, contact.getMaritalStatus().name().toLowerCase());
         statement.setString(8, contact.getWebsite());
         statement.setString(9, contact.getEmail());
-        statement.setString(10, contact.getCompanyName());
+        statement.setString(10, contact.getCompany());
         Address address = contact.getAddress();
         statement.setString(11, address.getCountry());
         statement.setString(12, address.getCity());
         statement.setString(13, address.getStreet());
-        statement.setString(14, address.getHomeNumber());
+        statement.setString(14, address.getHouse());
         statement.setInt(15,address.getIndex());
         statement.setInt(16,contact.getId());
     }
@@ -86,21 +82,19 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
         statement.setString(1, name.getFirstName());
         statement.setString(2, name.getLastName());
         statement.setString(3, name.getParentName());
-        DateFormat format  = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        String date = format.format(contact.getBirthDate());
-        Date sqlDate = Date.valueOf(date);
+        Date sqlDate = new Date(contact.getBirthDate().getTime());
         statement.setDate(4, sqlDate);
         statement.setString(5,contact.getSex().toString());
         statement.setString(6, contact.getNationality());
         statement.setString(7, contact.getMaritalStatus().name().toLowerCase());
         statement.setString(8, contact.getWebsite());
         statement.setString(9, contact.getEmail());
-        statement.setString(10, contact.getCompanyName());
+        statement.setString(10, contact.getCompany());
         Address address = contact.getAddress();
         statement.setString(11, address.getCountry());
         statement.setString(12, address.getCity());
         statement.setString(13, address.getStreet());
-        statement.setString(14, address.getHomeNumber());
+        statement.setString(14, address.getHouse());
         statement.setInt(15,address.getIndex());
 
     }
@@ -140,7 +134,7 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
                 " b_date, sex, nationality," +
                 " marital_status, web_site, email, company," +
                 " country, city, street, house_n, post_index)" +
-                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     }
 
     @Override
@@ -154,13 +148,28 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
     }
 
     //TODO переделать под параметризированный запрос
-    public List<Contact> getPage(Connection connection, int size) throws DaoException {
-        String query = "SELECT * FROM contact LIMIT ?";
+    public List<Contact> getPage(Connection connection, int pageN, int pageSize) throws DaoException {
+        int startN = (pageN - 1) * pageSize;
+        String query = "SELECT * FROM contact LIMIT ? , ?";
         List<Contact> result = null;
         try(PreparedStatement statement = connection.prepareStatement(query)){
-            statement.setInt(1, size);
+            statement.setInt(1, startN);
+            statement.setInt(2, pageSize);
             ResultSet rs = statement.executeQuery();
             result = builder.buildList(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public int getTableSize(Connection connection) {
+        int result = 0;
+        String query = "SELECT COUNT(*) from contact";
+        try(Statement statement = connection.createStatement()) {
+            ResultSet rs = statement.executeQuery(query);
+            rs.next();
+            result = rs.getInt("count(*)");
         } catch (SQLException e) {
             e.printStackTrace();
         }

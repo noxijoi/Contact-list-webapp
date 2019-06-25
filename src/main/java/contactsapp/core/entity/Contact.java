@@ -1,12 +1,9 @@
 package contactsapp.core.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import contactsapp.dao.Identified;
 
 import java.io.File;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class Contact implements Identified {
 
@@ -20,7 +17,7 @@ public class Contact implements Identified {
     private MaritalStatus maritalStatus;
     private String website;
     private String email;
-    private String companyName;
+    private String company;
     private Address address;
 
     private File avatar = null;
@@ -33,7 +30,7 @@ public class Contact implements Identified {
         this.maritalStatus = maritalStatus;
         this.website = website;
         this.email = email;
-        this.companyName = companyName;
+        this.company = company;
         this.address = address;
     }
 
@@ -106,12 +103,12 @@ public class Contact implements Identified {
         this.email = email;
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public String getCompany() {
+        return company;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public Address getAddress() {

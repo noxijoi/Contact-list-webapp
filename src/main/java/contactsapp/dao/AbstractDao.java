@@ -68,7 +68,7 @@ public abstract class AbstractDao<T extends Identified,PK extends Number> implem
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        query = getSelectAllQuery() + "WHERE id = last_insert_id();";
+        query = getSelectAllQuery() + " WHERE id = last_insert_id();";
         try(PreparedStatement statement = connection.prepareStatement(query)){
             ResultSet rs = statement.executeQuery();
             result = builder.buildSingle(rs);

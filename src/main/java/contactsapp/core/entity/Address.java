@@ -4,14 +4,14 @@ public class Address{
     String country;
     String city;
     String street;
-    String homeNumber;
+    String house;
     int index;
 
-    public Address(String country, String city, String street, String homeNumber, int index) {
+    public Address(String country, String city, String street, String house, int index) {
         this.country = country;
         this.city = city;
         this.street = street;
-        this.homeNumber = homeNumber;
+        this.house = house;
         this.index = index;
     }
 
@@ -44,12 +44,12 @@ public class Address{
         this.street = street;
     }
 
-    public String getHomeNumber() {
-        return homeNumber;
+    public String getHouse() {
+        return house;
     }
 
-    public void setHomeNumber(String homeNumber) {
-        this.homeNumber = homeNumber;
+    public void setHouse(String house) {
+        this.house = house;
     }
 
     public int getIndex() {

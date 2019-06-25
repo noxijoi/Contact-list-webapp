@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class ContactBuilder implements DaoBuilder<Contact> {
     @Override
@@ -18,12 +17,13 @@ public class ContactBuilder implements DaoBuilder<Contact> {
         contact.setFullName(fullName);
         contact.setId(rs.getInt("id"));
         contact.setEmail(rs.getString("email"));
+        contact.setBirthDate(rs.getDate("b_date"));
         contact.setSex(Sex.valueOf(rs.getString("sex").toUpperCase()));
         contact.setNationality(rs.getString("nationality"));
         contact.setMaritalStatus(MaritalStatus.valueOf(rs.getString("marital_status").toUpperCase()));
         contact.setWebsite(rs.getString("web_site"));
         contact.setEmail(rs.getString("email"));
-        contact.setCompanyName(rs.getString("company"));
+        contact.setCompany(rs.getString("company"));
 
         return contact;
     }
@@ -41,7 +41,7 @@ public class ContactBuilder implements DaoBuilder<Contact> {
         address.setCountry(rs.getString("country"));
         address.setCity(rs.getString("city"));
         address.setStreet(rs.getString("street"));
-        address.setHomeNumber(rs.getString("house_n"));
+        address.setHouse(rs.getString("house_n"));
         address.setIndex(rs.getInt("post_index"));
         return address;
     }
