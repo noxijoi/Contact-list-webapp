@@ -38,7 +38,7 @@
                     <div class="col-2">
                         <button class="btn rounded-circle avatar">
                             <a href="#/avatar">
-                                <img src="img/user.png" alt="avatar" class="md-avatar rounded-circle contact-avatar">
+                                <img src="/img/user.png" alt="avatar" class="md-avatar rounded-circle contact-avatar">
                             </a>
                         </button>
                     </div>        
@@ -88,7 +88,7 @@
                             <select id="marital-status-input" class="form-control">
                                 <option value="MARRIED">женат/замужем</option>
                                 <option value="SINGLE">холост/не замужем</option>
-                                <option value="DIVORSED">разведен/разведена</option>
+                                <option value="DIVORCED">разведен/разведена</option>
                                 <option value="WIDOVED">вдовец/вдова</option>
                             </select>
                         </div>
@@ -246,8 +246,8 @@
                             </label>
                     </div>
                     <div class="form-check">
-                            <input class="form-check-input" name="maritalStatus" type="checkbox" value="DIVORSED" id="divorsedCheck">
-                            <label class="form-check-label" for="divorsedCheck">
+                            <input class="form-check-input" name="maritalStatus" type="checkbox" value="divorced" id="divorcedCheck">
+                            <label class="form-check-label" for="divorcedCheck">
                              Разведен/Разведена
                             </label>
                     </div>
@@ -362,7 +362,9 @@
                 <h3 class="h3">Файлы</h3>
                 <div class="button-group attachbuttons" role="group" aria-label="Basic example">
                         <button class="add-button btn btn-outline-primary ">
-                            <img src="img/add.png" alt="add" class="sidenav-button-img">
+                            <a href ="#{{ownerId}}/addattach">
+                                <img src="img/add.png" alt="add" class="sidenav-button-img">
+                            </a>
                         </button>
                         <button class="delete-button btn btn-outline-primary ">
                             <img src="img/remove.png" alt="remove" class="sidenav-button-img"/>
@@ -390,14 +392,17 @@
                     <div class="modal-content">
                         <h3 class="h3">Файл</h3>
                         <div class="container">
-                            <div class="form-group">
-                                <label for="addFile">Выберите файл</label>
-                                <input type="file" id="addFile" class="form-cotrol-file">
-                            </div>
-                            <div class="form-group">
-                                <label for="attachComment">Комментарий</label>
-                                <input class="form-control" type="text" id="attachComment">
-                            </div>
+                            <form id="attach-form">
+                                <div class="form-group">
+                                    <label for="addFile">Выберите файл</label>
+                                    <input type="file" id="addFile" class="form-cotrol-file" name="file">
+                                </div>
+                                <div class="form-group">
+                                    <label for="attachComment">Комментарий</label>
+                                    <input class="form-control" type="text" id="attachComment" name="comment">
+                                </div>
+                                <input type="text" name="ownerId" value="{{ownerId}}" hidden>
+                            </form>
                             <button class="btn btn-primary close-modal" id="confirmAttach" >ОК</button>
                             <button claas="btn btn-outline-primary close-modal" id="cancelAttach">Отменить</button>
                         </div>
@@ -405,15 +410,28 @@
                 </div>
         </script>
 
+        <script id="phoneRowTemplate" type="text/template">
+            <tr>
+                    <td><input type="checkbox" value="{{id}}"></td>
+                    <td class="nameCell">
+                        <a href="#phone/{{id}}">
+                            {{countryCode}} {{operatorCode}} {{number}}
+                        </a>
+                    </td>
+                    <td>{{type}}</td>
+                    <td>{{comment}}</td>
+                </tr>
+        </script>
+
         <script id="mailToMainTemplate" type="text/template">
             <div class="form-group">
                 <label for="mailText">Текст сообщения</label>
-                <textarea class="form-control" id="mailText" rows="5">
+                <textarea class="form-control" id="mail-text" rows="5">
                 </textarea>
             </div>
-            <button class="btn btn-primary" id="sendMail">Отправить
+            <button class="btn btn-primary" id="send-mail">Отправить
             </button>
-            <button class ="btn btn-secondary" id="cancelMail">Отменить
+            <button class ="btn btn-secondary" id="cancel-mail">Отменить
             </button>
         </script>
 

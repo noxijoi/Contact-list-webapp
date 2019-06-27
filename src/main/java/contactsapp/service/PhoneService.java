@@ -1,12 +1,12 @@
 package contactsapp.service;
 
-import contactsapp.command.Command;
-import contactsapp.core.entity.Attachment;
+import contactsapp.core.entity.Contact;
 import contactsapp.core.entity.Phone;
-import contactsapp.dao.AttachmentDao;
 import contactsapp.dao.DaoException;
+import contactsapp.dao.PhoneDao;
 import contactsapp.dao.connectionmanager.ConManager;
 import contactsapp.dao.connectionmanager.ConnectionManager;
+
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -14,22 +14,35 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AttachmentService implements Service<Attachment>
-{
-    private AttachmentDao dao = new AttachmentDao();
+public class PhoneService implements Service<Phone> {
+    private PhoneDao dao;
     private ConManager connectionManager;
 
-    public AttachmentService() throws IOException {
+    public PhoneService() throws IOException {
         connectionManager = ConnectionManager.getInstance();
+        dao = new PhoneDao();
     }
 
     @Override
-    public void delete(List<Attachment> list) {
+    public Phone getById(Number id) {
+        Phone phone = null;
+        try(Connection connection = connectionManager.getConnection()) {
+            phone = dao.getById(connection, id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return phone;
+    }
+
+    @Override
+    public void delete(List<Phone> list) {
         try (Connection connection = connectionManager.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                for (Attachment attachment : list) {
-                    dao.delete(connection, attachment);
+                for (Phone phone : list) {
+                    dao.delete(connection, phone);
                 }
                 connection.commit();
                 connection.setAutoCommit(false);
@@ -42,38 +55,24 @@ public class AttachmentService implements Service<Attachment>
         }
     }
 
-    @Override
-    public Attachment getById(Number id) {
-        Attachment attachment = null;
-        try(Connection connection = connectionManager.getConnection()) {
-            attachment = dao.getById(connection, id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-        return attachment;
-    }
-
-    public List<Attachment> getByOwnerId(Integer ownerId){
-        List<Attachment> attachments = new ArrayList<>();
+    public List<Phone> getByOwnerId(Integer ownerId){
+        List<Phone> phones = new ArrayList<>();
         try(Connection connection = connectionManager.getConnection()){
-            attachments = dao.getByOwnerId(connection, ownerId);
+            phones = dao.getByOwnerId(connection, ownerId);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return attachments;
+        return phones;
     }
-
     @Override
-    public List<Attachment> select() {
+    public List<Phone> select() {
         return null;
     }
 
     @Override
-    public void update(Attachment attachment) {
+    public void update(Phone phone) {
         try(Connection connection = connectionManager.getConnection()){
-            dao.update(connection, attachment);
+            dao.update(connection, phone);
         } catch (DaoException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -82,9 +81,10 @@ public class AttachmentService implements Service<Attachment>
     }
 
     @Override
-    public void insert(Attachment attachment) {
+    public void insert(Phone phone) {
+
         try(Connection connection = connectionManager.getConnection()){
-            dao.insert(connection, attachment);
+            dao.insert(connection, phone);
         } catch (DaoException e) {
             e.printStackTrace();
         } catch (SQLException e) {

@@ -41,7 +41,7 @@ public abstract class AbstractDao<T extends Identified,PK extends Number> implem
     }
 
     @Override
-    public Identified getById(Connection connection, Number number) throws DaoException {
+    public T getById(Connection connection, Number number) throws DaoException {
         T result;
         String query = getSelectByIdQuery();
         try(PreparedStatement statement = connection.prepareStatement(query)){
@@ -56,7 +56,7 @@ public abstract class AbstractDao<T extends Identified,PK extends Number> implem
     }
 
     @Override
-    public Identified insert(Connection connection, Identified object) throws DaoException {
+    public T insert(Connection connection, Identified object) throws DaoException {
         T result;
         String query = getInsertQuery();
         try(PreparedStatement statement = connection.prepareStatement(query)){
@@ -71,6 +71,7 @@ public abstract class AbstractDao<T extends Identified,PK extends Number> implem
         query = getSelectAllQuery() + " WHERE id = last_insert_id();";
         try(PreparedStatement statement = connection.prepareStatement(query)){
             ResultSet rs = statement.executeQuery();
+            rs.next();
             result = builder.buildSingle(rs);
             if(result == null){
                 throw  new DaoException("Can't find inserted record");

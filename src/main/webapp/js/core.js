@@ -20,20 +20,36 @@ function Communicator() {
     this.sendGET = function () {
         var url = location.pathname + "contacts/" + location.hash.slice(1) + location.search;
         return fetch(url, { method: "GET" });
-    }
+    };
     this.sendPOST = function (body) {
         var url = location.pathname + "contacts/" + location.hash.slice(1);
         return fetch(url, {
-            method:"POST",
+            method: "POST",
+            body: JSON.stringify(body)
+        });
+    };
+    this.sendFormDataPOST = function (formData) {
+        var url = location.pathname + "contacts/" + location.hash.slice(1);
+        return fetch(url, {
+            method: "POST",
+            body: formData
+        });
+    };
+    this.sendPUT = function (body) {
+        var url = location.pathname + "contacts/" + location.hash.slice(1);
+        return fetch(url, {
+            method: "PUT",
+            body: JSON.stringify(body)
+        });
+    };
+    this.sendDELETE = function (body) {
+        var url = location.pathname + "contacts/" + location.hash.slice(1);
+        return fetch(url, {
+            method: "DELETE",
             body: JSON.stringify(body)
         });
     }
-    this.sendPUT = function () {
 
-    }
-    this.sendDELETE = function () {
-
-    }
 
 }
 
@@ -41,16 +57,20 @@ function Communicator() {
 //Controller получает с вьюхи комманды отправляет запросы куда надо
 function Controller() {
     this.hashPatterns = {
-        contactsPage: /page\/\d/,
-        addContactPage: /add/,
-        mailToPage: /mailTo/,
-        editContactPage: /\d/,
-        phonePage: /\d\/phone[\/\d]{0,1}/,
-        attachPage: /\d\/attach[\/\d]{0,1}/,
+        contactsPage: /page\/\d$/,
+        addContactPage: /add$/,
+        addPhoneModal: /\d\/addphone$/,
+        addAttachModal: /\d\/addattach$/,
+        mailToPage: /mailto$/,
+        editContactPage: /\d$/,
+        phonePage: /\d\/phone[\/\d]{0,1}$/,
+        attachPage: /\d\/attach[\/\d]{0,1}$/,
     }
 
     this.getFunction = function (key) {
         switch (key) {
+            case "addPhoneModal": return this.addPhoneModal;
+            case "addAttachModal": return this.addAttachModal;
             case "contactsPage": return this.contactsPage;
             case "addContactPage": return this.addContactPage;
             case "mailToPage": return this.mailToPage;
@@ -87,44 +107,87 @@ function Controller() {
         view.addListenersForContactForm();
         view.renderSidenav(TEMPLATE_NAMES.empty);
     }
+
+    this.addPhoneModal = function () {
+        view.openPhoneModal();
+    }
+
+    this.addAttachModal = function () {
+        view.openAttachModal();
+    }
+
     this.mailToPage = function () {
         view.renderWorkArea(TEMPLATE_NAMES.mailToMain);
         view.renderSidenav(TEMPLATE_NAMES.mailToSettings);
+        view.addListenersForMailForm()
     }
+
     this.editContactPage = function () {
         this.communicator.sendGET()
-            .then(response =>{
+            .then(response => {
                 return response.json();
             })
-            .then(data =>{
+            .then(data => {
                 view.renderWorkArea(TEMPLATE_NAMES.editContact, data);
-                view.renderSidenav(TEMPLATE_NAMES.phonesAttachBar, data);
+                var sideData = {};
+                sideData.ownerId = data.id;
+                view.renderSidenav(TEMPLATE_NAMES.phonesAttachBar, sideData);
                 view.addListenersForEditContactForm();
             })
-        ;
-        
+            ;
+
     }
+    //TODO
     this.phonePage = function () {
-        view.openPhoneModal();
     }
+    //TODO
     this.attachPage = function () {
-        view.openAttachModal();
     }
-    this.toMainPage = function(){
+    this.toMainPage = function () {
         location.hash = router.startHash;
     }
 
-    this.addContactToDB = function(){
+    this.addContactToDB = function () {
         var contact = view.collectContactData();
-        if(contact){
+        if (contact) {
             communicator.sendPOST(contact)
-            .then(response =>{
-                return response.json();
-            })
-            .then(data =>{
-                console.log(data);
+                .then(response => {
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
 
-            });
+                });
+        }
+    }
+    this.addPhone = function () {
+        var phone = view.collectPhoneData();
+        if (phone) {
+            communicator.sendPOST(phone)
+                .then(response => {
+                    console.log(response);
+                })
+        }
+    }
+    
+    this.addAttach = function () {
+        var attachData = new FormData(document.getElementById("attach-form"));
+        if (attachData) {
+            communicator.sendFormDataPOST(attachData)
+            .then(response => {
+                console.log(response);
+            })
+        }
+
+
+    }
+    this.editContact = function () {
+        var contact = view.collectContactData();
+        if (contact) {
+            communicator.sendPUT(contact)
+                .then(response => {
+                    console.log(response);
+                });
         }
     }
 }

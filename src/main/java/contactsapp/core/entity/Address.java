@@ -5,7 +5,7 @@ public class Address{
     String city;
     String street;
     String house;
-    int index;
+    Integer index;
 
     public Address(String country, String city, String street, String house, int index) {
         this.country = country;
@@ -52,7 +52,7 @@ public class Address{
         this.house = house;
     }
 
-    public int getIndex() {
+    public Integer getIndex() {
         return index;
     }
 

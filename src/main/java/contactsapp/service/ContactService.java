@@ -12,7 +12,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactService implements Service<Contact>{
+public class ContactService implements Service<Contact> {
     private ContactDao dao;
     private ConManager connectionManager;
 
@@ -23,17 +23,19 @@ public class ContactService implements Service<Contact>{
 
 
     public void delete(List<Contact> list) {
-        try(Connection connection = connectionManager.getConnection()) {
+        try (Connection connection = connectionManager.getConnection()) {
             connection.setAutoCommit(false);
-            for (Contact contact : list) {
-                dao.delete(connection, contact);
+            try {
+                for (Contact contact : list) {
+                    dao.delete(connection, contact);
+                }
+                connection.commit();
+                connection.setAutoCommit(false);
+            } catch (DaoException e) {
+                connection.rollback();
+                e.printStackTrace();
             }
-            connection.commit();
-            connection.setAutoCommit(false);
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (DaoException e) {
-
             e.printStackTrace();
         }
 
@@ -42,7 +44,7 @@ public class ContactService implements Service<Contact>{
     @Override
     public Contact getById(Number id) {
         Contact contact = null;
-        try(Connection connection = connectionManager.getConnection()) {
+        try (Connection connection = connectionManager.getConnection()) {
             contact = dao.getById(connection, id);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -54,7 +56,7 @@ public class ContactService implements Service<Contact>{
 
     public List<Contact> getPage(int pageN, int pageSize) throws DaoException {
         List<Contact> page = new ArrayList<>();
-        try(Connection connection = connectionManager.getConnection()) {
+        try (Connection connection = connectionManager.getConnection()) {
             page = dao.getPage(connection, pageN, pageSize);
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -67,15 +69,17 @@ public class ContactService implements Service<Contact>{
     }
 
     public void update(Contact contact) {
-        try(Connection connection = connectionManager.getConnection()) {
-
+        try (Connection connection = connectionManager.getConnection()) {
+            dao.update(connection, contact);
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (DaoException e) {
             e.printStackTrace();
         }
     }
 
     public void insert(Contact contact) {
-        try(Connection connection = connectionManager.getConnection()){
+        try (Connection connection = connectionManager.getConnection()) {
             dao.insert(connection, contact);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,7 +90,7 @@ public class ContactService implements Service<Contact>{
 
     public int getRecordsNum() {
         int num = 0;
-        try(Connection connection = connectionManager.getConnection()){
+        try (Connection connection = connectionManager.getConnection()) {
             num = dao.getTableSize(connection);
         } catch (SQLException e) {
             e.printStackTrace();

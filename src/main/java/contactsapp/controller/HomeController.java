@@ -4,6 +4,7 @@ import contactsapp.command.Command;
 import contactsapp.command.CommandManager;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(value = "/contacts/*")
+@MultipartConfig
 public class HomeController extends HttpServlet {
     private CommandManager commandManager;
     @Override
@@ -32,13 +34,13 @@ public class HomeController extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Command command = commandManager.getPOSTCommand(req.getRequestURI());
+        Command command = commandManager.getPUTCommand(req.getRequestURI());
         command.execute(req,resp);
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Command command = commandManager.getPOSTCommand(req.getRequestURI());
+        Command command = commandManager.getDELETECommand(req.getRequestURI());
         command.execute(req,resp);
     }
 

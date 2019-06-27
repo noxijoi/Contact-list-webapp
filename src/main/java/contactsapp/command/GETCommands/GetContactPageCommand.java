@@ -25,7 +25,8 @@ public class GetContactPageCommand implements Command {
         for (int i = 0; i < parts.length; i++) {
             if (parts[i].equals("page")){
                 pageN = Integer.parseInt(parts[i+1]);
-            }        }
+            }
+        }
 
         try{
             ContactService service = new ContactService();

@@ -23,15 +23,15 @@ public class Contact implements Identified {
     private File avatar = null;
 
     public Contact() {
-        this.fullName = fullName;
-        this.birthDate = birthDate;
-        this.sex = sex;
-        this.nationality = nationality;
-        this.maritalStatus = maritalStatus;
-        this.website = website;
-        this.email = email;
-        this.company = company;
-        this.address = address;
+        this.fullName = new FullName();
+        this.birthDate = new Date();
+        this.sex = Sex.MALE;
+        this.nationality = "";
+        this.maritalStatus = MaritalStatus.SINGLE;
+        this.website = "";
+        this.email = "";
+        this.company = "";
+        this.address = new Address();
     }
 
     public Contact(Integer id, FullName fullName, Date birthDate, Sex sex, String email) {

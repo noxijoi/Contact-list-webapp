@@ -1,13 +1,14 @@
 package contactsapp.dao;
 
 import contactsapp.core.entity.Attachment;
+import contactsapp.core.entity.Phone;
 import contactsapp.dao.daobilder.AttachmentBuilder;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AttachmentDao extends AbstractDao<Attachment, Integer>{
 
@@ -81,5 +82,18 @@ public class AttachmentDao extends AbstractDao<Attachment, Integer>{
         Date sqlDate = Date.valueOf(date);
         statement.setDate(4, sqlDate);
         statement.setString(5, attachment.getComment());
+    }
+
+    public List<Attachment> getByOwnerId(Connection connection, Integer ownerId) {
+        String query ="SELECT * FROM phone_number WHERE owner_id = ?";
+        List<Attachment> result = new ArrayList<>();
+        try(PreparedStatement statement = connection.prepareStatement(query)){
+            statement.setInt(1, ownerId);
+            ResultSet rs = statement.executeQuery();
+            result = builder.buildList(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

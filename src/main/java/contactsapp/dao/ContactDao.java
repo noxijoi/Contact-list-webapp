@@ -58,7 +58,10 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
         statement.setString(1, name.getFirstName());
         statement.setString(2, name.getLastName());
         statement.setString(3, name.getParentName());
-        Date sqlDate = new Date(contact.getBirthDate().getTime());
+        Date sqlDate = null;
+        if(contact.getBirthDate() != null){
+           sqlDate =  new Date(contact.getBirthDate().getTime());
+        }
         statement.setDate(4, sqlDate);
         statement.setString(5,contact.getSex().toString());
         statement.setString(6, contact.getNationality());
@@ -108,7 +111,7 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE TABLE contact SET" +
+        return "UPDATE TABLE contact SET " +
                 "f_name = ?," +
                 "l_name = ?," +
                 "p_name = ?," +
@@ -118,7 +121,7 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
                 "marital_status =?," +
                 "web_site = ?," +
                 "email= ?," +
-                "company = ?" +
+                "company = ?," +
                 "country = ?," +
                 "city = ?," +
                 "street = ?," +

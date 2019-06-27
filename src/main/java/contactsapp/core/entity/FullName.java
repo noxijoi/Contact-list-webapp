@@ -2,9 +2,9 @@ package contactsapp.core.entity;
 
 public class FullName {
 
-    private String firstName;
-    private String lastName;
-    private String parentName;
+    private String firstName = "";
+    private String lastName = "";
+    private String parentName = "";
 
     public FullName(){
 

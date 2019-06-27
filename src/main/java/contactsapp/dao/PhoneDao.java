@@ -1,14 +1,15 @@
 package contactsapp.dao;
 
-import contactsapp.core.entity.Attachment;
 import contactsapp.core.entity.Phone;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class PhoneDao extends AbstractDao<Phone, Integer> {
+public class PhoneDao extends AbstractDao<Phone,Integer> {
 
     @Override
     public List getAll(Connection connection) throws DaoException {
@@ -16,12 +17,12 @@ public class PhoneDao extends AbstractDao<Phone, Integer> {
     }
 
     @Override
-    public Identified getById(Connection connection, Number number) throws DaoException {
-        return super.getById(connection, number);
+    public Phone getById(Connection connection, Number number) throws DaoException {
+        return (Phone)super.getById(connection, number);
     }
 
     @Override
-    public Identified insert(Connection connection, Identified object) throws DaoException {
+    public Phone insert(Connection connection, Identified object) throws DaoException {
         return super.insert(connection, object);
     }
 
@@ -92,5 +93,18 @@ public class PhoneDao extends AbstractDao<Phone, Integer> {
         statement.setString(4, phone.getNumber());
         statement.setString(5, phone.getType().name());
         statement.setString(6, phone.getComment());
+    }
+
+    public List<Phone> getByOwnerId(Connection connection, Integer ownerId) {
+        String query ="SELECT * FROM phone_number WHERE owner_id = ?";
+        List<Phone> result = new ArrayList<>();
+        try(PreparedStatement statement = connection.prepareStatement(query)){
+            statement.setInt(1, ownerId);
+            ResultSet rs = statement.executeQuery();
+            result = builder.buildList(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

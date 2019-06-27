@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import contactsapp.command.GETCommands.dto.PageDto;
 import contactsapp.core.entity.Attachment;
 import contactsapp.core.entity.Contact;
+import contactsapp.core.entity.Phone;
 
 import java.io.IOException;
 import java.util.List;
@@ -44,5 +45,11 @@ public class JSONParser {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(dto);
         return json;
+    }
+
+    public static Phone parsePhone(String json) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Phone phone = mapper.readValue(json, Phone.class);
+        return phone;
     }
 }

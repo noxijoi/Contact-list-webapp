@@ -2,28 +2,30 @@ function View() {
     this.renderWorkArea = function (templateName, data) {
         data = data || {};
         var elementTo = document.getElementById("main");
-        var templateElement = document.getElementById(templateName);
-        var templateSource = templateElement.innerHTML;
-        var generatedHTML = Mustache.to_html(templateSource, data);
-        elementTo.innerHTML = generatedHTML;
+        elementTo.innerHTML =  this.generateTemplateHTML(templateName, data);
     }
     this.renderSidenav = function (templateName, data) {
         data = data || {};
         var elementTo = document.getElementById("sidenav");
+        elementTo.innerHTML = this.generateTemplateHTML(templateName, data);
+    }
+    this.generateTemplateHTML = function(templateName, data){
         var templateElement = document.getElementById(templateName);
         var templateSource = templateElement.innerHTML;
-        var generatedHTML = Mustache.to_html(templateSource, data);
-        elementTo.innerHTML = generatedHTML;
+        return  Mustache.to_html(templateSource, data);
     }
-    this.addListenersForContactTable = function () {
 
-    }
+    //TODO
     this.addListenersForAttachAndPhones = function () {
 
     }
     this.addListenersForMailForm = function () {
-
+        var sendMailButton = document.getElementById("send-mail");
+        sendMailButton.addEventListener('click', controller.sendMail);
+        var cancelMailButton = document.getElementById("cancel-mail");
+        cancelMailButton.addEventListener('click', controller.toMainPage);
     }
+    //TODO
     this.addListenersForSearchForm = function () {
 
     }
@@ -39,7 +41,7 @@ function View() {
     }
     this.addListenersForEditContactForm = function () {
         var okButton = document.querySelector(".contact-ok");
-        okButton.addEventListener('click', editContact);
+        okButton.addEventListener('click', controller.editContact);
         var cancelButton = document.querySelector(".contact-cancel");
         cancelButton.addEventListener('click', controller.toMainPage);
 
@@ -48,20 +50,20 @@ function View() {
         //sideBar
         var deletePhonesButton = document.querySelector(".phonebuttons .delete-button");
         deletePhonesButton.addEventListener('click', controller.deletePhones);
-        var deleteAttachsButton = document.querySelector(".attach-buttons .delete-button");
+        var deleteAttachsButton = document.querySelector(".attachbuttons .delete-button");
         deleteAttachsButton.addEventListener('click', controller.deleteAttach);
-        //modals
+        //modal
         var confirmPhoneButton = document.getElementById("confirmPhone");
-        confirmPhoneButton.addEventListener('click', view.addPhoneDataToTable);
+        confirmPhoneButton.addEventListener('click', controller.addPhone);
 
         var confirmAttachButton = document.getElementById("confirmAttach");
-        confirmAttachButton.addEventListener('click', view.addAttachDataToTable);
+        confirmAttachButton.addEventListener('click', controller.addAttach);
 
         var closeModals = document.getElementsByClassName("close-modal");
-        closeModals.foreach(closeModal => {
+        Array.prototype.forEach.call(closeModals, closeModal =>{
             closeModal.addEventListener('click', function(){
                 var modals = document.getElementsByClassName('modal');
-                modals.foreach(modal => modal.style.display="none");
+                Array.prototype.forEach.call(modals, modal=> modal.style.display="none");
             })
         })
     }
@@ -96,17 +98,26 @@ function View() {
 
         return contact;
     }
-
-    this.addPhoneDataToTable = function(){
+    this.collectPhoneData = function(){
         var countryCode = document.getElementById("country-code-input").value;
         var operatorCode = document.getElementById("operator-code-input").value;
         var number = document.getElementById("number-input").value;
-        var type = document.querySelector('input[name="sex"]:checked').value.toUpperCase();
+        var type = document.querySelector('input[name="phoneType"]:checked').value.toUpperCase();
         var comment = document.getElementById('phone-comment-input').value;
 
-        var phone = new Phone(0, countryCode, operatorCode. number, comment);
+        var phone = new Phone(0,countryCode, operatorCode, number, type, comment);
+        return phone;
+    }
+
+    this.openPhoneModal = function(){
+        var phoneModal = document.getElementById("phoneModal");
+        phoneModal.style.display = "block";
+    }
+    this.openAttachModal = function(){
+        var attachModal = document.getElementById("attachModal");
+        attachModal.style.display = "block";
     }
 }
 
-
+//TODO
 function editAvatar() { }

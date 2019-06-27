@@ -21,6 +21,7 @@ public class AddContactCommand  implements Command {
             while ((s = req.getReader().readLine()) != null) {
                 sb.append(s);
             }
+
             Contact contact = JSONParser.parseContact(sb.toString());
             service.insert(contact);
         } catch (NamingException e) {

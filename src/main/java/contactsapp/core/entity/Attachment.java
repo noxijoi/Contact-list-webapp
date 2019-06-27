@@ -5,8 +5,8 @@ import contactsapp.dao.Identified;
 import java.util.Date;
 
 public class Attachment implements Identified<Integer> {
-    int id;
-    int ownerId;
+    Integer id;
+    Integer ownerId;
     String fileName;
     String filePath;
     Date downloadTime;
@@ -22,7 +22,7 @@ public class Attachment implements Identified<Integer> {
         this.id = id;
     }
 
-    public int getOwnerId() {
+    public Integer getOwnerId() {
         return ownerId;
     }
 
