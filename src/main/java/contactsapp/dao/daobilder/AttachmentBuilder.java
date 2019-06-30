@@ -15,7 +15,7 @@ public class AttachmentBuilder implements DaoBuilder<Attachment> {
         attachment.setId(rs.getInt("id"));
         attachment.setOwnerId(rs.getInt("owner_id"));
         attachment.setFilePath(rs.getString("path"));
-        attachment.setDownloadTime(rs.getDate("download_time"));
+        attachment.setDownloadTime(rs.getDate("download_time").toLocalDate());
         attachment.setFileName(rs.getString("name"));
         attachment.setComment(rs.getString("comment"));
         return attachment;

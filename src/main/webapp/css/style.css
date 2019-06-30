@@ -27,6 +27,11 @@
     overflow: auto; /* При необходимости, то появиться прокрутка */
 }
 
+#avatar-img{
+    width:50px;
+    height:50px;
+}
+
 .modal-content {
     position: relative;
     margin: auto;

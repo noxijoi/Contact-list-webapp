@@ -3,7 +3,7 @@ package contactsapp.command.PUTCommands;
 import contactsapp.command.Command;
 import contactsapp.core.entity.Contact;
 import contactsapp.service.ContactService;
-import contactsapp.utils.JSONParser;
+import contactsapp.utils.serialization.JSONParser;
 
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;

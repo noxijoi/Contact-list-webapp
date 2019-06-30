@@ -1,12 +1,19 @@
 package contactsapp.command;
 
+import contactsapp.command.DELETECommands.DeleteAttachCommand;
 import contactsapp.command.DELETECommands.DeleteContactCommand;
+import contactsapp.command.DELETECommands.DeletePhoneCommand;
+import contactsapp.command.GETCommands.DownloadFileCommand;
+import contactsapp.command.GETCommands.GetAttachmentCommand;
 import contactsapp.command.GETCommands.GetContactCommand;
 import contactsapp.command.GETCommands.GetContactPageCommand;
 import contactsapp.command.POSTCommands.AddAttachCommand;
 import contactsapp.command.POSTCommands.AddContactCommand;
 import contactsapp.command.POSTCommands.AddPhoneCommand;
+import contactsapp.command.POSTCommands.SendEmailCommand;
+import contactsapp.command.PUTCommands.EditAttachCommand;
 import contactsapp.command.PUTCommands.EditContactCommand;
+import contactsapp.command.PUTCommands.EditPhoneComand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,33 +27,43 @@ public class CommandManager {
     private String PUT = "PUT";
 
     private String ONE_CONTACT = "oneContact";
-    private String ADD_PHONE = "addPhone";
+    private String PHONE = "Phone";
     private String PAGE = "page";
     private String ADD_CONTACT = "addContact";
-    private String ADD_ATTACH ="addAttach";
+    private String ATTACH = "Attach";
+    private String DOWNLOAD_ATTACH ="downLoadAttach";
+    private String MAIL = "mail";
 
     private  Map<String, Command> commandMap = new HashMap<>();
     public CommandManager(){
-        //patterns.put("allContacts",".*\\/contacts");
         patterns.put(ONE_CONTACT,".*\\/contacts\\/\\d+");
+        //выбивается
         patterns.put(ADD_CONTACT, ".*\\/contacts\\/add");
-        patterns.put(ADD_PHONE, ".*\\/contacts\\/\\d+\\/addphone");
-        patterns.put(ADD_ATTACH, ".*\\/contacts\\/\\d+\\/addattach");
-        patterns.put("allContactAttach",".*\\/contacts\\/\\d+\\/attach");
-        patterns.put("oneAttach",".*\\/contacts\\/attach\\/\\d+");
-        patterns.put("allContactPhone",".*\\/contacts\\/\\d+\\/phone");
-        patterns.put("onePhone",".*\\/contacts\\/phone\\/\\d+");
+        patterns.put(PHONE, ".*\\/contacts\\/\\d+\\/phone");
+        patterns.put(ATTACH, ".*\\/contacts\\/\\d+\\/attach");
+        patterns.put(DOWNLOAD_ATTACH, ".*\\/contacts\\/attach\\/download\\/.*");
         patterns.put(PAGE,".*\\/contacts\\/page\\/\\d+");
+        patterns.put(MAIL, ".*\\/contacts\\/mail");
 
         commandMap.put(null, new NoCommand());
+
         commandMap.put(GET + patterns.get(ONE_CONTACT), new GetContactCommand());
-
         commandMap.put(GET + patterns.get(PAGE), new GetContactPageCommand());
-        commandMap.put(POST + patterns.get(ADD_CONTACT), new AddContactCommand());
-        commandMap.put(POST + patterns.get(ADD_PHONE), new AddPhoneCommand());
-        commandMap.put(POST + patterns.get(ADD_ATTACH), new AddAttachCommand());
-        commandMap.put(PUT + patterns.get(ONE_CONTACT), new EditContactCommand());
+        commandMap.put(GET + patterns.get(DOWNLOAD_ATTACH), new DownloadFileCommand());
+        commandMap.put(GET + patterns.get(ATTACH), new GetAttachmentCommand());
 
+        commandMap.put(POST + patterns.get(ADD_CONTACT), new AddContactCommand());
+        commandMap.put(POST + patterns.get(PHONE), new AddPhoneCommand());
+        commandMap.put(POST + patterns.get(ATTACH), new AddAttachCommand());
+        commandMap.put(POST + patterns.get(MAIL), new SendEmailCommand());
+
+        commandMap.put(PUT + patterns.get(ONE_CONTACT), new EditContactCommand());
+        commandMap.put(PUT + patterns.get(ATTACH), new EditAttachCommand());
+        commandMap.put(PUT + patterns.get(PHONE), new EditPhoneComand());
+
+        commandMap.put(DELETE + patterns.get(PAGE), new DeleteContactCommand());
+        commandMap.put(DELETE + patterns.get(PHONE), new DeletePhoneCommand());
+        commandMap.put(DELETE + patterns.get(ATTACH), new DeleteAttachCommand());
     }
 
 

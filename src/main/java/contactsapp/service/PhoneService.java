@@ -65,7 +65,7 @@ public class PhoneService implements Service<Phone> {
         return phones;
     }
     @Override
-    public List<Phone> select() {
+    public List<Phone> selectAll() {
         return null;
     }
 

@@ -64,8 +64,16 @@ public class ContactService implements Service<Contact> {
         return page;
     }
 
-    public List<Contact> select() {
-        return null;
+    public List<Contact> selectAll() {
+        List<Contact> contacts = null;
+        try(Connection connection = connectionManager.getConnection()){
+            contacts = dao.getAll(connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return contacts;
     }
 
     public void update(Contact contact) {
@@ -97,4 +105,15 @@ public class ContactService implements Service<Contact> {
         }
         return num;
     }
+
+    public List<Contact> getContactsBorn(int month, int day) {
+        List<Contact> contacts = new ArrayList<>();
+        try(Connection connection = connectionManager.getConnection()){
+            contacts = dao.getContactsBorn(connection, month, day);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return contacts;
+    }
+
 }

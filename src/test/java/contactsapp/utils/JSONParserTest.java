@@ -2,10 +2,8 @@ package contactsapp.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import contactsapp.core.entity.*;
+import contactsapp.utils.serialization.JSONParser;
 import org.junit.Test;
-
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 
 public class JSONParserTest {

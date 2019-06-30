@@ -7,10 +7,10 @@ CREATE TABLE contact (
   f_name            VARCHAR(30)    NOT NULL,
   l_name            VARCHAR(30)    NOT NULL,
   p_name            VARCHAR(30)    NOT NULL,
-  b_date            DATETIME       NOT NULL,
+  b_date            DATE           NOT NULL,
   sex               ENUM('male', 'female') NOT NULL,
   nationality       VARCHAR(30),
-  marital_status    ENUM('married','widowed','single','divorced'),
+  marital_status    ENUM('married','single'),
   web_site          VARCHAR(50),
   email             VARCHAR(50)   NOT NULL ,
   company           VARCHAR(100),
@@ -34,6 +34,7 @@ CREATE TABLE phone_number(
   FOREIGN KEY (owner_id)
   REFERENCES contact(id)
 )ENGINE=InnoDB;
+ALTER TABLE contact ALTER COLUMN b_date DATE NOT Null;
 
 CREATE TABLE attachment(
   id        INT UNSIGNED     NOT NULL    AUTO_INCREMENT    PRIMARY KEY,

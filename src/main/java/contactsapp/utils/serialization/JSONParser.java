@@ -1,4 +1,4 @@
-package contactsapp.utils;
+package contactsapp.utils.serialization;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import contactsapp.command.GETCommands.dto.PageDto;
 import contactsapp.core.entity.Attachment;
 import contactsapp.core.entity.Contact;
+import contactsapp.core.entity.MailParam;
 import contactsapp.core.entity.Phone;
 
 import java.io.IOException;
@@ -34,6 +35,19 @@ public class JSONParser {
         List<Contact> contactList = mapper.readValue(json, new TypeReference<List<Contact>>() {});
         return contactList;
     }
+
+    public static List<Attachment> parseListAttach(String json) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        List<Attachment> attachmentList = mapper.readValue(json, new TypeReference<List<Attachment>>() {});
+        return attachmentList;
+    }
+
+    public static List<Phone> parseListPhones(String json) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        List<Phone> phoneList = mapper.readValue(json, new TypeReference<List<Phone>>() {});
+        return phoneList;
+    }
+
     public static Attachment parseAttachment(String json) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         Attachment attachment = mapper.readValue(json, Attachment.class);
@@ -41,7 +55,7 @@ public class JSONParser {
     }
 
 
-    public static String toJson(PageDto dto) throws JsonProcessingException {
+    public static String toJson(Object dto) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(dto);
         return json;
@@ -51,5 +65,11 @@ public class JSONParser {
         ObjectMapper mapper = new ObjectMapper();
         Phone phone = mapper.readValue(json, Phone.class);
         return phone;
+    }
+
+    public static MailParam parseObject(String json) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        MailParam  mailParam= mapper.readValue(json, MailParam.class);
+        return mailParam;
     }
 }

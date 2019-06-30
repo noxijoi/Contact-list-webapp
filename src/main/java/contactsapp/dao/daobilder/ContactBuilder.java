@@ -17,7 +17,7 @@ public class ContactBuilder implements DaoBuilder<Contact> {
         contact.setFullName(fullName);
         contact.setId(rs.getInt("id"));
         contact.setEmail(rs.getString("email"));
-        contact.setBirthDate(rs.getDate("b_date"));
+        contact.setBirthDate(rs.getDate("b_date").toLocalDate());
         contact.setSex(Sex.valueOf(rs.getString("sex").toUpperCase()));
         contact.setNationality(rs.getString("nationality"));
         contact.setMaritalStatus(MaritalStatus.valueOf(rs.getString("marital_status").toUpperCase()));

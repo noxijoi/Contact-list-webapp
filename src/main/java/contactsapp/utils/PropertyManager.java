@@ -8,6 +8,7 @@ import java.util.Properties;
 public class PropertyManager {
     private static final String dbPropFile ="db.properties";
     private static final String attachPropFile ="attachments.properties";
+    private static final String  mailAttachFile = "mail.properties";
     public static Properties readProperties(String name) throws IOException {
         Properties properties = new Properties();
         String path = PropertyManager.class.getClassLoader().getResource(name).getPath();
@@ -20,5 +21,9 @@ public class PropertyManager {
     }
     public static Properties getAttachProperties() throws IOException{
         return  readProperties(attachPropFile);
+    }
+
+    public static Properties getMailProperties() throws IOException {
+        return readProperties(mailAttachFile);
     }
 }

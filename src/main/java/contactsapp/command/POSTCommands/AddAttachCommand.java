@@ -10,8 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Properties;
 
@@ -21,7 +22,7 @@ public class AddAttachCommand implements Command {
 
         try {
             Properties uploadFilesProp = PropertyManager.getAttachProperties();
-            String directoryPath = uploadFilesProp.getProperty("attachment.pathForFileDirectory");
+            String directoryPath = uploadFilesProp.getProperty("attachment.pathToAttachDirectory");
             String folderName = Long.toString(new Date().getTime());
             File uploadFolder = new File(directoryPath + File.separator + folderName);
             if(!uploadFolder.exists()) {
@@ -44,11 +45,14 @@ public class AddAttachCommand implements Command {
             attachment.setOwnerId(ownerId);
             attachment.setComment(comment);
             attachment.setFileName(file.getName());
-            attachment.setDownloadTime(new Date(file.lastModified()));
+            attachment.setDownloadTime(Instant.ofEpochMilli(file.lastModified()).atZone(ZoneId.systemDefault()).toLocalDate());
             attachment.setFilePath(folderName + File.separator + fileName);
 
             AttachmentService service = new AttachmentService();
             service.insert(attachment);
+
+            int id = service.getLastInsertedId();
+            resp.getWriter().write("id=" + id);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ServletException e) {

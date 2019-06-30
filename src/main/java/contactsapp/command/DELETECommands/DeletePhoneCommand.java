@@ -1,35 +1,34 @@
-package contactsapp.command.POSTCommands;
+package contactsapp.command.DELETECommands;
 
 import contactsapp.command.Command;
+import contactsapp.core.entity.Contact;
 import contactsapp.core.entity.Phone;
 import contactsapp.service.PhoneService;
 import contactsapp.utils.serialization.JSONParser;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
-public class AddPhoneCommand implements Command {
+
+public class DeletePhoneCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(DeletePhoneCommand.class);
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
-        try{
+        try {
             PhoneService service = new PhoneService();
             StringBuilder sb = new StringBuilder();
             String s;
-            String[] parts = req.getRequestURI().split("/");
-            Integer ownerId = null;
-            for (int i = 0; i < parts.length; i++) {
-                if (parts[i].equals("contacts")){
-                    ownerId = Integer.parseInt(parts[i+1]);
-                }        }
             while ((s = req.getReader().readLine()) != null) {
                 sb.append(s);
             }
-            Phone phone = JSONParser.parsePhone(sb.toString());
-            phone.setOwnerId(ownerId);
-            service.insert(phone);
+            List<Phone> list = JSONParser.parseListPhones(sb.toString());
+            service.delete(list);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
     }
 }

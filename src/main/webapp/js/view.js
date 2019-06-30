@@ -1,123 +1,279 @@
-function View() {
-    this.renderWorkArea = function (templateName, data) {
-        data = data || {};
-        var elementTo = document.getElementById("main");
-        elementTo.innerHTML =  this.generateTemplateHTML(templateName, data);
+
+var view = {
+  renderWorkArea: function(templateName, data) {
+    data = data || {};
+    var elementTo = document.getElementById("main");
+    elementTo.innerHTML = view.generateTemplateHTML(templateName, data);
+  },
+  renderSidenav: function(templateName, data) {
+    data = data || {};
+    var elementTo = document.getElementById("sidenav");
+    elementTo.innerHTML = view.generateTemplateHTML(templateName, data);
+  },
+
+  generateTemplateHTML: function(templateName, data) {
+    var templateElement = document.getElementById(templateName);
+    var templateSource = templateElement.innerHTML;
+    return Mustache.to_html(templateSource, data);
+  },
+
+  dataCollector: {
+    //id выбранных контактов
+    collectSelectedContacts: function() {
+      var contactsArray = new Array();
+      var mainTable = document.getElementById("main-table");
+      var inputElements = mainTable.querySelectorAll(".checkContact");
+      inputElements.forEach(item => {
+        if (item.checked) {
+          var contact = new Contact(item.value);
+          contactsArray.push(contact);
+        }
+      });
+      return contactsArray;
+    },
+
+    collectContactData: function() {
+      var fullName = new FullName();
+      fullName.firstName = document.getElementById("first-name-input").value;
+      fullName.lastName = document.getElementById("last-name-input").value;
+      fullName.parentName = document.getElementById("parent-name-input").value;
+
+      var birthDate = document.getElementById("birth-date-input").value;
+      var nationality = document.getElementById("nationality-input").value;
+
+      var sex = document
+        .querySelector('input[name="sex"]:checked')
+        .value.toUpperCase();
+      var company = document.getElementById("company-input").value;
+
+      var e = document.getElementById("marital-status-input");
+      var maritalStatus = e.options[e.selectedIndex].value.toUpperCase();
+
+      var website = document.getElementById("website-input").value;
+      var email = document.getElementById("email-input").value;
+
+      var address = new Address();
+      address.country = document.getElementById("country-input").value;
+      address.city = document.getElementById("city-input").value;
+      address.street = document.getElementById("street-input").value;
+      address.house = document.getElementById("house-input").value;
+      address.index = document.getElementById("index-input").value;
+
+      var contact = new Contact(null, fullName, birthDate, sex, nationality,  maritalStatus,
+        website, email, company, address);
+
+      return contact;
+    },
+//+
+    collectPhoneData: function() {
+      var phone = new Phone();
+      phone.countryCode = document.getElementById("country-code-input").value;
+      phone.operatorCode = document.getElementById("operator-code-input").value;
+      phone.number = document.getElementById("number-input").value;
+      phone.type = document
+        .querySelector('input[name="phoneType"]:checked')
+        .value.toUpperCase();
+      phone.comment = document.getElementById("phone-comment-input").value;
+      phone.ownerId = contactData.contact.id;
+      //все телефоны, которые ещё не добавлены в базу будут иметь индекс с меткой "а"
+      var id = contactData.phones.length + 1;
+      id +="a";
+      phone.id = id;
+      return phone;
+    },
+    
+    collectSearchParams: function() {
+      var params = {};
+
+      params.firstName = document.getElementById("fName").value;
+      params.lastName = document.getElementById("lName").value;
+      params.parentName = document.getElementById("pName").value;
+      params.dateFrom = document.getElementById("dateFrom").value;
+      params.dateTo = document.getElementById("dateTo").value;
+      params.sex = document
+        .querySelector('input[name="sexRadio"]:checked')
+        .value.toUpperCase();
+      params.company = document.getElementById("company-input").value;
+      params.email = document.getElementById("email-input").value;
+      params.country = document.getElementById("country-input").value;
+      params.city = document.getElementById("city-input").value;
+      params.street = document.getElementById("street-input").value;
+      params.index = document.getElementById("index-input").value;
+
+      return params;
+    },
+
+    collectSelectedPhones: function() {
+      var contactsIdInputs = new Array();
+      document.querySelectorAll("#phones-table input").forEach(input => {
+        if (input.checked) {
+          contactsIdInputs.push(input);
+        }
+      });
+      return contactsIdInputs;
+    },
+
+    collectSelectedAttach: function(){
+      var attachsId = new Array();
+      document.querySelectorAll("#attachs-table input").forEach(input =>{
+        if(input.checked){
+          attachsInputs.push(input.value);
+        }
+      });
+    },
+    
+//+
+    collectAttachData: function(){
+      var attach = new Attachment();
+      var file = document.getElementById("addFile").files[0];
+      attach.ownerId = contactData.contact.id;
+      var id = contactData.attachs.length + 1;
+      id +="a";
+
+      files[id] = file; 
+
+      attach.id= id;
+      attach.fileName = file.name;
+      attach.comment = document.getElementById("attachComment").value;
+
+      return attach;
     }
-    this.renderSidenav = function (templateName, data) {
-        data = data || {};
-        var elementTo = document.getElementById("sidenav");
-        elementTo.innerHTML = this.generateTemplateHTML(templateName, data);
+  },
+
+  listenerManager: {
+
+    addListenersForMailForm: function() {
+      var sendMailButton = document.getElementById("send-mail");
+      sendMailButton.addEventListener("click", controller.sendMail);
+      var cancelMailButton = document.getElementById("cancel-mail");
+      cancelMailButton.addEventListener("click", controller.toMainPage);
+    },
+
+    addListenersForTable: function() {
+      var deleteButton = document.querySelector(".delete-button");
+      deleteButton.addEventListener("click", controller.deleteSelectedContact);
+    },
+
+    addListenersForEditContactForm: function() {
+      //--
+      var okButton = document.querySelector(".contact-ok");
+      okButton.addEventListener("click", controller.submitContact);
+      //--
+      var cancelButton = document.querySelector(".contact-cancel");
+      cancelButton.addEventListener("click", controller.toMainPage);
+      //+
+      var avatarInput = document.getElementById("avatarUpload");
+      avatarInput.addEventListener("change", function(evt) {
+        var file = evt.target.files[0];
+        var reader = new FileReader();
+        reader.onload = (function(theFile) {
+          return function(e) {
+            var span = document.getElementById("avatarWrap");
+            span.innerHTML = [
+              '<img class="thumb" id="avatar-img" src="',
+              e.target.result,
+              '" title="',
+              escape(theFile.name),
+              '"/>'
+            ].join("");
+          };
+        })(file);
+        reader.readAsDataURL(file);
+
+        contactData.decodedAvatar = document.getElementById("avatar-img").src; 
+      });
+
+      //sideBar
+      //+
+      var openPhoneModalButton = document.querySelector(".phonebuttons .add-button");
+      openPhoneModalButton.addEventListener("click", view.openPhoneModal);
+      //+
+      var openAttachModalButton = document.querySelector(".attachbuttons .add-button");
+      openAttachModalButton.addEventListener("click", view.openAttachModal);
+      
+      var deletePhonesButton = document.querySelector(".phonebuttons .delete-button");
+      deletePhonesButton.addEventListener("click", controller.deleteSelectedPhones);
+
+      var deleteAttachsButton = document.querySelector(
+        ".attachbuttons .delete-button"
+      );
+      deleteAttachsButton.addEventListener("click", controller.deleteSelectedAttach);
+    },
+
+    addListenersForContactForm: function() {
+      var okButton = document.querySelector(".contact-ok");
+      okButton.addEventListener("click", controller.addContactToDB);
+      var cancelButton = document.querySelector(".contact-cancel");
+      cancelButton.addEventListener("click", controller.toMainPage);
+
+      //avatar
+      var avatarEl = document.querySelector(".avatar");
+      avatarEl.addEventListener("click", editAvatar);
+    },
+
+    addListenersForSearchForm: function() {
+      var searchButton = document.getElementById("paramSearchButton");
+      searchButton.addEventListener("click", function() {
+        var params = view.dataCollector.collectSearchParams();
+        controller.searchByParams(params);
+      });
     }
-    this.generateTemplateHTML = function(templateName, data){
-        var templateElement = document.getElementById(templateName);
-        var templateSource = templateElement.innerHTML;
-        return  Mustache.to_html(templateSource, data);
+  },
+
+  //+
+  openPhoneModal: function(phone) {
+    var phoneModal = document.getElementById("phoneModal");
+    phoneModal.innerHTML = view.generateTemplateHTML(TEMPLATE_NAMES.phoneModal,phone);
+
+    var confirmPhoneButton = document.getElementById("confirmPhone");
+    confirmPhoneButton.addEventListener("click", view.addPhoneToTable);
+    confirmPhoneButton.addEventListener("click", function() {
+      phoneModal.style.display = "none";
+    });
+
+    var cancelPhoneButton = document.getElementById("cancelPhone");
+    cancelPhoneButton.addEventListener("click", function() {
+      phoneModal.style.display = "none";
+    });
+    phoneModal.style.display = "block";
+  },
+
+  openAttachModal: function(attach) {
+    var attachModal = document.getElementById("attachModal");
+    attachModal.innerHTML = view.generateTemplateHTML(TEMPLATE_NAMES.attachModal,attach);
+
+    var confirmAttachButton = document.getElementById("confirmAttach");
+    //confirmAttachButton.addEventListener("click", controller.addAttach);
+    confirmAttachButton.addEventListener("click", function() {
+      view.addAttachToTable();
+      attachModal.style.display = "none";
+    });
+    var cancelAttachButton = document.getElementById("cancelAttach");
+    cancelAttachButton.addEventListener("click", function() {
+      attachModal.style.display = "none";
+    });
+    attachModal.style.display = "block";
+  },
+
+  //++
+  addPhoneToTable: function() {
+    var phone = view.dataCollector.collectPhoneData();
+        
+    contactData.phones.push(phone);
+
+    if (phone) {
+      var phoneTableElement = document.getElementById("phones-table");
+      phoneTableElement.innerHTML += view.generateTemplateHTML(TEMPLATE_NAMES.phoneRow,
+        phone);
     }
-
-    //TODO
-    this.addListenersForAttachAndPhones = function () {
-
+  },
+//++
+  addAttachToTable: function() {
+    var attach = view.dataCollector.collectAttachData();
+    contactData.attachs.push(attach);
+    if (attach) {
+      var attachTableElement = document.getElementById("attach-table");
+      attachTableElement.innerHTML += view.generateTemplateHTML(TEMPLATE_NAMES.attachRow, attach);
     }
-    this.addListenersForMailForm = function () {
-        var sendMailButton = document.getElementById("send-mail");
-        sendMailButton.addEventListener('click', controller.sendMail);
-        var cancelMailButton = document.getElementById("cancel-mail");
-        cancelMailButton.addEventListener('click', controller.toMainPage);
-    }
-    //TODO
-    this.addListenersForSearchForm = function () {
-
-    }
-    this.addListenersForContactForm = function () {
-        var okButton = document.querySelector(".contact-ok");
-        okButton.addEventListener('click', controller.addContactToDB);
-        var cancelButton = document.querySelector(".contact-cancel");
-        cancelButton.addEventListener('click', controller.toMainPage);
-
-        //avatar
-        var avatarEl = document.querySelector(".avatar");
-        avatarEl.addEventListener('click', editAvatar);
-    }
-    this.addListenersForEditContactForm = function () {
-        var okButton = document.querySelector(".contact-ok");
-        okButton.addEventListener('click', controller.editContact);
-        var cancelButton = document.querySelector(".contact-cancel");
-        cancelButton.addEventListener('click', controller.toMainPage);
-
-        var avatarEl = document.querySelector(".avatar");
-        avatarEl.addEventListener('click', editAvatar);
-        //sideBar
-        var deletePhonesButton = document.querySelector(".phonebuttons .delete-button");
-        deletePhonesButton.addEventListener('click', controller.deletePhones);
-        var deleteAttachsButton = document.querySelector(".attachbuttons .delete-button");
-        deleteAttachsButton.addEventListener('click', controller.deleteAttach);
-        //modal
-        var confirmPhoneButton = document.getElementById("confirmPhone");
-        confirmPhoneButton.addEventListener('click', controller.addPhone);
-
-        var confirmAttachButton = document.getElementById("confirmAttach");
-        confirmAttachButton.addEventListener('click', controller.addAttach);
-
-        var closeModals = document.getElementsByClassName("close-modal");
-        Array.prototype.forEach.call(closeModals, closeModal =>{
-            closeModal.addEventListener('click', function(){
-                var modals = document.getElementsByClassName('modal');
-                Array.prototype.forEach.call(modals, modal=> modal.style.display="none");
-            })
-        })
-    }
-
-    this.collectContactData = function () {
-        var fullName = new FullName();
-        fullName.firstName = document.getElementById("first-name-input").value;
-        fullName.lastName = document.getElementById("last-name-input").value;
-        fullName.parentName = document.getElementById("parent-name-input").value;
-
-        var birthDate = document.getElementById("birth-date-input").value;
-        var nationality = document.getElementById("nationality-input").value;
-
-        var sex = document.querySelector('input[name="sex"]:checked').value.toUpperCase();
-        var company = document.getElementById("company-input").value;
-
-        var e = document.getElementById("marital-status-input");
-        var maritalStatus = e.options[e.selectedIndex].value.toUpperCase();
-
-        var website = document.getElementById("website-input").value;
-        var email = document.getElementById("email-input").value;
-
-        var address = new Address();
-        address.country = document.getElementById("country-input").value;
-        address.city = document.getElementById("city-input").value;
-        address.street = document.getElementById("street-input").value;
-        address.house = document.getElementById("house-input").value;
-        address.index = document.getElementById("index-input").value;
-
-        var contact = new Contact(null, fullName, birthDate, sex, nationality,
-            maritalStatus, website, email, company, address);
-
-        return contact;
-    }
-    this.collectPhoneData = function(){
-        var countryCode = document.getElementById("country-code-input").value;
-        var operatorCode = document.getElementById("operator-code-input").value;
-        var number = document.getElementById("number-input").value;
-        var type = document.querySelector('input[name="phoneType"]:checked').value.toUpperCase();
-        var comment = document.getElementById('phone-comment-input').value;
-
-        var phone = new Phone(0,countryCode, operatorCode, number, type, comment);
-        return phone;
-    }
-
-    this.openPhoneModal = function(){
-        var phoneModal = document.getElementById("phoneModal");
-        phoneModal.style.display = "block";
-    }
-    this.openAttachModal = function(){
-        var attachModal = document.getElementById("attachModal");
-        attachModal.style.display = "block";
-    }
-}
-
-//TODO
-function editAvatar() { }
+  }
+};

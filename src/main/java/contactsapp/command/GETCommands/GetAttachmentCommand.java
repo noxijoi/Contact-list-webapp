@@ -3,13 +3,17 @@ package contactsapp.command.GETCommands;
 import contactsapp.command.Command;
 import contactsapp.core.entity.Attachment;
 import contactsapp.service.AttachmentService;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+
 public class GetAttachmentCommand implements Command {
+    private final static Logger LOGGER = LogManager.getLogger(GetAttachmentCommand.class);
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -31,7 +35,7 @@ public class GetAttachmentCommand implements Command {
             List<Attachment> attachments = service.getByOwnerId(contactN);
             Attachment attachment = attachments.get(attachN);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
 
 

@@ -1,6 +1,8 @@
 package contactsapp.dao;
 
 import contactsapp.core.entity.Phone;
+import contactsapp.dao.daobilder.DaoBuilder;
+import contactsapp.dao.daobilder.PhoneBuilder;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PhoneDao extends AbstractDao<Phone,Integer> {
+
+    public PhoneDao() {
+        super(new PhoneBuilder());
+    }
 
     @Override
     public List getAll(Connection connection) throws DaoException {

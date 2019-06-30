@@ -66,7 +66,7 @@ public class AttachmentService implements Service<Attachment>
     }
 
     @Override
-    public List<Attachment> select() {
+    public List<Attachment> selectAll() {
         return null;
     }
 
@@ -90,5 +90,15 @@ public class AttachmentService implements Service<Attachment>
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getLastInsertedId() {
+        int result = 0;
+        try(Connection connection = connectionManager.getConnection()){
+            result = dao.getLastInserted(connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

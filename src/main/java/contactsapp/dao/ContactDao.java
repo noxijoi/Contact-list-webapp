@@ -8,6 +8,7 @@ import contactsapp.dao.daobilder.ContactBuilder;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactDao extends AbstractDao<Contact, Integer> {
@@ -60,7 +61,7 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
         statement.setString(3, name.getParentName());
         Date sqlDate = null;
         if(contact.getBirthDate() != null){
-           sqlDate =  new Date(contact.getBirthDate().getTime());
+           sqlDate =  Date.valueOf(contact.getBirthDate());
         }
         statement.setDate(4, sqlDate);
         statement.setString(5,contact.getSex().toString());
@@ -85,7 +86,10 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
         statement.setString(1, name.getFirstName());
         statement.setString(2, name.getLastName());
         statement.setString(3, name.getParentName());
-        Date sqlDate = new Date(contact.getBirthDate().getTime());
+        Date sqlDate = null;
+        if(contact.getBirthDate()!= null) {
+            sqlDate = Date.valueOf(contact.getBirthDate());
+        }
         statement.setDate(4, sqlDate);
         statement.setString(5,contact.getSex().toString());
         statement.setString(6, contact.getNationality());
@@ -106,7 +110,7 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
 
     @Override
     protected String getDeleteQuery() {
-        return "DELETE FROM contact WHERE contact_id = ?";
+        return "DELETE FROM contact WHERE id = ?";
     }
 
     @Override
@@ -126,7 +130,7 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
                 "city = ?," +
                 "street = ?," +
                 "house_n = ?," +
-                "post_index = ?" +
+                "post_index = ? " +
                 "WHERE id = ?";
     }
 
@@ -177,5 +181,20 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public List<Contact> getContactsBorn(Connection connection, int month, int day) {
+        List<Contact> contactList = new ArrayList<>();
+        String query = "SELECT * FROM contact WHERE EXTRACT(MONTH FROM b_date) = ? AND EXTRACT(MONTH FROM b_date) = ?";
+        try(PreparedStatement statement = connection.prepareStatement(query)){
+            statement.setInt(1, month);
+            statement.setInt(2, day);
+            ResultSet rs = statement.executeQuery();
+            contactList = builder.buildList(rs);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return contactList;
     }
 }

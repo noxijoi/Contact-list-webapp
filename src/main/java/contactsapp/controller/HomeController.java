@@ -2,6 +2,10 @@ package contactsapp.controller;
 
 import contactsapp.command.Command;
 import contactsapp.command.CommandManager;
+import contactsapp.utils.schedule.ScheduleManager;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.quartz.SchedulerException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -14,7 +18,10 @@ import java.io.IOException;
 @WebServlet(value = "/contacts/*")
 @MultipartConfig
 public class HomeController extends HttpServlet {
+    private static final Logger LOGGER = LogManager.getLogger(HomeController.class);
+
     private CommandManager commandManager;
+    private ScheduleManager scheduleManager;
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.service(req, resp);
@@ -44,13 +51,23 @@ public class HomeController extends HttpServlet {
         command.execute(req,resp);
     }
 
+
     @Override
     public void destroy() {
-        super.destroy();
+        try {
+            scheduleManager.shutDown();
+        } catch (SchedulerException e) {
+            LOGGER.error(e);
+        }
     }
 
     @Override
     public void init() throws ServletException {
         commandManager = new CommandManager();
+        try {
+            scheduleManager = new ScheduleManager();
+        } catch (SchedulerException e) {
+            LOGGER.error(e);
+        }
     }
 }

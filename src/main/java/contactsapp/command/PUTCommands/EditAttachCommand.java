@@ -1,34 +1,29 @@
-package contactsapp.command.POSTCommands;
+package contactsapp.command.PUTCommands;
 
 import contactsapp.command.Command;
+import contactsapp.core.entity.Attachment;
 import contactsapp.core.entity.Contact;
-import contactsapp.service.ContactService;
+import contactsapp.service.AttachmentService;
 import contactsapp.utils.serialization.JSONParser;
 
-import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AddContactCommand  implements Command {
-
+public class EditAttachCommand implements Command {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
-        try {
-            ContactService service = new ContactService();
+        try{
+            AttachmentService service = new AttachmentService();
             StringBuilder sb = new StringBuilder();
             String s;
             while ((s = req.getReader().readLine()) != null) {
                 sb.append(s);
             }
-
-            Contact contact = JSONParser.parseContact(sb.toString());
-            service.insert(contact);
-        } catch (NamingException e) {
-            e.printStackTrace();
+            Attachment attachment = JSONParser.parseAttachment(sb.toString());
+            service.update(attachment);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

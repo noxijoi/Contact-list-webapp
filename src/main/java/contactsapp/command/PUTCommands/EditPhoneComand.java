@@ -1,14 +1,10 @@
 package contactsapp.command.PUTCommands;
 
 import contactsapp.command.Command;
-import contactsapp.core.entity.Contact;
 import contactsapp.core.entity.Phone;
-import contactsapp.service.ContactService;
 import contactsapp.service.PhoneService;
-import contactsapp.service.Service;
-import contactsapp.utils.JSONParser;
+import contactsapp.utils.serialization.JSONParser;
 
-import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

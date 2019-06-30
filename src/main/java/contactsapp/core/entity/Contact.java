@@ -1,9 +1,13 @@
 package contactsapp.core.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import contactsapp.dao.Identified;
+import contactsapp.utils.FileManager;
 
-import java.io.File;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Contact implements Identified {
 
@@ -11,7 +15,9 @@ public class Contact implements Identified {
 
     private FullName fullName;
 
-    private Date birthDate;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate birthDate;
     private Sex sex;
     private String nationality;
     private MaritalStatus maritalStatus;
@@ -20,11 +26,11 @@ public class Contact implements Identified {
     private String company;
     private Address address;
 
-    private File avatar = null;
+    private String avatar = null;
 
     public Contact() {
         this.fullName = new FullName();
-        this.birthDate = new Date();
+        this.birthDate = null;
         this.sex = Sex.MALE;
         this.nationality = "";
         this.maritalStatus = MaritalStatus.SINGLE;
@@ -32,10 +38,21 @@ public class Contact implements Identified {
         this.email = "";
         this.company = "";
         this.address = new Address();
+        this.avatar = null;
     }
 
-    public Contact(Integer id, FullName fullName, Date birthDate, Sex sex, String email) {
-
+    public Contact(Integer id, FullName fullName, LocalDate birthDate, Sex sex, String nationality,
+                   MaritalStatus maritalStatus, String website, String email, String company, Address address) {
+        this.id = id;
+        this.fullName = fullName;
+        this.birthDate = birthDate;
+        this.sex = sex;
+        this.nationality = nationality;
+        this.maritalStatus = maritalStatus;
+        this.website = website;
+        this.email = email;
+        this.company = company;
+        this.address = address;
     }
 
     @Override
@@ -55,11 +72,11 @@ public class Contact implements Identified {
         this.fullName = fullName;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -119,11 +136,11 @@ public class Contact implements Identified {
         this.address = address;
     }
 
-    public File getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(File avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 

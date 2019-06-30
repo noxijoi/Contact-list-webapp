@@ -63,9 +63,7 @@ public class AttachmentDao extends AbstractDao<Attachment, Integer>{
         Attachment attachment = (Attachment) object;
         statement.setString(1, attachment.getFilePath());
         statement.setString(2, attachment.getFileName());
-        DateFormat format  = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        String date = format.format(attachment.getDownloadTime());
-        Date sqlDate = Date.valueOf(date);
+        Date sqlDate = Date.valueOf(attachment.getDownloadTime());
         statement.setDate(3, sqlDate);
         statement.setString(4, attachment.getComment());
         statement.setInt(5, attachment.getId());
@@ -77,20 +75,32 @@ public class AttachmentDao extends AbstractDao<Attachment, Integer>{
         statement.setInt(1, attachment.getOwnerId());
         statement.setString(2, attachment.getFilePath());
         statement.setString(3, attachment.getFileName());
-        DateFormat format  = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        String date = format.format(attachment.getDownloadTime());
-        Date sqlDate = Date.valueOf(date);
+        Date sqlDate = Date.valueOf(attachment.getDownloadTime());
         statement.setDate(4, sqlDate);
         statement.setString(5, attachment.getComment());
     }
 
     public List<Attachment> getByOwnerId(Connection connection, Integer ownerId) {
-        String query ="SELECT * FROM phone_number WHERE owner_id = ?";
+        String query ="SELECT * FROM attachment WHERE owner_id = ?";
         List<Attachment> result = new ArrayList<>();
         try(PreparedStatement statement = connection.prepareStatement(query)){
             statement.setInt(1, ownerId);
             ResultSet rs = statement.executeQuery();
             result = builder.buildList(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public int getLastInserted(Connection connection) {
+        String query = "SELECT Last_insert_id() FROM attacment";
+        Integer result = null;
+        try(Statement statement = connection.createStatement()){
+            ResultSet rs = statement.executeQuery(query);
+            rs.next();
+            result = rs.getInt("Last_insert_id()");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -1,16 +1,22 @@
 package contactsapp.core.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import contactsapp.dao.Identified;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Attachment implements Identified<Integer> {
-    Integer id;
-    Integer ownerId;
-    String fileName;
-    String filePath;
-    Date downloadTime;
-    String comment;
+    private Integer id;
+    private Integer ownerId;
+    private String fileName;
+    private String filePath;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate downloadTime;
+    private String comment;
 
     public Attachment(){}
     @Override
@@ -46,11 +52,11 @@ public class Attachment implements Identified<Integer> {
         this.filePath = filePath;
     }
 
-    public Date getDownloadTime() {
+    public LocalDate getDownloadTime() {
         return downloadTime;
     }
 
-    public void setDownloadTime(Date downloadTime) {
+    public void setDownloadTime(LocalDate downloadTime) {
         this.downloadTime = downloadTime;
     }
 

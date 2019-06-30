@@ -1,11 +1,11 @@
 package contactsapp.core.entity;
 
 public class Address{
-    String country;
-    String city;
-    String street;
-    String house;
-    Integer index;
+    private String country;
+    private String city;
+    private String street;
+    private String house;
+    private Integer index;
 
     public Address(String country, String city, String street, String house, int index) {
         this.country = country;
