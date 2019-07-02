@@ -3,7 +3,8 @@ package contactsapp.command.POSTCommands;
 import contactsapp.command.Command;
 import contactsapp.core.entity.Attachment;
 import contactsapp.service.AttachmentService;
-import contactsapp.utils.PropertyManager;
+import contactsapp.utils.FileManager;
+import contactsapp.utils.PropertiesManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +22,8 @@ public class AddAttachCommand implements Command {
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
 
         try {
-            Properties uploadFilesProp = PropertyManager.getAttachProperties();
-            String directoryPath = uploadFilesProp.getProperty("attachment.pathToAttachDirectory");
+            Properties uploadFilesProp = PropertiesManager.getAttachProperties();
+            String directoryPath = FileManager.getInstance().getAttachmentDirectory();
             String folderName = Long.toString(new Date().getTime());
             File uploadFolder = new File(directoryPath + File.separator + folderName);
             if(!uploadFolder.exists()) {

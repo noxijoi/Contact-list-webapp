@@ -18,7 +18,8 @@ CREATE TABLE contact (
   city              VARCHAR(50),
   street            VARCHAR(50),
   house_n           VARCHAR(10),
-  post_index        INT UNSIGNED
+  post_index        INT UNSIGNED,
+  avatar            VARCHAR(100)
 
 ) ENGINE=InnoDB DEFAULT CHARSET = utf8;
 
@@ -34,7 +35,7 @@ CREATE TABLE phone_number(
   FOREIGN KEY (owner_id)
   REFERENCES contact(id)
 )ENGINE=InnoDB;
-ALTER TABLE contact ALTER COLUMN b_date DATE NOT Null;
+
 
 CREATE TABLE attachment(
   id        INT UNSIGNED     NOT NULL    AUTO_INCREMENT    PRIMARY KEY,

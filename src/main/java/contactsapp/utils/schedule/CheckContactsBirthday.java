@@ -1,11 +1,10 @@
 package contactsapp.utils.schedule;
 
-import com.mysql.cj.x.protobuf.MysqlxExpr;
 import contactsapp.core.entity.Contact;
 import contactsapp.core.entity.MailParam;
 import contactsapp.service.ContactService;
 import contactsapp.service.MailService;
-import contactsapp.utils.PropertyManager;
+import contactsapp.utils.PropertiesManager;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -47,7 +46,7 @@ public class CheckContactsBirthday implements Job {
         }
         try {
             MailService mailService = new MailService();
-            Properties properties = PropertyManager.readProperties("mail.properties");
+            Properties properties = PropertiesManager.readProperties("mail.properties");
             String adminMail =properties.getProperty("mail.adminmail");
             String subject = "birthDays";
             MailParam mailParam = new MailParam(Arrays.asList(adminMail),subject, message);

@@ -1,25 +1,31 @@
 
 var view = {
-  renderWorkArea: function(templateName, data) {
+  renderWorkArea: function (templateName, data) {
     data = data || {};
     var elementTo = document.getElementById("main");
     elementTo.innerHTML = view.generateTemplateHTML(templateName, data);
   },
-  renderSidenav: function(templateName, data) {
+  renderSidenav: function (templateName, data) {
     data = data || {};
     var elementTo = document.getElementById("sidenav");
     elementTo.innerHTML = view.generateTemplateHTML(templateName, data);
   },
 
-  generateTemplateHTML: function(templateName, data) {
+  generateTemplateHTML: function (templateName, data) {
     var templateElement = document.getElementById(templateName);
     var templateSource = templateElement.innerHTML;
     return Mustache.to_html(templateSource, data);
   },
 
+  rerenderSideTables: function () {
+    view.renderSidenav(TEMPLATE_NAMES.phonesAttachBar, contactData);
+    view.addListenersForEditContactForm
+  },
+
+
   dataCollector: {
     //id выбранных контактов
-    collectSelectedContacts: function() {
+    collectSelectedContacts: function () {
       var contactsArray = new Array();
       var mainTable = document.getElementById("main-table");
       var inputElements = mainTable.querySelectorAll(".checkContact");
@@ -32,7 +38,7 @@ var view = {
       return contactsArray;
     },
 
-    collectContactData: function() {
+    collectContactData: function () {
       var fullName = new FullName();
       fullName.firstName = document.getElementById("first-name-input").value;
       fullName.lastName = document.getElementById("last-name-input").value;
@@ -59,13 +65,13 @@ var view = {
       address.house = document.getElementById("house-input").value;
       address.index = document.getElementById("index-input").value;
 
-      var contact = new Contact(null, fullName, birthDate, sex, nationality,  maritalStatus,
+      var contact = new Contact(null, fullName, birthDate, sex, nationality, maritalStatus,
         website, email, company, address);
 
       return contact;
     },
-//+
-    collectPhoneData: function() {
+    //+
+    collectPhoneData: function () {
       var phone = new Phone();
       phone.countryCode = document.getElementById("country-code-input").value;
       phone.operatorCode = document.getElementById("operator-code-input").value;
@@ -77,12 +83,12 @@ var view = {
       phone.ownerId = contactData.contact.id;
       //все телефоны, которые ещё не добавлены в базу будут иметь индекс с меткой "а"
       var id = contactData.phones.length + 1;
-      id +="a";
+      id += "a";
       phone.id = id;
       return phone;
     },
-    
-    collectSearchParams: function() {
+
+    collectSearchParams: function () {
       var params = {};
 
       params.firstName = document.getElementById("fName").value;
@@ -103,7 +109,7 @@ var view = {
       return params;
     },
 
-    collectSelectedPhones: function() {
+    collectSelectedPhones: function () {
       var contactsIdInputs = new Array();
       document.querySelectorAll("#phones-table input").forEach(input => {
         if (input.checked) {
@@ -113,26 +119,26 @@ var view = {
       return contactsIdInputs;
     },
 
-    collectSelectedAttach: function(){
+    collectSelectedAttach: function () {
       var attachsId = new Array();
-      document.querySelectorAll("#attachs-table input").forEach(input =>{
-        if(input.checked){
-          attachsInputs.push(input.value);
+      document.querySelectorAll("#attachs-table input").forEach(input => {
+        if (input.checked) {
+          attachsId.push(input.value);
         }
       });
     },
-    
-//+
-    collectAttachData: function(){
+
+    //+
+    collectAttachData: function () {
       var attach = new Attachment();
       var file = document.getElementById("addFile").files[0];
       attach.ownerId = contactData.contact.id;
       var id = contactData.attachs.length + 1;
-      id +="a";
+      id += "a";
 
-      files[id] = file; 
+      files[id] = file;
 
-      attach.id= id;
+      attach.id = id;
       attach.fileName = file.name;
       attach.comment = document.getElementById("attachComment").value;
 
@@ -142,20 +148,44 @@ var view = {
 
   listenerManager: {
 
-    addListenersForMailForm: function() {
+    addListenersForPhoneModal: function () {
+      var confirmPhoneButton = document.getElementById("confirmPhone");
+      confirmPhoneButton.addEventListener("click", view.addPhoneToTable);
+      confirmPhoneButton.addEventListener("click", function () {
+        phoneModal.style.display = "none";
+      });
+      var cancelPhoneButton = document.getElementById("cancelPhone");
+      cancelPhoneButton.addEventListener("click", function () {
+        phoneModal.style.display = "none";
+      });
+    },
+
+    addListenersForEditPhoneNodal: function () {
+      var confirmPhoneButton = document.getElementById("confirmPhone");
+      confirmPhoneButton.addEventListener("click", view.editPhone);
+      confirmPhoneButton.addEventListener("click", function () {
+        phoneModal.style.display = "none";
+      });
+      var cancelPhoneButton = document.getElementById("cancelPhone");
+      cancelPhoneButton.addEventListener("click", function () {
+        phoneModal.style.display = "none";
+      });
+    },
+
+
+    addListenersForMailForm: function () {
       var sendMailButton = document.getElementById("send-mail");
       sendMailButton.addEventListener("click", controller.sendMail);
       var cancelMailButton = document.getElementById("cancel-mail");
       cancelMailButton.addEventListener("click", controller.toMainPage);
     },
 
-    addListenersForTable: function() {
+    addListenersForTable: function () {
       var deleteButton = document.querySelector(".delete-button");
       deleteButton.addEventListener("click", controller.deleteSelectedContact);
     },
 
-    addListenersForEditContactForm: function() {
-      //--
+    addListersForEditMain: function () {
       var okButton = document.querySelector(".contact-ok");
       okButton.addEventListener("click", controller.submitContact);
       //--
@@ -163,11 +193,12 @@ var view = {
       cancelButton.addEventListener("click", controller.toMainPage);
       //+
       var avatarInput = document.getElementById("avatarUpload");
-      avatarInput.addEventListener("change", function(evt) {
+      avatarInput.addEventListener("change", function (evt) {
         var file = evt.target.files[0];
+        contactData.contact.avatar.path = file.fileName;
         var reader = new FileReader();
-        reader.onload = (function(theFile) {
-          return function(e) {
+        reader.onload = (function (theFile) {
+          return function (e) {
             var span = document.getElementById("avatarWrap");
             span.innerHTML = [
               '<img class="thumb" id="avatar-img" src="',
@@ -180,40 +211,69 @@ var view = {
         })(file);
         reader.readAsDataURL(file);
 
-        contactData.decodedAvatar = document.getElementById("avatar-img").src; 
+        contactData.avatar.decodedImg = document.getElementById("avatar-img").src;
       });
+    },
 
-      //sideBar
-      //+
+    addListenersForEditSide: function () {
       var openPhoneModalButton = document.querySelector(".phonebuttons .add-button");
       openPhoneModalButton.addEventListener("click", view.openPhoneModal);
-      //+
+
       var openAttachModalButton = document.querySelector(".attachbuttons .add-button");
       openAttachModalButton.addEventListener("click", view.openAttachModal);
-      
+
       var deletePhonesButton = document.querySelector(".phonebuttons .delete-button");
       deletePhonesButton.addEventListener("click", controller.deleteSelectedPhones);
 
-      var deleteAttachsButton = document.querySelector(
-        ".attachbuttons .delete-button"
-      );
+      var deleteAttachsButton = document.querySelector(".attachbuttons .delete-button");
       deleteAttachsButton.addEventListener("click", controller.deleteSelectedAttach);
+
+      var phonesTable = document.getElementById("phones-table");
+      var editPhoneButtons = phonesTable.querySelectorAll("editBtn");
+      editPhoneButtons.forEach(cell => {
+        var row = cell.parentElement;
+        var phoneId = row.querySelector("input").value;
+        var phoneN = contactData.phones.find(phone => {
+          return phone.id === phoneId;
+        });
+        view.openPhoneModal(phoneN);
+      });
+
+      var attachsTable = document.getElementById("phones-table");
+      var editAttachButtons = attachsTable.querySelectorAll("editBtn");
+      editAttachButtons.forEach(cell => {
+        var row = cell.parentElement;
+        var attachId = row.querySelector("input").value;
+        var attachN = contactData.phones.find(attach => {
+          return attach.id === attachId;
+        });
+        view.openEditAttachModal(attachN);
+      });
+
     },
 
-    addListenersForContactForm: function() {
+    addListenersForContactForm: function () {
       var okButton = document.querySelector(".contact-ok");
       okButton.addEventListener("click", controller.addContactToDB);
       var cancelButton = document.querySelector(".contact-cancel");
       cancelButton.addEventListener("click", controller.toMainPage);
-
-      //avatar
-      var avatarEl = document.querySelector(".avatar");
-      avatarEl.addEventListener("click", editAvatar);
     },
 
-    addListenersForSearchForm: function() {
+    addListenersForEditContactForm: function () {
+      this.addListersForEditMain();
+      this.addListenersForEditSide();
+    },
+
+    addListenersForContactForm: function () {
+      var okButton = document.querySelector(".contact-ok");
+      okButton.addEventListener("click", controller.addContactToDB);
+      var cancelButton = document.querySelector(".contact-cancel");
+      cancelButton.addEventListener("click", controller.toMainPage);
+    },
+
+    addListenersForSearchForm: function () {
       var searchButton = document.getElementById("paramSearchButton");
-      searchButton.addEventListener("click", function() {
+      searchButton.addEventListener("click", function () {
         var params = view.dataCollector.collectSearchParams();
         controller.searchByParams(params);
       });
@@ -221,59 +281,52 @@ var view = {
   },
 
   //+
-  openPhoneModal: function(phone) {
+  openPhoneModal: function (phone) {
     var phoneModal = document.getElementById("phoneModal");
-    phoneModal.innerHTML = view.generateTemplateHTML(TEMPLATE_NAMES.phoneModal,phone);
-
-    var confirmPhoneButton = document.getElementById("confirmPhone");
-    confirmPhoneButton.addEventListener("click", view.addPhoneToTable);
-    confirmPhoneButton.addEventListener("click", function() {
-      phoneModal.style.display = "none";
-    });
-
-    var cancelPhoneButton = document.getElementById("cancelPhone");
-    cancelPhoneButton.addEventListener("click", function() {
-      phoneModal.style.display = "none";
-    });
+    phoneModal.innerHTML = view.generateTemplateHTML(TEMPLATE_NAMES.phoneModal, phone);
     phoneModal.style.display = "block";
+    var confirmPhoneButton = document.getElementById("confirmPhone");
+    confirmPhoneButton.addEventListener("click", function () {
+      view.addPhoneToTable();
+      phoneModal.style.display = "none";
+    });
+    var cancelPhoneButton = document.getElementById("cancelPhone");
+    cancelPhoneButton.addEventListener("click", function () {
+      phoneModal.style.display = "none";
+    });
+    
   },
 
-  openAttachModal: function(attach) {
+  openAttachModal: function (attach) {
     var attachModal = document.getElementById("attachModal");
-    attachModal.innerHTML = view.generateTemplateHTML(TEMPLATE_NAMES.attachModal,attach);
+    attachModal.innerHTML = view.generateTemplateHTML(TEMPLATE_NAMES.attachModal, attach);
 
     var confirmAttachButton = document.getElementById("confirmAttach");
-    //confirmAttachButton.addEventListener("click", controller.addAttach);
-    confirmAttachButton.addEventListener("click", function() {
+    confirmAttachButton.addEventListener("click", function () {
       view.addAttachToTable();
       attachModal.style.display = "none";
     });
     var cancelAttachButton = document.getElementById("cancelAttach");
-    cancelAttachButton.addEventListener("click", function() {
+    cancelAttachButton.addEventListener("click", function () {
       attachModal.style.display = "none";
     });
     attachModal.style.display = "block";
   },
 
   //++
-  addPhoneToTable: function() {
+  addPhoneToTable: function () {
     var phone = view.dataCollector.collectPhoneData();
-        
     contactData.phones.push(phone);
-
-    if (phone) {
-      var phoneTableElement = document.getElementById("phones-table");
-      phoneTableElement.innerHTML += view.generateTemplateHTML(TEMPLATE_NAMES.phoneRow,
-        phone);
-    }
+    view.rerenderSideTables();
   },
-//++
-  addAttachToTable: function() {
+  //++
+  addAttachToTable: function () {
     var attach = view.dataCollector.collectAttachData();
     contactData.attachs.push(attach);
-    if (attach) {
-      var attachTableElement = document.getElementById("attach-table");
-      attachTableElement.innerHTML += view.generateTemplateHTML(TEMPLATE_NAMES.attachRow, attach);
-    }
+    view.rerenderSideTables();
+  },
+
+  editPhone: function(){
+    var attach = view.dataCollector.collectAttachData();
   }
 };

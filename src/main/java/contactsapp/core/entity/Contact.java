@@ -26,7 +26,7 @@ public class Contact implements Identified {
     private String company;
     private Address address;
 
-    private String avatar = null;
+    private Avatar avatar;
 
     public Contact() {
         this.fullName = new FullName();
@@ -38,7 +38,7 @@ public class Contact implements Identified {
         this.email = "";
         this.company = "";
         this.address = new Address();
-        this.avatar = null;
+        this.avatar = new Avatar();
     }
 
     public Contact(Integer id, FullName fullName, LocalDate birthDate, Sex sex, String nationality,
@@ -136,12 +136,16 @@ public class Contact implements Identified {
         this.address = address;
     }
 
-    public String getAvatar() {
+    public Avatar getAvatar(){
         return avatar;
     }
 
-    public void setAvatar(String avatar) {
+    public void setAvatar(Avatar avatar){
         this.avatar = avatar;
+    }
+
+    public void setAvatar(String pathToImg){
+        this.avatar = new Avatar(pathToImg);
     }
 
 }

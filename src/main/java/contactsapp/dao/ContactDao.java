@@ -76,7 +76,8 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
         statement.setString(13, address.getStreet());
         statement.setString(14, address.getHouse());
         statement.setInt(15,address.getIndex());
-        statement.setInt(16,contact.getId());
+        statement.setString(16, contact.getAvatar().getPath());
+        statement.setInt(17,contact.getId());
     }
 
     @Override
@@ -103,7 +104,7 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
         statement.setString(13, address.getStreet());
         statement.setString(14, address.getHouse());
         statement.setInt(15,address.getIndex());
-
+        statement.setString(16, contact.getAvatar().getPath());
     }
 
 
@@ -131,6 +132,7 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
                 "street = ?," +
                 "house_n = ?," +
                 "post_index = ? " +
+                "avatar = ?" +
                 "WHERE id = ?";
     }
 
@@ -140,8 +142,8 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
                 "(f_name, l_name, p_name," +
                 " b_date, sex, nationality," +
                 " marital_status, web_site, email, company," +
-                " country, city, street, house_n, post_index)" +
-                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                " country, city, street, house_n, post_index, avatar)" +
+                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     }
 
     @Override
@@ -154,7 +156,6 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
         return "SELECT * FROM contact WHERE id = ?";
     }
 
-    //TODO переделать под параметризированный запрос
     public List<Contact> getPage(Connection connection, int pageN, int pageSize) throws DaoException {
         int startN = (pageN - 1) * pageSize;
         String query = "SELECT * FROM contact LIMIT ? , ?";

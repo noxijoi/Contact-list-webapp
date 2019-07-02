@@ -30,10 +30,10 @@
                 <div class="header col-10">Контакт</div>
                 <div class="col-2">
                     <button class="btn rounded-circle avatar">
-                        <input id="avatarUpload" type="file" accept=".jpg, .jpeg, .png" >
+                        <input id="avatarUpload" type="file" accept=".jpg, .jpeg, .png" hidden>
                         <label for="avatarUpload">
                             <span id="avatarWrap">
-                                <img id="avatar-img" src="{{decodedAvatar}}" alt="avatar" class="md-avatar rounded-circle contact-avatar">
+                                <img id="avatar-img" src="{{contact.avatar.decodedImg}}" alt="avatar" class="md-avatar rounded-circle contact-avatar">
                             </span>
                         </label>
                     </button>
@@ -297,9 +297,9 @@
                         <tr>
                             <td><input type="checkbox" value="{{id}}"></td>
                             <td class="nameCell">
-                                <a href="#phone/{{id}}">
+                                <button class="btn btn-link editBtn">
                                     {{countryCode}} {{operatorCode}} {{number}}
-                                </a>
+                                </button>
                             </td>
                             <td>{{type}}</td>
                             <td>{{comment}}</td>
@@ -419,11 +419,11 @@
         <!--Шаблон строки таблицы атачей-->
         <script id="attachRowTemplate" type="text/template">
         <tr>
-                <td><input type="checkbox" value="{{attachId}}"></td>
-                <td class="nameCell"><button class="btn btn-link">{{name}}</button></td>
-                <td>{{date}}</td>
+                <td><input type="checkbox" value="{{attachId}}">{{id}}</td>
+                <td class="nameCell"><button class="btn btn-link" id="{{fileName}}">{{fileName}}</button></td>
+                <td>{{downloadTime}</td>
                 <td>{{comment}}</td>
-                <td><a class="hyperLink" href="{{location.pathname}}/contacts/attach/download/{{name}}">тык</td>
+                <td><a class="hyperLink" href="{{filePath}}">тык</td>
         </tr>
         </script>
 

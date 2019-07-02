@@ -2,7 +2,7 @@ package contactsapp.dao.connectionmanager;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import contactsapp.utils.PropertyManager;
+import contactsapp.utils.PropertiesManager;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -35,7 +35,7 @@ public class HikariConnectionManager implements ConManager {
 
     private static void initPool() throws IOException {
 
-        Properties dbProp = PropertyManager.readProperties("db.properties");
+        Properties dbProp = PropertiesManager.readProperties("db.properties");
 
         String host = dbProp.getProperty("db.host");
         String login = dbProp.getProperty("db.login");

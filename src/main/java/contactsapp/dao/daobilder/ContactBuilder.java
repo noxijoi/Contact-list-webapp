@@ -24,6 +24,7 @@ public class ContactBuilder implements DaoBuilder<Contact> {
         contact.setWebsite(rs.getString("web_site"));
         contact.setEmail(rs.getString("email"));
         contact.setCompany(rs.getString("company"));
+        contact.setAvatar(rs.getString("avatar"));
 
         return contact;
     }

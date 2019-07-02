@@ -8,12 +8,12 @@ import java.util.Properties;
 
 
 
-public class PropertyManagerTest {
+public class PropertiesManagerTest {
     String name = "db.properties";
 
     @Test
     public void testGetProperties() throws IOException {
-        Properties properties = PropertyManager.readProperties(name);
+        Properties properties = PropertiesManager.readProperties(name);
         Assert.assertFalse(properties.isEmpty());
     }
 

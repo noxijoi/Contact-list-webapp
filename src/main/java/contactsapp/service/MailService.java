@@ -1,40 +1,56 @@
 package contactsapp.service;
 
 import contactsapp.core.entity.MailParam;
-import contactsapp.utils.PropertyManager;
+import contactsapp.utils.PropertiesManager;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
-import java.util.List;
+import java.util.Date;
 import java.util.Properties;
 
 public class MailService {
     public void sendMessage(MailParam params){
         try {
-            Properties mailProp = PropertyManager.getMailProperties();
-            Properties sysProp = System.getProperties();
-            sysProp.setProperty("mail.smtp.host", mailProp.getProperty("mail.host"));
+            Properties mailProp = PropertiesManager.getMailProperties();
+            String fromEmail = mailProp.getProperty("mail.sender");
+            String password = mailProp.getProperty("mail.password");
 
-            Session session = Session.getDefaultInstance(sysProp);
+            Authenticator auth = new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(fromEmail, password);
+                }
+            };
 
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(mailProp.getProperty("mail.sender")));
+            Properties props = new Properties();
+            props.put("mail.smtp.host", "smtp.gmail.com"); //SMTP Host
+            props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+            props.put("mail.smtp.port", "587"); //TLS Port
+            props.put("mail.smtp.auth", "true"); //enable authentication
+            props.put("mail.smtp.starttls.enable", "true"); //enable STARTTLS
 
-            List<String> emails = params.getReceivers();
-            for (String email : emails) {
-                message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
-            }
+            Session session = Session.getInstance(props,auth);
 
-            message.setSubject(params.getSubject());
-            message.setText(params.getMessage());
+            MimeMessage msg = new MimeMessage(session);
+            msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
+            msg.addHeader("format", "flowed");
+            msg.addHeader("Content-Transfer-Encoding", "8bit");
 
-            Transport.send(message);
+            msg.setFrom(new InternetAddress(fromEmail, "NoReply-JD"));
+
+            msg.setReplyTo(InternetAddress.parse(fromEmail, false));
+
+            msg.setSubject(params.getSubject(), "UTF-8");
+
+            msg.setText(params.getMessage(), "UTF-8");
+
+            msg.setSentDate(new Date());
+
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(params.getReceivers().get(0), false));
+            Transport.send(msg);
 
         } catch (IOException e) {
             e.printStackTrace();

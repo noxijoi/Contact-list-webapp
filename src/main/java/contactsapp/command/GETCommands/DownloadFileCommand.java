@@ -3,7 +3,6 @@ package contactsapp.command.GETCommands;
 import contactsapp.command.Command;
 import contactsapp.core.entity.Attachment;
 import contactsapp.service.AttachmentService;
-import contactsapp.utils.PropertyManager;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -13,7 +12,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Properties;
 
 public class DownloadFileCommand implements Command {
 

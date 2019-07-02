@@ -8,7 +8,6 @@ import contactsapp.core.entity.Phone;
 import contactsapp.service.AttachmentService;
 import contactsapp.service.ContactService;
 import contactsapp.service.PhoneService;
-import contactsapp.utils.FileManager;
 import contactsapp.utils.serialization.JSONParser;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -36,7 +35,6 @@ public class GetContactCommand implements Command {
             ContactService service = new ContactService();
             Contact contact = service.getById(contactN);
 
-            String parsedAvatar = FileManager.getInstance().decodedImage(contact.getAvatar());
 
             AttachmentService attachmentService = new AttachmentService();
             List<Attachment> attachs = attachmentService.getByOwnerId(contactN);
@@ -44,7 +42,7 @@ public class GetContactCommand implements Command {
             PhoneService phoneService = new PhoneService();
             List<Phone> phones = phoneService.getByOwnerId(contactN);
 
-            FullContactInfo fullContactInfo = new FullContactInfo(contact, phones, attachs, parsedAvatar);
+            FullContactInfo fullContactInfo = new FullContactInfo(contact, phones, attachs);
 
             JSONParser parser = new JSONParser();
             String contactJson = parser.toJson(fullContactInfo);

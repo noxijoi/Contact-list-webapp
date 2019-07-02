@@ -2,6 +2,7 @@ package contactsapp.controller;
 
 import contactsapp.command.Command;
 import contactsapp.command.CommandManager;
+import contactsapp.utils.FileManager;
 import contactsapp.utils.schedule.ScheduleManager;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -64,6 +65,11 @@ public class HomeController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         commandManager = new CommandManager();
+        try {
+            FileManager.getInstance().init();
+        } catch (IOException e) {
+            LOGGER.fatal("Can't read file properties " + e);
+        }
         try {
             scheduleManager = new ScheduleManager();
         } catch (SchedulerException e) {

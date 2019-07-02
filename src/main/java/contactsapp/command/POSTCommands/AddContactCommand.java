@@ -3,6 +3,7 @@ package contactsapp.command.POSTCommands;
 import contactsapp.command.Command;
 import contactsapp.core.entity.Contact;
 import contactsapp.service.ContactService;
+import contactsapp.utils.FileManager;
 import contactsapp.utils.serialization.JSONParser;
 
 import javax.naming.NamingException;
@@ -23,6 +24,7 @@ public class AddContactCommand  implements Command {
             }
 
             Contact contact = JSONParser.parseContact(sb.toString());
+            FileManager.getInstance().writeImg(contact.getAvatar());
             service.insert(contact);
         } catch (NamingException e) {
             e.printStackTrace();
