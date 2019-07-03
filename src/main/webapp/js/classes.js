@@ -53,3 +53,10 @@ function Contact(id, fullName, birthDate, sex, nationality, maritalStatus, websi
     this.isSingle = function(){ return maritalStatus === "SINGLE";}
 }
 
+function MailParams(receivers, message, subject){
+    this.receivers = receivers || null;
+    this.message = message || null;
+    this.subject = subject || null;
+}
+
+

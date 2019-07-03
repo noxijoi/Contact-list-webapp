@@ -10,6 +10,7 @@ const TEMPLATE_NAMES = {
     phoneRow: "phoneRowTemplate",
     attachModal: "attachModalTemplate",
     attachRow: "attachRowTemplate",
+    attachEditModal: "editAttachModalTemplate",
     empty: "emptyTemplate"
 
 }
@@ -183,6 +184,10 @@ function Controller() {
             });
     }
 
+    this.sendMail = function(){
+        var Mail = view.dataCollector.collectMail();
+    }
+
 
     this.toMainPage = function () {
         location.hash = router.startHash;
@@ -199,26 +204,6 @@ function Controller() {
                 .then(data => {
                     console.log(data);
                 });
-        }
-    }
-
-    this.addPhone = function () {
-        var phone = view.dataCollector.collectPhoneData();
-        if (phone) {
-            communicator.sendPOST(phone, location.pathname + "contacts/" +phone.ownerId +"/phone" )
-                .then(response => {
-                    console.log(response);
-                })
-        }
-    }
-
-    this.addAttach = function () {
-        var attachData = new FormData(document.getElementById("attach-form"));
-        if (attachData) {
-            communicator.sendFormDataPOST(attachData, location.pathname +"contacts/"+ contactData.contactId +"/attach" )
-            .then(response => {
-                console.log(response);
-            })
         }
     }
 
@@ -267,12 +252,15 @@ function Controller() {
         var attachId = view.dataCollector.collectSelectedAttach();
         attachId.forEach(id => {
             for (var index = contactData.attachs.length - 1; index >= 0; index--) {
-                if(id === contactData.attachs[index]){
-                    deletedAttachs.put(contactData.attachs[index]);
+                if(id === contactData.attachs[index].id){
+                    if(!id.toString().endsWith("a")){
+                        deletedAttachs.put(contactData.attachs[index]);
+                    }
                     contactData.attachs.splice(index, 1);
                 }   
             }
         });
+        view.rerenderSideTables();
     }
 
     //+-
@@ -280,12 +268,15 @@ function Controller() {
         var phonesId = view.dataCollector.collectSelectedPhones();
         phonesId.forEach(id=>{
             for (var index = contactData.phones.length -1; index >= 0; index--) {
-                if(id === contactData.phones[index]){
-                    deletedPhones.put(contactData.phones[index]);
+                if(id === contactData.phones[index],id){
+                    if(!id.toString().endsWith("a")){
+                        deletedPhones.put(contactData.phones[index]);
+                    }  
                     contactData.phones.splice(index, 1);
                 }   
             }
         });
+        view.rerenderSideTables();
     }
 }
 
@@ -332,7 +323,7 @@ function formDataFromAttach(attach){
     var file = files[attach.id];
     formData.append("file", file);
     formData.append("comment", attach.comment);
-    formData.append("ownerId". attacg.ownerId);
+    formData.append("ownerId", attach.ownerId);
 
     return formData;
 }

@@ -49,12 +49,12 @@ public class PhoneDao extends AbstractDao<Phone,Integer> {
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE phone_number SET country_code = ?" +
-                "SET operator_code = ?" +
-                "SET number = ?" +
-                "SET type = ?"+
-                "SET comment = ?" +
-                "WHERe id = ?;";
+        return "UPDATE phone_number SET country_code = ?," +
+                "SET operator_code = ?," +
+                "SET number = ?," +
+                "SET type = ?,"+
+                "SET comment = ?," +
+                "WHERe id = ?";
     }
 
     @Override

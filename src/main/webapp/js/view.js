@@ -12,6 +12,7 @@ var view = {
   },
 
   generateTemplateHTML: function (templateName, data) {
+    data = data || {};
     var templateElement = document.getElementById(templateName);
     var templateSource = templateElement.innerHTML;
     return Mustache.to_html(templateSource, data);
@@ -19,7 +20,7 @@ var view = {
 
   rerenderSideTables: function () {
     view.renderSidenav(TEMPLATE_NAMES.phonesAttachBar, contactData);
-    view.addListenersForEditContactForm
+    view.listenerManager.addListenersForEditSide();
   },
 
 
@@ -81,10 +82,7 @@ var view = {
         .value.toUpperCase();
       phone.comment = document.getElementById("phone-comment-input").value;
       phone.ownerId = contactData.contact.id;
-      //все телефоны, которые ещё не добавлены в базу будут иметь индекс с меткой "а"
-      var id = contactData.phones.length + 1;
-      id += "a";
-      phone.id = id;
+      
       return phone;
     },
 
@@ -126,6 +124,7 @@ var view = {
           attachsId.push(input.value);
         }
       });
+      return attachsId;
     },
 
     //+
@@ -133,12 +132,7 @@ var view = {
       var attach = new Attachment();
       var file = document.getElementById("addFile").files[0];
       attach.ownerId = contactData.contact.id;
-      var id = contactData.attachs.length + 1;
-      id += "a";
-
-      files[id] = file;
-
-      attach.id = id;
+     
       attach.fileName = file.name;
       attach.comment = document.getElementById("attachComment").value;
 
@@ -159,19 +153,6 @@ var view = {
         phoneModal.style.display = "none";
       });
     },
-
-    addListenersForEditPhoneNodal: function () {
-      var confirmPhoneButton = document.getElementById("confirmPhone");
-      confirmPhoneButton.addEventListener("click", view.editPhone);
-      confirmPhoneButton.addEventListener("click", function () {
-        phoneModal.style.display = "none";
-      });
-      var cancelPhoneButton = document.getElementById("cancelPhone");
-      cancelPhoneButton.addEventListener("click", function () {
-        phoneModal.style.display = "none";
-      });
-    },
-
 
     addListenersForMailForm: function () {
       var sendMailButton = document.getElementById("send-mail");
@@ -211,7 +192,7 @@ var view = {
         })(file);
         reader.readAsDataURL(file);
 
-        contactData.avatar.decodedImg = document.getElementById("avatar-img").src;
+        contactData.contact.avatar.decodedImg = document.getElementById("avatar-img").src;
       });
     },
 
@@ -229,22 +210,22 @@ var view = {
       deleteAttachsButton.addEventListener("click", controller.deleteSelectedAttach);
 
       var phonesTable = document.getElementById("phones-table");
-      var editPhoneButtons = phonesTable.querySelectorAll("editBtn");
+      var editPhoneButtons = phonesTable.querySelectorAll(".editBtn");
       editPhoneButtons.forEach(cell => {
-        var row = cell.parentElement;
+        var row = cell.parentElement.parentElement;        
         var phoneId = row.querySelector("input").value;
-        var phoneN = contactData.phones.find(phone => {
-          return phone.id === phoneId;
+        var phoneToEdit = contactData.phones.find(phone => {
+          return phone.id.toString() === phoneId;
         });
-        view.openPhoneModal(phoneN);
+        view.openEditPhoneModal(phoneToEdit);
       });
 
-      var attachsTable = document.getElementById("phones-table");
-      var editAttachButtons = attachsTable.querySelectorAll("editBtn");
+      var attachsTable = document.getElementById("attachs-table");
+      var editAttachButtons = attachsTable.querySelectorAll(".editBtn");
       editAttachButtons.forEach(cell => {
-        var row = cell.parentElement;
+        var row = cell.parentElement.parentElement;
         var attachId = row.querySelector("input").value;
-        var attachN = contactData.phones.find(attach => {
+        var attachN = contactData.attachs.find(attach => {
           return attach.id === attachId;
         });
         view.openEditAttachModal(attachN);
@@ -285,6 +266,7 @@ var view = {
     var phoneModal = document.getElementById("phoneModal");
     phoneModal.innerHTML = view.generateTemplateHTML(TEMPLATE_NAMES.phoneModal, phone);
     phoneModal.style.display = "block";
+
     var confirmPhoneButton = document.getElementById("confirmPhone");
     confirmPhoneButton.addEventListener("click", function () {
       view.addPhoneToTable();
@@ -313,20 +295,66 @@ var view = {
     attachModal.style.display = "block";
   },
 
+  openEditPhoneModal: function(phone){
+    var phoneModal = document.getElementById("phoneModal");
+    phoneModal.innerHTML = view.generateTemplateHTML(TEMPLATE_NAMES.phoneModal, phone);
+    phoneModal.style.display = "block";
+    var confirmPhoneButton = document.getElementById("confirmPhone");
+    confirmPhoneButton.addEventListener("click", function () {
+      var id = phone.id;
+      phone = view.dataCollector.collectPhoneData();
+      phone.id = id;
+      var index = contactData.phones.findIndex(ph => ph.id.toString() === phone.id.toString());
+      contactData.phones[index] = phone;
+      view.rerenderSideTables();
+      phoneModal.style.display = "none";
+    });
+    var cancelPhoneButton = document.getElementById("cancelPhone");
+    cancelPhoneButton.addEventListener("click", function () {
+      phoneModal.style.display = "none";
+    });  
+  },
+
+
+  openEditAttachModal: function(attach){
+    var attachModal = document.getElementById("attachModal");
+    attachModal.innerHTML = view.generateTemplateHTML(TEMPLATE_NAMES.attachEditModal, attach);
+
+    var confirmAttachButton = document.getElementById("confirmAttach");
+    confirmAttachButton.addEventListener("click", function () {
+
+      attach.comment = document.getElementById("attachComment").value;
+      var index = contactData.attachs.findIndex(att => att.id.toString() === attach.id.toString());
+      contactData.attachs[index] = attach;
+
+      view.rerenderSideTables();
+      attachModal.style.display = "none";
+    });
+    var cancelAttachButton = document.getElementById("cancelAttach");
+    cancelAttachButton.addEventListener("click", function () {
+      attachModal.style.display = "none";
+    });
+    attachModal.style.display = "block";
+  },
+
   //++
   addPhoneToTable: function () {
     var phone = view.dataCollector.collectPhoneData();
     contactData.phones.push(phone);
+    //все телефоны, которые ещё не добавлены в базу будут иметь индекс с меткой "а"
+    var id = contactData.phones.length + 1;
+    id += "a";
+    phone.id = id;
     view.rerenderSideTables();
   },
   //++
   addAttachToTable: function () {
     var attach = view.dataCollector.collectAttachData();
+    //все атачи, которые ещё не добавлены в базу будут иметь индекс с меткой "а"
+    var id = contactData.phones.length + 1;
+    id += "a";
+    attach.id = id;
     contactData.attachs.push(attach);
     view.rerenderSideTables();
   },
-
-  editPhone: function(){
-    var attach = view.dataCollector.collectAttachData();
-  }
 };

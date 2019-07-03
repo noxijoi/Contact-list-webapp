@@ -16,7 +16,7 @@
 
 <body>
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary fixed-top">
-        <a class="navbar-brand" href="#">Маскалева. Список контактов</a>
+        <a class="navbar-brand" href="#page/1">Маскалева. Список контактов</a>
     </nav>
 
     <div class="row workspace">
@@ -158,7 +158,7 @@
                     <li class="page-item"><a class="page-link first-page" href="#page/1" >&lt&lt</a></li>
                     <li class="page-item"><a class="page-link prev-page"  href="#page/{{pageInfo.prevPageN}}">&lt</a></li>
                     <li class="page-item"><a class="page-link next-page"  href="#page/{{pageInfo.nextPageN}}">&gt</a></li>
-                    <li class="page-item"><a class="page-link last-page"  href="#page/{{pageInfo.nextPageN}}">&gt&gt</a></li>
+                    <li class="page-item"><a class="page-link last-page"  href="#page/{{pageInfo.lastPageN}}">&gt&gt</a></li>
                 </ul>
             </nav>
         </div>
@@ -174,7 +174,7 @@
                             <img src="img/remove.png" alt="remove"/>
                         </button>
                         <button class="mailto-button btn btn-outline-primary">
-                            <a href="#mailto">
+                            <a href="#mail">
                                 <img src="img/mailto.png" alt="mailto"/>
                             </a>
                         </button>
@@ -321,7 +321,7 @@
                         <img src="img/remove.png" alt="remove" class="sidenav-button-img"/>
                     </button>
             </div>
-            <table id="attach-table" class="table-striped table-bordered fluid">
+            <table id="attachs-table" class="table-striped table-bordered fluid">
                     <tr class="table-header">
                         <th>#</th>
                         <th scope="col-5">Имя</th>
@@ -332,7 +332,7 @@
                     {{#attachs}}
                         <tr>
                             <td><input type="checkbox" value="{{id}}"></td>
-                            <td class="nameCell"><button class="btn btn-link">{{name}}</button></td>
+                            <td class="nameCell"><button class="btn btn-link editBtn">{{name}}</button></td>
                             <td>{{date}}</td>
                             <td>{{comment}}</td>
                             <td><a class="hyperLink" href="{{requestPath}}/contacts/attach/download/{{id}}">тык</td>
@@ -352,23 +352,23 @@
                 <div class="container">
                     <div class="form-row">
                         <div class="form-group col-2">
-                            <label for="countrycode">Код страны</label>
+                            <label for="country-code-input">Код страны</label>
                             <input type="text" id="country-code-input" class="form-cotrol" value="{{countryCode}}">
                         </div>
                         <div class="form-group col-2">
-                            <label for="operatorCode">Код оператора</label>
+                            <label for="operator-code-input">Код оператора</label>
                             <input type="text" class="form-control" id="operator-code-input" value="{{operatorCode}}">
                         </div>
                         <div class="form-group col-2">
                             <label for="number">Номер</label>
-                            <input type="text" class="form-control" id="number-input">
+                            <input type="text" class="form-control" id="number-input" value="{{number}}">
                         </div>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="phoneType" value="HOME" id="homeRadio" {{#isHome}} checked {{/isHome}}>
                         <label for="homeRadio">Домашний</label>
                         <input class="form-check-input" type="radio" name="phoneType" value="MOBILE" id="mobileRadio" {{^isHome}} checked {{/isHome}}>
-                        <label for="homeRadio">Мобильный</label>
+                        <label for="mobileRadio">Мобильный</label>
                     </div>
                     <div class="form-group">
                         <label for="phoneComment">Комментарий</label>
@@ -434,10 +434,8 @@
             <textarea class="form-control" id="mail-text" rows="5">
             </textarea>
         </div>
-        <button class="btn btn-primary" id="send-mail">Отправить
-        </button>
-        <button class ="btn btn-secondary" id="cancel-mail">Отменить
-        </button>
+        <button class="btn btn-primary" id="send-mail">Отправить</button>
+        <button class ="btn btn-secondary" id="cancel-mail">Отменить</button>
         </script>
 
 
@@ -460,7 +458,7 @@
 
 
         <!--форма редактирования данных атача-->
-        <script id="editAttachTemplate" type="text/template">
+        <script id="editAttachModalTemplate" type="text/template">
             <div class="modal-content">
                     <div class="form-group">
                         <h3 class="h3">Файл</h3>
