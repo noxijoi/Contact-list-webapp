@@ -13,7 +13,7 @@ import contactsapp.command.POSTCommands.AddPhoneCommand;
 import contactsapp.command.POSTCommands.SendEmailCommand;
 import contactsapp.command.PUTCommands.EditAttachCommand;
 import contactsapp.command.PUTCommands.EditContactCommand;
-import contactsapp.command.PUTCommands.EditPhoneComand;
+import contactsapp.command.PUTCommands.EditPhoneCommand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,7 +59,7 @@ public class CommandManager {
 
         commandMap.put(PUT + patterns.get(ONE_CONTACT), new EditContactCommand());
         commandMap.put(PUT + patterns.get(ATTACH), new EditAttachCommand());
-        commandMap.put(PUT + patterns.get(PHONE), new EditPhoneComand());
+        commandMap.put(PUT + patterns.get(PHONE), new EditPhoneCommand());
 
         commandMap.put(DELETE + patterns.get(PAGE), new DeleteContactCommand());
         commandMap.put(DELETE + patterns.get(PHONE), new DeletePhoneCommand());

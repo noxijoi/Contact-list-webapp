@@ -3,6 +3,7 @@ function FullName(firstName, lastName, parentName) {
     this.firstName = firstName || "";
     this.lastName = lastName || "";
     this.parentName = parentName || "";
+    
 }
 //Address class
 function Address(country, city, street, house, index){
@@ -27,13 +28,14 @@ function Phone(id, ownerId, code, operatorCode, number, type, comment){
     }
 }
 //Attachment class
-function Attachment(id, ownerId, fileName, filePath, downloadTime, comment){
-    this.id = id;
-    this.ownerId = ownerId;
-    this.fileName = fileName ||"";
-    this.filePath = filePath ||"";
+function Attachment(id, ownerId, file, fileName, filePath, downloadTime, comment){
+    this.id = id || 0;
+    this.ownerId = ownerId || 0;
+    this.file = file || null;
+    this.fileName = fileName || "";
+    this.filePath = filePath || "";
     this.downloadTime = downloadTime || null;
-    this.comment = comment;
+    this.comment = comment || "";
 }
 
 //Contact class
@@ -49,6 +51,10 @@ function Contact(id, fullName, birthDate, sex, nationality, maritalStatus, websi
     this.company = company || "";
     this.address = address || null;
 
+    this.avatar = avatar || {};
+
+
+
     this.isMale = function(){return sex === "male";}
     this.isSingle = function(){ return maritalStatus === "SINGLE";}
 }
@@ -57,6 +63,11 @@ function MailParams(receivers, message, subject){
     this.receivers = receivers || null;
     this.message = message || null;
     this.subject = subject || null;
+}
+
+function Avatar(decodedImg, path){
+    this.decodedImg = decodedImg ||"";
+    this.path =path || ""; 
 }
 
 

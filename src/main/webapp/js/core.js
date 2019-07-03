@@ -22,8 +22,6 @@ const tempId     = /\/d+a$/;
 var startCotactData = {};
 //состояние после всех изменений
 var contactData = {};
-//загруженные на страницу файлы
-var files = {};
 //список контактов страницы
 var contactPageData = {};
 var deletedPhones =[];
@@ -145,6 +143,9 @@ function Controller() {
     }
 
     this.addContactPage = function () {
+        contactData = {};
+        contactData.contact = new Contact();
+        startCotactData = {};
         view.renderWorkArea(TEMPLATE_NAMES.editContact);
         view.listenerManager.addListenersForContactForm();
         view.renderSidenav(TEMPLATE_NAMES.empty);
@@ -195,9 +196,9 @@ function Controller() {
 
 
     this.addContactToDB = function () {
-        var contact = view.dataCollector.collectContactData();
-        if (contact) {
-            communicator.sendPOST(contact)
+        view.dataCollector.collectContactData();
+        if (contactData.contact) {
+            communicator.sendPOST(contactData.contact)
                 .then(response => {
                     return response.json();
                 })
@@ -208,33 +209,33 @@ function Controller() {
     }
 
     this.submitContact = function () {
-        var contact = view.dataCollector.collectContactData();
-        contact.id = startCotactData.contact.id;
+        view.dataCollector.collectContactData();
+        
         var phones = contactData.phones;
         phones.forEach(phone => {
             if(phone.id.toString().endsWith("a")){
                 phone.id = 0;
-                communicator.sendPOST(phone, location.pathname + "contacts/" + contact.id + "/phone");
+                communicator.sendPOST(phone, location.pathname + "contacts/" + contactData.contact.id + "/phone");
             } else {
-                communicator.sendPUT(phone, location.pathname + "contacts/" + contact.id + "/phone");
+                communicator.sendPUT(phone, location.pathname + "contacts/" + contactData.contact.id + "/phone");
             }
         });
         var attaches = contactData.attachs;
         attaches.forEach(attach => {
             if(attach.id.toString().endsWith("a")){
                 var formData = formDataFromAttach(attach);
-                communicator.sendPOST(formData, location.pathname + "contacts/" + contact.id + "/attach");
+                communicator.sendFormDataPOST(formData, location.pathname + "contacts/" + contactData.contact.id + "/attach");
             } else{
-                communicator.sendPUT(attach, location.pathname + "contacts/" + contact.id + "/attach");
+                communicator.sendPUT(attach, location.pathname + "contacts/" + contactData.contact.id + "/attach");
             }
         });
         if(deletedPhones.length > 0){
-            communicator.sendDELETE(deletedPhones, location.pathname + "contacts/" + contact.id + "/phone");
+            communicator.sendDELETE(deletedPhones, location.pathname + "contacts/" + contactData.contact.id + "/phone");
         }
         if(deletedAttachs.length > 0){
-            communicator.sendDELETE(deletedAttachs, location.pathname + "contacts/" + contact.id + "/attach");
+            communicator.sendDELETE(deletedAttachs, location.pathname + "contacts/" + contactData.contact.id + "/attach");
         }
-        communicator.sendPUT(contact)
+        communicator.sendPUT(contactData.contact)
         .then(function(){
             controller.toMainPage();
         })
@@ -320,8 +321,7 @@ var validator = {
 
 function formDataFromAttach(attach){
     var formData = new FormData();
-    var file = files[attach.id];
-    formData.append("file", file);
+    formData.append("file", attach.file);
     formData.append("comment", attach.comment);
     formData.append("ownerId", attach.ownerId);
 

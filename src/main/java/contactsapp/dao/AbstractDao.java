@@ -85,7 +85,7 @@ public abstract class AbstractDao<T extends Identified,PK extends Number> implem
     @Override
     public void update(Connection connection, Identified object) throws DaoException {
         String query = getUpdateQuery();
-        try(PreparedStatement statement= connection.prepareStatement(query)){
+        try(PreparedStatement statement = connection.prepareStatement(query)){
             prepareUpdateStatement(statement, object);
             int count = statement.executeUpdate();
             if (count != 1) {

@@ -116,23 +116,23 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE TABLE contact SET " +
-                "f_name = ?," +
-                "l_name = ?," +
-                "p_name = ?," +
-                "b_date = ?," +
-                "sex = ?," +
-                "nationality = ?," +
-                "marital_status =?," +
-                "web_site = ?," +
-                "email= ?," +
-                "company = ?," +
-                "country = ?," +
-                "city = ?," +
-                "street = ?," +
-                "house_n = ?," +
-                "post_index = ? " +
-                "avatar = ?" +
+        return "UPDATE contact SET " +
+                "f_name = ?, " +
+                "l_name = ?, " +
+                "p_name = ?, " +
+                "b_date = ?, " +
+                "sex = ?, " +
+                "nationality = ?, " +
+                "marital_status = ?, " +
+                "web_site = ?, " +
+                "email = ?, " +
+                "company = ?, " +
+                "country = ?, " +
+                "city = ?, " +
+                "street = ?, " +
+                "house_n = ?, " +
+                "post_index = ?, " +
+                "avatar = ? " +
                 "WHERE id = ?";
     }
 

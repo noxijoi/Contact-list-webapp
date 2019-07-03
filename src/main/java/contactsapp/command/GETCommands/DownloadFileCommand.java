@@ -3,6 +3,7 @@ package contactsapp.command.GETCommands;
 import contactsapp.command.Command;
 import contactsapp.core.entity.Attachment;
 import contactsapp.service.AttachmentService;
+import contactsapp.utils.FileManager;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -21,7 +22,7 @@ public class DownloadFileCommand implements Command {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
         String uri = req.getRequestURI();
-        String[] parts = uri.split(File.separator);
+        String[] parts = uri.split("/");
         Integer attachN = null;
         for (int i = 0; i < parts.length; i++) {
             if (parts[i].equals("download")) {
@@ -32,7 +33,8 @@ public class DownloadFileCommand implements Command {
             AttachmentService service = new AttachmentService();
             Attachment attachment = service.getById(attachN);
 
-            File file = new File(attachment.getFilePath());
+            String fullPath = FileManager.getInstance().getAttachmentDirectory() + File.separator + attachment.getFilePath();
+            File file = new File(fullPath);
             OutputStream ostream = null;
             FileInputStream fis = null;
 

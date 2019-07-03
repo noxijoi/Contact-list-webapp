@@ -24,17 +24,18 @@ public class AttachmentDao extends AbstractDao<Attachment, Integer>{
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE attachment SET path = ?" +
-                "SET name = ?" +
-                "SET download_time = ?" +
-                "SET comment = ?" +
+        return "UPDATE attachment SET " +
+                "path = ?, " +
+                "name = ?, " +
+                "download_time = ?, " +
+                "comment = ? " +
                 "WHERe id = ?;";
     }
 
     @Override
     protected String getInsertQuery() {
         return "INSERT INTO attachment (owner_id, path, name, download_time, comment)" +
-                " VALUES (?, ?, ?, ?);";
+                " VALUES (?, ?, ?, ?, ?);";
     }
 
     @Override
@@ -44,7 +45,7 @@ public class AttachmentDao extends AbstractDao<Attachment, Integer>{
 
     @Override
     protected String getSelectByIdQuery() {
-        return "SELECT * FROM attachment WHERE attach_id = ?";
+        return "SELECT * FROM attachment WHERE id = ?";
     }
 
     private String getSelectByOwnerIdQuery(){
@@ -94,7 +95,7 @@ public class AttachmentDao extends AbstractDao<Attachment, Integer>{
     }
 
     public int getLastInserted(Connection connection) {
-        String query = "SELECT Last_insert_id() FROM attacment";
+        String query = "SELECT Last_insert_id() FROM attachment";
         Integer result = null;
         try(Statement statement = connection.createStatement()){
             ResultSet rs = statement.executeQuery(query);

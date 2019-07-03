@@ -117,11 +117,11 @@
                         <label for="street-input">Улица</label>
                         <input type="text" id="street-input" class="form-control" value="{{contact.address.street}}">
                     </div>
-                    <div class="form-group col-1">
+                    <div class="form-group col-2">
                         <label for="house-input">Дом</label>
                         <input type="text" id="house-input" class="form-control" value="{{contact.address.house}}">
                     </div>
-                    <div class="form-group col-1">
+                    <div class="form-group col-2">
                         <label for="index-input">Индекс</label>
                         <input type="text" id="index-input" class="form-control" value="{{contact.address.index}}">
                     </div>
@@ -332,10 +332,10 @@
                     {{#attachs}}
                         <tr>
                             <td><input type="checkbox" value="{{id}}"></td>
-                            <td class="nameCell"><button class="btn btn-link editBtn">{{name}}</button></td>
-                            <td>{{date}}</td>
+                            <td class="nameCell"><button class="btn btn-link editBtn">{{fileName}}</button></td>
+                            <td>{{downloadTime}}</td>
                             <td>{{comment}}</td>
-                            <td><a class="hyperLink" href="{{requestPath}}/contacts/attach/download/{{id}}">тык</td>
+                            <td><a class="hyperLink" href="contacts/attach/download/{{id}}">тык</td>
                         </tr>
                     {{/attachs}}
             </table>
@@ -385,11 +385,13 @@
         <div class="modal-content">
             <div class="form-group">
                 <h3 class="h3">Файл</h3>
-                <input type="file" id="addFile" class="form-cotrol-file" name="file">
+                <div class="form-group">
+                    <label for="addFile">Выберите файл</label>
+                    <input type="file" id="addFile" class="form-cotrol-file" name="file">
+                </div>
                 <div class="container">
                     <div class="form-group">
                         <form id="attach-form">
-                            <label for="addFile">Выберите файл</label>
                             <input type="text" name="ownerId" value="{{ownerId}}" hidden>
                             <label for="attachComment">Комментарий</label>
                             <input class="form-control" type="text" id="attachComment" name="comment">

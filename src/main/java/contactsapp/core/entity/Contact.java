@@ -144,8 +144,5 @@ public class Contact implements Identified {
         this.avatar = avatar;
     }
 
-    public void setAvatar(String pathToImg){
-        this.avatar = new Avatar(pathToImg);
-    }
 
 }
