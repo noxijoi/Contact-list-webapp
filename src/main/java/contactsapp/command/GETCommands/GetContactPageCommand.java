@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ public class GetContactPageCommand implements Command {
                 pageN = Integer.parseInt(parts[i + 1]);
             }
         }
-        Map params = req.getParameterMap();
+        Map<String, String[]>params = req.getParameterMap();
         try {
             if (params.size() > 1) {
                 ContactService service = new ContactService();
@@ -40,51 +41,56 @@ public class GetContactPageCommand implements Command {
                 params.forEach((key, value)->{
                     switch (key.toString()){
                         case "firstName":
-                            contacts.removeIf(contact -> contact.getFullName().getFirstName()== null &&
-                                    !contact.getFullName().getFirstName().equals(value));
+                            contacts.removeIf(contact -> (contact.getFullName().getFirstName() == null) ||
+                                    !contact.getFullName().getFirstName().equals(value[0]));
                             break;
                         case "lastName":
-                            contacts.removeIf(contact -> contact.getFullName().getLastName()== null &&
-                                    !contact.getFullName().getLastName().equals(value));
+                            contacts.removeIf(contact -> contact.getFullName().getLastName()== null ||
+                                    !contact.getFullName().getLastName().equals(value[0]));
                             break;
                         case "parentName":
-                            contacts.removeIf(contact -> contact.getFullName().getParentName() == null &&
-                                    !contact.getFullName().getParentName().equals(value));
+                            contacts.removeIf(contact -> contact.getFullName().getParentName() == null ||
+                                    !contact.getFullName().getParentName().equals(value[0]));
                             break;
                         case "dateFrom":
-                            contacts.removeIf(contact -> contact.getBirthDate() == null &&
-                                    contact.getBirthDate().isBefore(LocalDate.parse(value.toString())));
+                            contacts.removeIf(contact -> contact.getBirthDate() == null ||
+                                    contact.getBirthDate().isBefore(LocalDate.parse(value[0].toString())));
                             break;
                         case "dateTo":
-                            contacts.removeIf(contact -> contact.getBirthDate() == null &&
-                                    contact.getBirthDate().isBefore(LocalDate.parse(value.toString())));
+                            contacts.removeIf(contact -> contact.getBirthDate() == null ||
+                                    contact.getBirthDate().isBefore(LocalDate.parse(value[0].toString())));
                             break;
                         case "sex":
-                            contacts.removeIf(contact -> contact.getSex() == null &&
-                                    !contact.getSex().toString().equals(value));
+                            contacts.removeIf(contact -> contact.getSex() == null ||
+                                    !contact.getSex().toString().equals(value[0]));
                             break;
                         case "company":
-                            contacts.removeIf(contact -> contact.getCompany()== null &&
-                                    !contact.getCompany().equals(value));
+                            contacts.removeIf(contact -> contact.getCompany()== null ||
+                                    !contact.getCompany().equals(value[0]));
                             break;
                         case "website":
-                            contacts.removeIf(contact -> contact.getWebsite() == null &&
-                                    !contact.getWebsite().equals(value));
+                            contacts.removeIf(contact -> contact.getWebsite() == null ||
+                                    !contact.getWebsite().equals(value[0]));
                             break;
                         case "email":
-                            contacts.removeIf(contact -> !contact.getEmail().equals(value));
+                            contacts.removeIf(contact -> contact.getEmail() == null ||
+                                    !contact.getEmail().equals(value[0]));
                             break;
                         case "country":
-                            contacts.removeIf(contact -> !contact.getAddress().getCountry().equals(value));
+                            contacts.removeIf(contact -> contact.getAddress().getCountry() == null ||
+                                    !contact.getAddress().getCountry().equals(value[0]));
                             break;
                         case "city":
-                            contacts.removeIf(contact -> !contact.getAddress().getCountry().equals(value));
+                            contacts.removeIf(contact ->contact.getAddress().getCountry() == null ||
+                                    !contact.getAddress().getCountry().equals(value[0]));
                             break;
                         case "street":
-                            contacts.removeIf(contact -> !contact.getAddress().getCity().equals(value));
+                            contacts.removeIf(contact ->contact.getAddress().getCity() == null||
+                                    !contact.getAddress().getCity().equals(value[0]));
                             break;
                         case "index":
-                            contacts.removeIf(contact -> !contact.getAddress().getIndex().equals(value));
+                            contacts.removeIf(contact ->contact.getAddress().getIndex() == null ||
+                                    !contact.getAddress().getIndex().equals(value[0]));
                             default:
                                 break;
 

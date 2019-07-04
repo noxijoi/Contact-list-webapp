@@ -118,7 +118,7 @@ var view = {
       var contactsIdInputs = new Array();
       document.querySelectorAll("#phones-table input").forEach(input => {
         if (input.checked) {
-          contactsIdInputs.push(input);
+          contactsIdInputs.push(input.value);
         }
       });
       return contactsIdInputs;
@@ -175,8 +175,11 @@ var view = {
     },
 
     addListersForEditMain: function () {
+      
       var okButton = document.querySelector(".contact-ok");
       okButton.addEventListener("click", controller.submitContact);
+      var submitButton = document.querySelector(".submit");
+      submitButton.addEventListener('submit', okButton.click);
       //--
       var cancelButton = document.querySelector(".contact-cancel");
       cancelButton.addEventListener("click", controller.toMainPage);
@@ -284,6 +287,7 @@ var view = {
       okButton.addEventListener("click", controller.addContactToDB);
       var cancelButton = document.querySelector(".contact-cancel");
       cancelButton.addEventListener("click", controller.toMainPage);
+      document.querySelector(".avatar").style.display = "none";
     },
 
     addListenersForEditContactForm: function () {
@@ -311,6 +315,10 @@ var view = {
       view.addPhoneToTable();
       phoneModal.style.display = "none";
     });
+
+    var submitButton = document.querySelector(".phone .submit");
+    submitButton.addEventListener('submit', confirmPhoneButton.click);
+
     var cancelPhoneButton = document.getElementById("cancelPhone");
     cancelPhoneButton.addEventListener("click", function () {
       phoneModal.style.display = "none";
@@ -327,6 +335,10 @@ var view = {
       view.addAttachToTable();
       attachModal.style.display = "none";
     });
+
+    var submitButton = document.querySelector(".attach .submit");
+    submitButton.addEventListener('submit', confirmAttachButton.click);
+    
     var cancelAttachButton = document.getElementById("cancelAttach");
     cancelAttachButton.addEventListener("click", function () {
       attachModal.style.display = "none";

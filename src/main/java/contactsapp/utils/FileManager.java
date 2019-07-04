@@ -63,6 +63,7 @@ public class FileManager {
     public void writeImg(Avatar avatar) {
 
         String encodingPrefix = "base64,";
+
         if(avatar.getDecodedImg() == null || avatar.getDecodedImg().isEmpty()){
             return;
         }

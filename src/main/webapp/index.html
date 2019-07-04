@@ -12,6 +12,7 @@
     <script src="js/classes.js"></script>
     <script src="js/core.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 </head>
 
 <body>
@@ -44,24 +45,24 @@
                 <div class="row">
                     <div class="form-group col-2">
                         <label for="first-name-input">Имя* </label>
-                        <input type="text" id="first-name-input" class="form-control" value="{{contact.fullName.firstName}}" required>
+                        <input type="text" id="first-name-input" class="form-control" value="{{contact.fullName.firstName}}" required maxlength="30" >
                     </div>
 
                     <div class="form-group col-2">
                         <label for="last-name-input">Фамилия* </label>
-                        <input type="text" id="last-name-input" class="form-control" value="{{contact.fullName.lastName}}" required>
+                        <input type="text" id="last-name-input" class="form-control" value="{{contact.fullName.lastName}}" required maxlength="30">
                     </div>
 
                     <div class="form-group col-2">
                         <label for="parent-name-input">Отчество* </label>
-                        <input type="text" id="parent-name-input" class="form-control" value="{{contact.fullName.parentName}}" required>
+                        <input type="text" id="parent-name-input" class="form-control" value="{{contact.fullName.parentName}}" required maxlength="30">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="birth-date-input">Дата рождения </label>
                     <div class="input-group">
-                        <input type="date" id="birth-date-input" class="form-control" value="{{contact.birthDate}}">
+                        <input type="date" id="birth-date-input" class="form-control" value="{{contact.birthDate}}" required>
                         <span class="input-group-addon">
                             <i class="glyphicon glyphicon-calendar"></i>
                         </span>
@@ -76,7 +77,7 @@
                 <div class="form-row">
                     <div class="form-group col-2">
                         <label for="company-input">Компания</label>
-                        <input type="text" id="company-input" class="form-control sm" value="{{contact.company}}">
+                        <input type="text" id="company-input" class="form-control sm" value="{{contact.company}}" maxlength="100">
                     </div>
                 <!-- проставить значение в js, ибо неудобно-->
                     <div class="form-group col-2">
@@ -89,17 +90,17 @@
                 </div>
                 <div class="form-group">
                         <label for="nationality-input">Гражданство</label>
-                        <input type="text" id="nationality-input" class="form-control" value="{{contact.nationality}}">
+                        <input type="text" id="nationality-input" class="form-control" value="{{contact.nationality}}" maxlength="30">
                     </div>
                 <div class="form-row">
                     <div class="form-group col-3">
                         <label for="web-site-input">Веб-сайт</label>
-                        <input type="text" id="website-input" class="form-control" value="{{contact.website}}">
+                        <input type="text" id="website-input" class="form-control" value="{{contact.website}}" maxlength="50">
                     </div>
 
                     <div clas="form-group col-3">
                         <label for="email-input">Email*</label>
-                        <input type="text" id="email-input" class="form-control" required value="{{contact.email}}">
+                        <input type="text" id="email-input" class="form-control" required value="{{contact.email}}" required maxlength="50">
                     </div>
                 </div>
 
@@ -107,28 +108,29 @@
                 <div class="address-form form-row">
                     <div class="form-group col-2">
                         <label for="country-input">Cтрана</label>
-                        <input type="text" id="country-input" class="form-control" value="{{contact.address.country}}">
+                        <input type="text" id="country-input" class="form-control" value="{{contact.address.country}}" maxlength="100">
                     </div>
                     <div class="form-group col-2">
                         <label for="city-input">Город</label>
-                        <input type="text" id="city-input" class="form-control" value="{{contact.address.city}}">
+                        <input type="text" id="city-input" class="form-control" value="{{contact.address.city}}" maxlength="50">
                     </div>
                     <div class="form-group col-2">
                         <label for="street-input">Улица</label>
-                        <input type="text" id="street-input" class="form-control" value="{{contact.address.street}}">
+                        <input type="text" id="street-input" class="form-control" value="{{contact.address.street}}" maxlength="50">
                     </div>
                     <div class="form-group col-2">
                         <label for="house-input">Дом</label>
-                        <input type="text" id="house-input" class="form-control" value="{{contact.address.house}}">
+                        <input type="text" id="house-input" class="form-control" value="{{contact.address.house}}" maxlength="10">
                     </div>
                     <div class="form-group col-2">
                         <label for="index-input">Индекс</label>
                         <input type="text" id="index-input" class="form-control" value="{{contact.address.index}}">
                     </div>
                 </div>
-                <input type="button" class="btn btn-success contact-ok" value="Добавить">
-                <input type="button" class="btn btn-secondary contact-cancel" value="Отменить">
+                <input type="submit" class="btn btn-success submit" value="OK" > 
             </form>
+            <button type="button" class="btn btn-success contact-ok" hidden>ОК</button>
+            <button type="button" class="btn btn-secondary contact-cancel" >НЕ ОК</button>
         </div>
         </script>
 
@@ -191,19 +193,19 @@
                 <div class="form-group-row">
                     <label for="fName" class="col col-form-label">Имя</label>
                     <div class="col">
-                        <input type="text" class="form-control" id="fName" value="{{firstName}}">
+                        <input type="text" class="form-control" id="fName" value="{{firstName}}" maxlength="30" >
                     </div>
                 </div>
                 <div class="form-group-row">
                         <label for="lName" class="col col-form-label">Фамилия</label>
                         <div class="col">
-                            <input type="text" class="form-control" id="lName" value="{{lastName}}">
+                            <input type="text" class="form-control" id="lName" value="{{lastName}}" maxlength="30">
                         </div>
                 </div>
                 <div class="form-group-row">
                         <label for="pName" class="col col-form-label">Отчество</label>
                         <div class="col">
-                            <input type="text" class="form-control" id="pName" value="{{parentName}}">
+                            <input type="text" class="form-control" id="pName" value="{{parentName}}" maxlength="30">
                         </div>
                 </div>
                 <div class="form-group">
@@ -216,7 +218,7 @@
                 <div class="form-group-row">
                     <label for="pName" class="col col-form-label">Компания</label>
                     <div class="col">
-                        <input type="text" class="form-control" id="company-input" value="{{company}}">
+                        <input type="text" class="form-control" id="company-input" value="{{company}}" maxlength="100">
                     </div>
             </div>
                 <div class="form-group">
@@ -237,32 +239,32 @@
                 <div class="form-group-row">
                     <label for="email-input" class="col col-form-label">email</label>
                     <div class="col">
-                        <input type="text" class="form-control" id="email-input" value="{{email}}">
+                        <input type="text" class="form-control" id="email-input" value="{{email}}" maxlength="50">
                     </div>
             </div>
                 <!--Адрес-->
                 <div class="form-group-row">
                         <label for="country-input" class="col col-form-label">Страна</label>
                         <div class="col">
-                            <input type="text" class="form-control" id="country-input" value="{{country}}">
+                            <input type="text" class="form-control" id="country-input" value="{{country}}" maxlength="100">
                         </div>
                     </div>
                     <div class="form-group-row">
                             <label for="city-input" class="col col-form-label">Город</label>
                             <div class="col">
-                                <input type="text" class="form-control" id="city-input" value="{{city}}">
+                                <input type="text" class="form-control" id="city-input" value="{{city}}" maxlength="50">
                             </div>
                     </div>
                     <div class="form-group-row">
                             <label for="street-input" class="col col-form-label">Улица</label>
                             <div class="col">
-                                <input type="text" class="form-control" id="street-input" value="{{street}}">
+                                <input type="text" class="form-control" id="street-input" value="{{street}}" maxlength="50">
                             </div>
                     </div>
                     <div class="form-group-row">
                             <label for="index-input" class="col col-form-label">Индекс</label>
                             <div class="col">
-                                <input type="text" class="form-control" id="index-input" value="{{index}}">
+                                <input type="number" class="form-control" id="index-input" value="{{index}}" >
                             </div>
                     </div>
                     <div class="container">
@@ -347,34 +349,37 @@
 
         <!--Модальное окошко для телефона-->
         <script id="phoneModalTemplate" type="text/template">
-        <div class="modal-content">
+        <div class="modal-content phone">
                 <div class="modal-header">Телефонный номер</div>
                 <div class="container">
-                    <div class="form-row">
-                        <div class="form-group col-2">
-                            <label for="country-code-input">Код страны</label>
-                            <input type="text" id="country-code-input" class="form-cotrol" value="{{countryCode}}">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-2">
+                                <label for="country-code-input">Код страны</label>
+                                <input type="text" id="country-code-input" class="form-cotrol" value="{{countryCode}}" required maxlength="5">
+                            </div>
+                            <div class="form-group col-2">
+                                <label for="operator-code-input">Код оператора</label>
+                                <input type="text" class="form-control" id="operator-code-input" value="{{operatorCode}}" required maxlength="5">
+                            </div>
+                            <div class="form-group col-2">
+                                <label for="number">Номер</label>
+                                <input type="text" class="form-control" id="number-input" value="{{number}}" required maxlength="10">
+                            </div>
                         </div>
-                        <div class="form-group col-2">
-                            <label for="operator-code-input">Код оператора</label>
-                            <input type="text" class="form-control" id="operator-code-input" value="{{operatorCode}}">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="phoneType" value="HOME" id="homeRadio" {{#isHome}} checked {{/isHome}}>
+                            <label for="homeRadio">Домашний</label>
+                            <input class="form-check-input" type="radio" name="phoneType" value="MOBILE" id="mobileRadio" {{^isHome}} checked {{/isHome}}>
+                            <label for="mobileRadio">Мобильный</label>
                         </div>
-                        <div class="form-group col-2">
-                            <label for="number">Номер</label>
-                            <input type="text" class="form-control" id="number-input" value="{{number}}">
+                        <div class="form-group">
+                            <label for="phoneComment">Комментарий</label>
+                            <input class="form-control" type="text" id="phone-comment-input" value="{{comment}}" maxlength="255">
                         </div>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="phoneType" value="HOME" id="homeRadio" {{#isHome}} checked {{/isHome}}>
-                        <label for="homeRadio">Домашний</label>
-                        <input class="form-check-input" type="radio" name="phoneType" value="MOBILE" id="mobileRadio" {{^isHome}} checked {{/isHome}}>
-                        <label for="mobileRadio">Мобильный</label>
-                    </div>
-                    <div class="form-group">
-                        <label for="phoneComment">Комментарий</label>
-                        <input class="form-control" type="text" id="phone-comment-input" value="{{comment}}">
-                    </div>
-                    <button class="btn btn-primary close-modal" id="confirmPhone" >ОК</button>
+                        <input type="submit" class="btn btn-success submit" value="OK" > 
+                    </form>
+                    <button class="btn btn-primary close-modal" id="confirmPhone" hidden>ОК</button>
                     <button claas="btn btn-outline-primary close-modal" id="cancelPhone">Отменить</button>
                 </div>
         </div>
@@ -382,25 +387,28 @@
 
         <!--Модальное окошко для атача-->
         <script id="attachModalTemplate" type="text/template">
-        <div class="modal-content">
-            <div class="form-group">
-                <h3 class="h3">Файл</h3>
+        <div class="modal-content attach">
+            <form>
                 <div class="form-group">
-                    <label for="addFile">Выберите файл</label>
-                    <input type="file" id="addFile" class="form-cotrol-file" name="file">
-                </div>
-                <div class="container">
+                    <h3 class="h3">Файл</h3>
                     <div class="form-group">
-                        <form id="attach-form">
-                            <input type="text" name="ownerId" value="{{ownerId}}" hidden>
-                            <label for="attachComment">Комментарий</label>
-                            <input class="form-control" type="text" id="attachComment" name="comment">
-                        </form>
+                        <label for="addFile">Выберите файл</label>
+                        <input type="file" id="addFile" class="form-cotrol-file" name="file" required>
                     </div>
-                    <button class="btn btn-primary close-modal" id="confirmAttach" >ОК</button>
-                    <button class="btn btn-outline-primary close-modal" id="cancelAttach">Отменить</button>
+                    <div class="container">
+                        <div class="form-group">
+                            <form id="attach-form">
+                                <input type="text" name="ownerId" value="{{ownerId}}" hidden>
+                                <label for="attachComment">Комментарий</label>
+                                <input class="form-control" type="text" id="attachComment" name="comment" maxlength="200">
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <input type="submit" class="btn btn-success submit" value="OK" >
+            </form>
+            <button class="btn btn-primary close-modal" id="confirmAttach" hidden>ОК</button>
+            <button class="btn btn-outline-primary close-modal" id="cancelAttach">Отменить</button>
         </div>
         </script>
 

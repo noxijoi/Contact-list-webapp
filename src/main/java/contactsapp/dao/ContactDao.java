@@ -26,12 +26,12 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
 
     @Override
     public Contact getById(Connection connection, Number number) throws DaoException {
-        return (Contact) super.getById(connection,number);
+        return  super.getById(connection,number);
     }
 
     @Override
     public Contact insert(Connection connection, Identified object) throws DaoException {
-        return (Contact) super.insert(connection, object);
+        return  super.insert(connection, object);
     }
 
     @Override

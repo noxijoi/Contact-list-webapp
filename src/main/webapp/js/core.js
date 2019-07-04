@@ -117,9 +117,6 @@ function Controller() {
 
                 view.listenerManager.addListenersForTable();
                 view.listenerManager.addListenersForSearchForm();
-            })
-            .catch(e =>{
-                alert(e);
             });
     }
 
@@ -139,7 +136,6 @@ function Controller() {
                 view.renderSidenav(TEMPLATE_NAMES.phonesAttachBar, data);
                 view.listenerManager.addListenersForEditContactForm();
             })
-            .catch(e => alert(e));
     }
 
     this.addContactPage = function () {
@@ -198,13 +194,7 @@ function Controller() {
     this.addContactToDB = function () {
         view.dataCollector.collectContactData();
         if (contactData.contact) {
-            communicator.sendPOST(contactData.contact)
-                .then(response => {
-                    return response.json();
-                })
-                .then(data => {
-                    console.log(data);
-                });
+            communicator.sendPOST(contactData.contact);
         }
     }
 
@@ -269,7 +259,7 @@ function Controller() {
         var phonesId = view.dataCollector.collectSelectedPhones();
         phonesId.forEach(id=>{
             for (var index = contactData.phones.length -1; index >= 0; index--) {
-                if(id === contactData.phones[index],id){
+                if(id === contactData.phones[index].id){
                     if(!id.toString().endsWith("a")){
                         deletedPhones.put(contactData.phones[index]);
                     }  
@@ -309,9 +299,6 @@ function Router(controller) {
         location.search = '?' + paramsString;
     }
 
-    this.getParams = function(){
-
-    }
 }
 
 //Validator

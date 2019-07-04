@@ -24,6 +24,9 @@ public class AddContactCommand  implements Command {
             }
 
             Contact contact = JSONParser.parseContact(sb.toString());
+            if(contact.getAvatar().getPath() == null){
+                contact.getAvatar().setPath(FileManager.getInstance().getDefaultAvatarPath());
+            }
             FileManager.getInstance().writeImg(contact.getAvatar());
             service.insert(contact);
         } catch (NamingException e) {

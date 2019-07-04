@@ -39,7 +39,7 @@ function Attachment(id, ownerId, file, fileName, filePath, downloadTime, comment
 }
 
 //Contact class
-function Contact(id, fullName, birthDate, sex, nationality, maritalStatus, website, email, company, address ){
+function Contact(id, fullName, birthDate, sex, nationality, maritalStatus, website, email, company, address, avatar ){
     this.id = id || 0; 
     this.fullName = fullName || null;
     this.birthDate = birthDate || null;
@@ -49,9 +49,9 @@ function Contact(id, fullName, birthDate, sex, nationality, maritalStatus, websi
     this.website = website || "";
     this.email = email || "";
     this.company = company || "";
-    this.address = address || null;
+    this.address = address || new Address();
 
-    this.avatar = avatar || {};
+    this.avatar = avatar || new Avatar();
 
 
 
