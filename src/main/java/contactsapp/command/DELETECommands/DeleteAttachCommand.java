@@ -26,6 +26,7 @@ public class DeleteAttachCommand implements Command {
             }
             List<Attachment> list = JSONParser.parseListAttach(sb.toString());
             service.delete(list);
+            LOGGER.info("Delete " + list.size() + " attachments");
         } catch (IOException e) {
             LOGGER.error(e);
         }

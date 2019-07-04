@@ -27,7 +27,7 @@ public class DeleteContactCommand implements Command {
             }
             List<Contact> list = JSONParser.parseListContact(sb.toString());
             service.delete(list);
-            LOGGER.info("deleted "+ list.size() + " contacts");
+            LOGGER.info("delete "+ list.size() + " contacts");
         } catch (NamingException e) {
             LOGGER.warn(e);
         } catch (IOException e) {

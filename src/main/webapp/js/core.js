@@ -85,7 +85,7 @@ function Controller() {
         switch (key) {
             case "contactsPage": return this.contactsPage;
             case "addContactPage": return this.addContactPage;
-            case "mailToPage": return this.mailToPage;
+            case "mailPage": return this.mailPage;
             case "editContactPage": return this.editContactPage;
         }
     }
@@ -110,7 +110,10 @@ function Controller() {
             })
             .then(data => {
                 contactPageData = {};
-                communicator.list = data.contacts;
+                contactPageData = data;
+                data.contacts.forEach(contact =>
+                    contact.birthDate = moment(contact.birthDate).format("YYYY-MM-DD"))
+            
 
                 view.renderWorkArea(TEMPLATE_NAMES.contactsTable, data);
                 view.renderSidenav(TEMPLATE_NAMES.searchBar, data);
@@ -132,6 +135,10 @@ function Controller() {
             .then(data => {
                 startCotactData = data;
                 contactData = data;
+                data.contact.birthDate = moment(data.contact.birthDate).format("YYYY-MM-DD");
+                data.attachs.forEach(attach =>{
+                    attach.downloadTime = moment(attach.downloadTime).format("YYYY-MM-DD");
+                })
                 view.renderWorkArea(TEMPLATE_NAMES.editContact, data);
                 view.renderSidenav(TEMPLATE_NAMES.phonesAttachBar, data);
                 view.listenerManager.addListenersForEditContactForm();
@@ -147,12 +154,12 @@ function Controller() {
         view.renderSidenav(TEMPLATE_NAMES.empty);
     }
 
-    this.mailToPage = function () {
+    this.mailPage = function () {
         var contactsIds = view.dataCollector.collectSelectedContacts();
         var emails = new Array();
         var data = {};
         
-        contactPageData.list.forEach(contact =>{
+        contactPageData.contacts.forEach(contact =>{
            if(contactsIds.includes(contact.id)){
                emails.push(contact.email);
            }

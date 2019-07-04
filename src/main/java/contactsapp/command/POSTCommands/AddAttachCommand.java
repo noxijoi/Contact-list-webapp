@@ -5,6 +5,11 @@ import contactsapp.core.entity.Attachment;
 import contactsapp.service.AttachmentService;
 import contactsapp.utils.FileManager;
 import contactsapp.utils.PropertiesManager;
+import contactsapp.validation.AttachmentValidator;
+import contactsapp.validation.DataValidationException;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +23,7 @@ import java.util.Date;
 import java.util.Properties;
 
 public class AddAttachCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(AddAttachCommand.class);
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -46,18 +52,25 @@ public class AddAttachCommand implements Command {
             attachment.setOwnerId(ownerId);
             attachment.setComment(comment);
             attachment.setFileName(file.getName());
-            attachment.setDownloadTime(Instant.ofEpochMilli(file.lastModified()).atZone(ZoneId.systemDefault()).toLocalDate());
+            attachment.setDownloadTime(Instant.ofEpochMilli(file.lastModified())
+                    .atZone(ZoneId.systemDefault()).toLocalDate());
             attachment.setFilePath(folderName + File.separator + fileName);
 
             AttachmentService service = new AttachmentService();
+            AttachmentValidator validator = new AttachmentValidator();
+            validator.validate(attachment);
             service.insert(attachment);
 
             int id = service.getLastInsertedId();
             resp.getWriter().write("id=" + id);
+            LOGGER.info("add 1 new Attachment to database");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         } catch (ServletException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
+        } catch (DataValidationException e) {
+            resp.setStatus(400);
+            LOGGER.warn(e);
         }
     }
 }

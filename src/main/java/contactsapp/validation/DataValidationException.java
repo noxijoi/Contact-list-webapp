@@ -1,19 +1,19 @@
 package contactsapp.validation;
 
-public class ValidationExeption extends Throwable {
-    public ValidationExeption(String message) {
+public class DataValidationException extends Throwable {
+    public DataValidationException(String message) {
         super(message);
     }
 
-    public ValidationExeption(String message, Throwable cause) {
+    public DataValidationException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ValidationExeption(Throwable cause) {
+    public DataValidationException(Throwable cause) {
         super(cause);
     }
 
-    protected ValidationExeption(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected DataValidationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

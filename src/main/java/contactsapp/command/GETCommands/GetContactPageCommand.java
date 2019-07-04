@@ -8,6 +8,8 @@ import contactsapp.core.entity.Contact;
 import contactsapp.dao.DaoException;
 import contactsapp.service.ContactService;
 import contactsapp.utils.serialization.JSONParser;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GetContactPageCommand implements Command {
-    private final String FIRST_NAME ="firstName";
+    private final static Logger LOGGER  = LogManager.getLogger(GetContactPageCommand.class);
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
         String uri = req.getRequestURI();
@@ -112,13 +114,13 @@ public class GetContactPageCommand implements Command {
                 resp.getWriter().write(resultJSON);
             }
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         } catch (DaoException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         } catch (NamingException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
     }
 }

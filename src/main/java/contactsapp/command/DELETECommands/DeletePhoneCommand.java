@@ -27,6 +27,7 @@ public class DeletePhoneCommand implements Command {
             }
             List<Phone> list = JSONParser.parseListPhones(sb.toString());
             service.delete(list);
+            LOGGER.info("delete "+ list.size() + " contacts");
         } catch (IOException e) {
             LOGGER.error(e);
         }

@@ -1,5 +1,6 @@
 package contactsapp.validation;
 
+
 public interface Validator<T> {
-    boolean validate(T t);
+    boolean validate(T t) throws DataValidationException;
 }

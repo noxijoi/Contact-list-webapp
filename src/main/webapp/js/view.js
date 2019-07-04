@@ -55,7 +55,7 @@ var view = {
       var sex = document
         .querySelector('input[name="sex"]:checked')
         .value.toUpperCase();
-        contactData.contact.sex = sex;
+      contactData.contact.sex = sex;
 
       var company = document.getElementById("company-input").value;
       contactData.contact.company = company;
@@ -175,11 +175,20 @@ var view = {
     },
 
     addListersForEditMain: function () {
-      
+
       var okButton = document.querySelector(".contact-ok");
       okButton.addEventListener("click", controller.submitContact);
+
       var submitButton = document.querySelector(".submit");
-      submitButton.addEventListener('submit', okButton.click);
+      submitButton.addEventListener('click', function () {
+        var form = document.querySelector("form");
+        if (form.checkValidity()) {
+          okButton.click();
+        } else {
+          alert("Заполните все поля со звездочкой");
+        }
+      });
+
       //--
       var cancelButton = document.querySelector(".contact-cancel");
       cancelButton.addEventListener("click", controller.toMainPage);
@@ -205,6 +214,7 @@ var view = {
         reader.readAsDataURL(file);
       });
     },
+
 
     addListenersForEditSide: function () {
       var openPhoneModalButton = document.querySelector(".phonebuttons .add-button");
@@ -285,6 +295,17 @@ var view = {
     addListenersForContactForm: function () {
       var okButton = document.querySelector(".contact-ok");
       okButton.addEventListener("click", controller.addContactToDB);
+
+      var submitButton = document.querySelector(".submit");
+      submitButton.addEventListener('click', function () {
+        var form = document.querySelector("form");
+        if (form.checkValidity()) {
+          okButton.click();
+        } else {
+          alert("Заполните все поля со звездочкой");
+        }
+      });
+
       var cancelButton = document.querySelector(".contact-cancel");
       cancelButton.addEventListener("click", controller.toMainPage);
       document.querySelector(".avatar").style.display = "none";
@@ -301,7 +322,7 @@ var view = {
         var params = view.dataCollector.collectSearchParams();
         controller.searchByParams(params);
       });
-    }
+    },
   },
 
   //+
@@ -317,7 +338,14 @@ var view = {
     });
 
     var submitButton = document.querySelector(".phone .submit");
-    submitButton.addEventListener('submit', confirmPhoneButton.click);
+    submitButton.addEventListener('click', function () {
+      var form = document.querySelector("form");
+      if (form.checkValidity()) {
+        confirmPhoneButton.click();
+      } else {
+        alert("Заполните все поля со звездочкой");
+      }
+    });
 
     var cancelPhoneButton = document.getElementById("cancelPhone");
     cancelPhoneButton.addEventListener("click", function () {
@@ -338,7 +366,7 @@ var view = {
 
     var submitButton = document.querySelector(".attach .submit");
     submitButton.addEventListener('submit', confirmAttachButton.click);
-    
+
     var cancelAttachButton = document.getElementById("cancelAttach");
     cancelAttachButton.addEventListener("click", function () {
       attachModal.style.display = "none";
