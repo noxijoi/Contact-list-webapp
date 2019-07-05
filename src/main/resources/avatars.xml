@@ -1,3 +1,0 @@
-<!-- поместить в Tomcat\conf\Catalina\localhost-->
-<!-- path - путь для браузера, docBase - реальный путь в системе-->
-<Context path="/avatars" docBase="D:\javalab\task\attachments\avatars"/>

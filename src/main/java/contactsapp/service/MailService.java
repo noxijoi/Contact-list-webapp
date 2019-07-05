@@ -1,6 +1,7 @@
 package contactsapp.service;
 
-import contactsapp.core.entity.MailParam;
+import contactsapp.core.entity.Contact;
+import contactsapp.utils.mail.MailParam;
 import contactsapp.utils.PropertiesManager;
 
 import javax.mail.*;
@@ -8,7 +9,9 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 public class MailService {
@@ -39,19 +42,19 @@ public class MailService {
             msg.addHeader("format", "flowed");
             msg.addHeader("Content-Transfer-Encoding", "8bit");
 
-            msg.setFrom(new InternetAddress(fromEmail, "NoReply-JD"));
+            msg.setFrom(new InternetAddress(fromEmail, "Maskaliova Contact App"));
 
             msg.setReplyTo(InternetAddress.parse(fromEmail, false));
 
-            msg.setSubject(params.getSubject(), "UTF-8");
-
-            msg.setText(params.getMessage(), "UTF-8");
-
             msg.setSentDate(new Date());
 
-            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(params.getReceivers().get(0), false));
-            Transport.send(msg);
-
+            List<Contact> receivers = params.getReceivers();
+            for (int i = 0; i < receivers.size(); i ++) {
+                msg.setSubject(params.getSubject(), "UTF-8");
+                msg.setText(params.getMessages().get(i), "UTF-8");
+                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receivers.get(i).getEmail()));
+                Transport.send(msg);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (AddressException e) {

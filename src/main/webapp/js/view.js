@@ -32,7 +32,8 @@ var view = {
       var inputElements = mainTable.querySelectorAll(".checkContact");
       inputElements.forEach(item => {
         if (item.checked) {
-          var contact = new Contact(item.value);
+          var id = item.value;
+          var contact = contactPageData.contacts.find(cont => cont.id.toString() === id.toString());
           contactsArray.push(contact);
         }
       });
@@ -145,6 +146,14 @@ var view = {
       attach.comment = document.getElementById("attachComment").value;
 
       return attach;
+    },
+
+    collectMail: function(){
+      var receivers = document.getElementById("reciever").value.split(',');
+      var msg = document.getElementById("mail-text").value;
+      var subject = document.getElementById("topic").value;
+      var mailParams = new MailParams(receivers, msg, subject);
+      return mailParams;
     }
   },
 

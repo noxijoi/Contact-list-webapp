@@ -3,10 +3,9 @@ package contactsapp.utils.serialization;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import contactsapp.command.GETCommands.dto.PageDto;
 import contactsapp.core.entity.Attachment;
 import contactsapp.core.entity.Contact;
-import contactsapp.core.entity.MailParam;
+import contactsapp.utils.mail.MailParam;
 import contactsapp.core.entity.Phone;
 
 import java.io.IOException;

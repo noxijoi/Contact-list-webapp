@@ -45,6 +45,7 @@ public class CommandManager {
         patterns.put(PAGE,".*\\/contacts\\/page\\/\\d+");
         patterns.put(MAIL, ".*\\/contacts\\/mail");
 
+
         commandMap.put(null, new NoCommand());
 
         commandMap.put(GET + patterns.get(ONE_CONTACT), new GetContactCommand());

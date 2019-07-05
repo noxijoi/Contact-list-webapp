@@ -17,12 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class GetContactPageCommand implements Command {
-    private final static Logger LOGGER  = LogManager.getLogger(GetContactPageCommand.class);
+    private final static Logger LOGGER = LogManager.getLogger(GetContactPageCommand.class);
+
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
         String uri = req.getRequestURI();
@@ -34,85 +36,84 @@ public class GetContactPageCommand implements Command {
                 pageN = Integer.parseInt(parts[i + 1]);
             }
         }
-        Map<String, String[]>params = req.getParameterMap();
         try {
+            Map<String, String[]> params = req.getParameterMap();
+            List<Contact> contacts = new ArrayList<>();
+            ContactService service = new ContactService();
             if (params.size() > 1) {
-                ContactService service = new ContactService();
-                List<Contact> contacts = service.selectAll();
+                contacts = service.selectAll();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                params.forEach((key, value)->{
-                    switch (key.toString()){
+                List<Contact> finalContacts = contacts;
+                params.forEach((key, value) -> {
+                    switch (key) {
                         case "firstName":
-                            contacts.removeIf(contact -> (contact.getFullName().getFirstName() == null) ||
-                                    !contact.getFullName().getFirstName().equals(value[0]));
+                            finalContacts.removeIf(contact -> (contact.getFullName().getFirstName() == null) ||
+                                    !contact.getFullName().getFirstName().startsWith(value[0]));
                             break;
                         case "lastName":
-                            contacts.removeIf(contact -> contact.getFullName().getLastName()== null ||
-                                    !contact.getFullName().getLastName().equals(value[0]));
+                            finalContacts.removeIf(contact -> contact.getFullName().getLastName() == null ||
+                                    !contact.getFullName().getLastName().startsWith(value[0]));
                             break;
                         case "parentName":
-                            contacts.removeIf(contact -> contact.getFullName().getParentName() == null ||
-                                    !contact.getFullName().getParentName().equals(value[0]));
+                            finalContacts.removeIf(contact -> contact.getFullName().getParentName() == null ||
+                                    !contact.getFullName().getParentName().startsWith(value[0]));
                             break;
                         case "dateFrom":
-                            contacts.removeIf(contact -> contact.getBirthDate() == null ||
+                            finalContacts.removeIf(contact -> contact.getBirthDate() == null ||
                                     contact.getBirthDate().isBefore(LocalDate.parse(value[0].toString())));
                             break;
                         case "dateTo":
-                            contacts.removeIf(contact -> contact.getBirthDate() == null ||
+                            finalContacts.removeIf(contact -> contact.getBirthDate() == null ||
                                     contact.getBirthDate().isBefore(LocalDate.parse(value[0].toString())));
                             break;
                         case "sex":
-                            contacts.removeIf(contact -> contact.getSex() == null ||
+                            finalContacts.removeIf(contact -> contact.getSex() == null ||
                                     !contact.getSex().toString().equals(value[0]));
                             break;
                         case "company":
-                            contacts.removeIf(contact -> contact.getCompany()== null ||
-                                    !contact.getCompany().equals(value[0]));
+                            finalContacts.removeIf(contact -> contact.getCompany() == null ||
+                                    !contact.getCompany().startsWith(value[0]));
                             break;
                         case "website":
-                            contacts.removeIf(contact -> contact.getWebsite() == null ||
-                                    !contact.getWebsite().equals(value[0]));
+                            finalContacts.removeIf(contact -> contact.getWebsite() == null ||
+                                    !contact.getWebsite().startsWith(value[0]));
                             break;
                         case "email":
-                            contacts.removeIf(contact -> contact.getEmail() == null ||
-                                    !contact.getEmail().equals(value[0]));
+                            finalContacts.removeIf(contact -> contact.getEmail() == null ||
+                                    !contact.getEmail().startsWith(value[0]));
                             break;
                         case "country":
-                            contacts.removeIf(contact -> contact.getAddress().getCountry() == null ||
-                                    !contact.getAddress().getCountry().equals(value[0]));
+                            finalContacts.removeIf(contact -> contact.getAddress().getCountry() == null ||
+                                    !contact.getAddress().getCountry().startsWith(value[0]));
                             break;
                         case "city":
-                            contacts.removeIf(contact ->contact.getAddress().getCountry() == null ||
-                                    !contact.getAddress().getCountry().equals(value[0]));
+                            finalContacts.removeIf(contact -> contact.getAddress().getCountry() == null ||
+                                    !contact.getAddress().getCountry().startsWith(value[0]));
                             break;
                         case "street":
-                            contacts.removeIf(contact ->contact.getAddress().getCity() == null||
-                                    !contact.getAddress().getCity().equals(value[0]));
+                            finalContacts.removeIf(contact -> contact.getAddress().getCity() == null ||
+                                    !contact.getAddress().getCity().startsWith(value[0]));
                             break;
                         case "index":
-                            contacts.removeIf(contact ->contact.getAddress().getIndex() == null ||
+                            finalContacts.removeIf(contact -> contact.getAddress().getIndex() == null ||
                                     !contact.getAddress().getIndex().equals(value[0]));
-                            default:
-                                break;
-
+                        default:
+                            break;
                     }
                 });
-
+                contacts = finalContacts;
             } else {
-                ContactService service = new ContactService();
-                List<Contact> contacts = service.getPage(pageN, pageSize);
-
-                int recordsNum = service.getRecordsNum();
-                PageDto dto = new PageDto();
-                dto.contacts = contacts;
-                PageInfo pageInfo = new PageInfo(pageN, recordsNum, pageSize);
-                dto.pageInfo = pageInfo;
-                String resultJSON = JSONParser.toJson(dto);
-
-                resp.setCharacterEncoding("UTF-8");
-                resp.getWriter().write(resultJSON);
+                contacts = service.getPage(pageN, pageSize);
             }
+            int recordsNum = service.getRecordsNum();
+            PageDto dto = new PageDto();
+            dto.contacts = contacts;
+            PageInfo pageInfo = new PageInfo(pageN, recordsNum, pageSize);
+            dto.pageInfo = pageInfo;
+            String resultJSON = JSONParser.toJson(dto);
+
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write(resultJSON);
         } catch (JsonProcessingException e) {
             LOGGER.error(e);
         } catch (IOException e) {

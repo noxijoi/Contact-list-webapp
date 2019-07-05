@@ -4,12 +4,17 @@ import contactsapp.command.Command;
 import contactsapp.core.entity.Phone;
 import contactsapp.service.PhoneService;
 import contactsapp.utils.serialization.JSONParser;
+import contactsapp.validation.DataValidationException;
+import contactsapp.validation.PhoneValidator;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AddPhoneCommand implements Command {
+    private final static Logger LOGGER = LogManager.getLogger(AddPhoneCommand.class);
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
@@ -28,9 +33,15 @@ public class AddPhoneCommand implements Command {
             }
             Phone phone = JSONParser.parsePhone(sb.toString());
             phone.setOwnerId(ownerId);
+            PhoneValidator validator= new PhoneValidator();
+            validator.validate(phone);
             service.insert(phone);
+            LOGGER.info("add 1 new phone");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
+        } catch (DataValidationException e) {
+            resp.setStatus(400);
+            LOGGER.warn(e);
         }
     }
 }

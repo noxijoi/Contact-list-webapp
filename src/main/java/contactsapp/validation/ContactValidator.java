@@ -10,7 +10,8 @@ public class ContactValidator implements Validator<Contact> {
     @Override
     public boolean validate(Contact contact) throws DataValidationException {
         if(contact.getId() == null){
-            return false;
+            throw new DataValidationException("contact don't have id");
+
         }
         FullName fullName = contact.getFullName();
         if(fullName.getLastName() == null || fullName.getLastName().length() > 30){

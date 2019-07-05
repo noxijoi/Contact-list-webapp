@@ -1,14 +1,19 @@
 package contactsapp.service;
 
-import contactsapp.core.entity.MailParam;
+import contactsapp.core.entity.Contact;
+import contactsapp.core.entity.FullName;
+import contactsapp.core.entity.MaritalStatus;
+import contactsapp.core.entity.Sex;
+import contactsapp.utils.mail.MailParam;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class MailServiceTest {
-    private static final MailParam mailParams = new MailParam(Arrays.asList("noxijoi@gmail.com"), "simple message", "message");
+    private static final Contact contact = new Contact(1, new FullName("Mary","Mas","MMM"),
+            LocalDate.now(), Sex.FEMALE, "bel", MaritalStatus.SINGLE,"","noxijoi@gmial.com","",null);
+    private static final MailParam mailParams = new MailParam(Arrays.asList(contact),"invitation");
 
 
     @Test

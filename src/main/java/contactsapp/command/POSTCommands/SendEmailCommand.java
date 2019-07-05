@@ -1,14 +1,19 @@
 package contactsapp.command.POSTCommands;
 
 import contactsapp.command.Command;
-import contactsapp.core.entity.MailParam;
+import contactsapp.utils.mail.MailParam;
+import contactsapp.service.MailService;
 import contactsapp.utils.serialization.JSONParser;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class SendEmailCommand implements Command {
+    private static Logger LOGGER = LogManager.getLogger(SendEmailCommand.class);
+
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
         try {
@@ -19,9 +24,11 @@ public class SendEmailCommand implements Command {
             }
 
             MailParam params = JSONParser.parseObject(sb.toString());
-
+            MailService service = new MailService();
+            service.sendMessage(params);
+            LOGGER.info("send "+ params.getReceivers().size() + " messages");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
     }
 }

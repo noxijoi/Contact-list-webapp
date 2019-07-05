@@ -36,7 +36,7 @@ router.init();
 //Communicator общается с сервером
 function Communicator() {
     this.sendGET = function (url) {
-        url = url || location.pathname + "contacts/" + location.hash.slice(1) + location.search;
+        url = url || location.pathname + "contacts/" + location.hash.slice(1);
         return fetch(url, { method: "GET" });
     };
     this.sendPOST = function (body, url) {
@@ -67,8 +67,6 @@ function Communicator() {
             body: JSON.stringify(body)
         });
     }
-
-
 }
 
 
@@ -103,8 +101,8 @@ function Controller() {
         var params = {
             size: PAGE_SIZE
         };
-        router.addParams(params);
-        communicator.sendGET()
+        var paramStr = router.getParamString(params);
+        communicator.sendGET(location.pathname + "contacts/" + location.hash.slice(1) + paramStr)
             .then(response => {
                 return response.json();
             })
@@ -123,6 +121,7 @@ function Controller() {
             });
     }
 
+//TODO
     this.editContactPage = function () {
         contactData = {};
         startCotactData = {};
@@ -155,12 +154,12 @@ function Controller() {
     }
 
     this.mailPage = function () {
-        var contactsIds = view.dataCollector.collectSelectedContacts();
+        var contacts = view.dataCollector.collectSelectedContacts();
         var emails = new Array();
         var data = {};
         
         contactPageData.contacts.forEach(contact =>{
-           if(contactsIds.includes(contact.id)){
+           if(contacts.includes(contact)){
                emails.push(contact.email);
            }
         });
@@ -175,8 +174,8 @@ function Controller() {
 
     this.searchByParams = function(params){
         params.size = PAGE_SIZE;
-        router.addParams(params);
-        communicator.sendGET()
+        var searchParams = router.getParamString(params);
+        communicator.sendGET(location.pathname + "contacts/" + location.hash.slice(1) + location.search + searchParams)
             .then(response => {
                 return response.json();
             })
@@ -189,7 +188,10 @@ function Controller() {
     }
 
     this.sendMail = function(){
-        var Mail = view.dataCollector.collectMail();
+        var mailParams = view.dataCollector.collectMail();
+        communicator.sendPOST(mailParams, location.pathname + "contacts/mail")
+        .then(response => controller.toMainPage())
+        .catch(error => console.log(error));
     }
 
 
@@ -296,14 +298,14 @@ function Router(controller) {
         this.controller.handlePage(hash);
     }
 
-    this.addParams = function (params) {
+    this.getParamString = function (params) {
         var paramsString = "";
         for (const key in params) {
             if(params[key]){
                 paramsString += key + "=" + params[key] + '&';
             }
         }
-        location.search = '?' + paramsString;
+        return  '?' + paramsString;
     }
 
 }

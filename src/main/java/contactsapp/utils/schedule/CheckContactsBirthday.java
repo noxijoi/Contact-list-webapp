@@ -1,7 +1,7 @@
 package contactsapp.utils.schedule;
 
 import contactsapp.core.entity.Contact;
-import contactsapp.core.entity.MailParam;
+import contactsapp.utils.mail.MailParam;
 import contactsapp.service.ContactService;
 import contactsapp.service.MailService;
 import contactsapp.utils.PropertiesManager;
@@ -47,9 +47,11 @@ public class CheckContactsBirthday implements Job {
         try {
             MailService mailService = new MailService();
             Properties properties = PropertiesManager.readProperties("mail.properties");
-            String adminMail =properties.getProperty("mail.adminmail");
+            String adminMail = properties.getProperty("mail.adminmail");
             String subject = "birthDays";
-            MailParam mailParam = new MailParam(Arrays.asList(adminMail),subject, message);
+            Contact admin = new Contact();
+            admin.setEmail(adminMail);
+            MailParam mailParam = new MailParam(Arrays.asList(admin),Arrays.asList(message),subject);
             mailService.sendMessage(mailParam);
         } catch (IOException e) {
             e.printStackTrace();
