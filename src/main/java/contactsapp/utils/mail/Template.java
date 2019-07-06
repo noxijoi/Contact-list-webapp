@@ -3,12 +3,12 @@ package contactsapp.utils.mail;
 public class Template {
     private String name;
     private String subject;
-    private String messageTemplate;
+    private String message;
 
-    public Template(String name, String subject, String messageTemplate) {
+    public Template(String name, String subject, String message) {
         this.name = name;
         this.subject = subject;
-        this.messageTemplate = messageTemplate;
+        this.message = message;
     }
 
     public Template(){
@@ -31,11 +31,11 @@ public class Template {
         this.subject = subject;
     }
 
-    public String getMessageTemplate() {
-        return messageTemplate;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMessageTemplate(String messageTemplate) {
-        this.messageTemplate = messageTemplate;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

@@ -16,7 +16,7 @@ const TEMPLATE_NAMES = {
 }
 
 const databaseId = /\/d+$/;
-const tempId     = /\/d+a$/; 
+const tempId = /\/d+a$/;
 
 //исходное состояние контакта
 var startCotactData = {};
@@ -24,8 +24,11 @@ var startCotactData = {};
 var contactData = {};
 //список контактов страницы
 var contactPageData = {};
-var deletedPhones =[];
-var deletedAttachs =[];
+
+var selectedContacts = [];
+var deletedPhones = [];
+var deletedAttachs = [];
+var templates = [];
 
 var communicator = new Communicator();
 var controller = new Controller();
@@ -111,7 +114,7 @@ function Controller() {
                 contactPageData = data;
                 data.contacts.forEach(contact =>
                     contact.birthDate = moment(contact.birthDate).format("YYYY-MM-DD"))
-            
+
 
                 view.renderWorkArea(TEMPLATE_NAMES.contactsTable, data);
                 view.renderSidenav(TEMPLATE_NAMES.searchBar, data);
@@ -121,7 +124,6 @@ function Controller() {
             });
     }
 
-//TODO
     this.editContactPage = function () {
         contactData = {};
         startCotactData = {};
@@ -135,7 +137,7 @@ function Controller() {
                 startCotactData = data;
                 contactData = data;
                 data.contact.birthDate = moment(data.contact.birthDate).format("YYYY-MM-DD");
-                data.attachs.forEach(attach =>{
+                data.attachs.forEach(attach => {
                     attach.downloadTime = moment(attach.downloadTime).format("YYYY-MM-DD");
                 })
                 view.renderWorkArea(TEMPLATE_NAMES.editContact, data);
@@ -154,33 +156,39 @@ function Controller() {
     }
 
     this.mailPage = function () {
-        var contacts = view.dataCollector.collectSelectedContacts();
+        selectedContacts = view.dataCollector.collectSelectedContacts();
+
         var emails = new Array();
         var data = {};
-        data.templates = new Array();
+
 
         communicator.sendGET()
-        .then(response =>{
-            return response.json();
-        })
-        .then(templates =>
-            data = templates);
+            .then(response => {
+                return response.json();
+            })
+            .then(temp => {
+                templates = temp;
+                data.templates = temp
+                selectedContacts.forEach(contct => emails.push(contct.email));
+                data.emails = emails;
 
-        contactPageData.contacts.forEach(contact =>{
-           if(contacts.includes(contact)){
-               emails.push(contact.email);
-           }
-        });
-        data.emails = emails;
+                view.renderWorkArea(TEMPLATE_NAMES.mailToMain);
+                view.renderSidenav(TEMPLATE_NAMES.mailToSettings, data);
+                view.listenerManager.addListenersForMailForm()
+            })
+            .catch(e => {
+                view.renderWorkArea(TEMPLATE_NAMES.mailToMain);
+                view.renderSidenav(TEMPLATE_NAMES.mailToSettings, data);
+                view.listenerManager.addListenersForMailForm();
+            })
 
-        view.renderWorkArea(TEMPLATE_NAMES.mailToMain);
-        view.renderSidenav(TEMPLATE_NAMES.mailToSettings, data);
-        view.listenerManager.addListenersForMailForm()
+
+
     }
 
-    
 
-    this.searchByParams = function(params){
+
+    this.searchByParams = function (params) {
         params.size = PAGE_SIZE;
         var searchParams = router.getParamString(params);
         communicator.sendGET(location.pathname + "contacts/" + location.hash.slice(1) + location.search + searchParams)
@@ -195,11 +203,11 @@ function Controller() {
             });
     }
 
-    this.sendMail = function(){
+    this.sendMail = function () {
         var mailParams = view.dataCollector.collectMail();
         communicator.sendPOST(mailParams, location.pathname + "contacts/mail")
-        .then(response => controller.toMainPage())
-        .catch(error => console.log(error));
+            .then(response => controller.toMainPage())
+            .catch(error => console.log(error));
     }
 
 
@@ -217,10 +225,10 @@ function Controller() {
 
     this.submitContact = function () {
         view.dataCollector.collectContactData();
-        
+
         var phones = contactData.phones;
         phones.forEach(phone => {
-            if(phone.id.toString().endsWith("a")){
+            if (phone.id.toString().endsWith("a")) {
                 phone.id = 0;
                 communicator.sendPOST(phone, location.pathname + "contacts/" + contactData.contact.id + "/phone");
             } else {
@@ -229,59 +237,59 @@ function Controller() {
         });
         var attaches = contactData.attachs;
         attaches.forEach(attach => {
-            if(attach.id.toString().endsWith("a")){
+            if (attach.id.toString().endsWith("a")) {
                 var formData = formDataFromAttach(attach);
                 communicator.sendFormDataPOST(formData, location.pathname + "contacts/" + contactData.contact.id + "/attach");
-            } else{
+            } else {
                 communicator.sendPUT(attach, location.pathname + "contacts/" + contactData.contact.id + "/attach");
             }
         });
-        if(deletedPhones.length > 0){
+        if (deletedPhones.length > 0) {
             communicator.sendDELETE(deletedPhones, location.pathname + "contacts/" + contactData.contact.id + "/phone");
         }
-        if(deletedAttachs.length > 0){
+        if (deletedAttachs.length > 0) {
             communicator.sendDELETE(deletedAttachs, location.pathname + "contacts/" + contactData.contact.id + "/attach");
         }
         communicator.sendPUT(contactData.contact)
-        .then(function(){
-            controller.toMainPage();
-        })
-        
+            .then(function () {
+                controller.toMainPage();
+            })
+
     }
 
-    this.deleteSelectedContact = function(){
+    this.deleteSelectedContact = function () {
         var contacts = view.dataCollector.collectSelectedContacts();
         communicator.sendDELETE(contacts);
         router.handlehash();
     }
 
     //+-
-    this.deleteSelectedAttach = function(){
+    this.deleteSelectedAttach = function () {
         var attachId = view.dataCollector.collectSelectedAttach();
         attachId.forEach(id => {
             for (var index = contactData.attachs.length - 1; index >= 0; index--) {
-                if(id === contactData.attachs[index].id){
-                    if(!id.toString().endsWith("a")){
+                if (id === contactData.attachs[index].id) {
+                    if (!id.toString().endsWith("a")) {
                         deletedAttachs.put(contactData.attachs[index]);
                     }
                     contactData.attachs.splice(index, 1);
-                }   
+                }
             }
         });
         view.rerenderSideTables();
     }
 
     //+-
-    this.deleteSelectedPhones = function(){
+    this.deleteSelectedPhones = function () {
         var phonesId = view.dataCollector.collectSelectedPhones();
-        phonesId.forEach(id=>{
-            for (var index = contactData.phones.length -1; index >= 0; index--) {
-                if(id === contactData.phones[index].id){
-                    if(!id.toString().endsWith("a")){
+        phonesId.forEach(id => {
+            for (var index = contactData.phones.length - 1; index >= 0; index--) {
+                if (id === contactData.phones[index].id) {
+                    if (!id.toString().endsWith("a")) {
                         deletedPhones.put(contactData.phones[index]);
-                    }  
+                    }
                     contactData.phones.splice(index, 1);
-                }   
+                }
             }
         });
         view.rerenderSideTables();
@@ -300,7 +308,7 @@ function Router(controller) {
     }
 
 
-    
+
     this.handlehash = function () {
         var hash = location.hash.slice(1);
         this.controller.handlePage(hash);
@@ -309,11 +317,11 @@ function Router(controller) {
     this.getParamString = function (params) {
         var paramsString = "";
         for (const key in params) {
-            if(params[key]){
+            if (params[key]) {
                 paramsString += key + "=" + params[key] + '&';
             }
         }
-        return  '?' + paramsString;
+        return '?' + paramsString;
     }
 
 }
@@ -323,7 +331,7 @@ var validator = {
 
 }
 
-function formDataFromAttach(attach){
+function formDataFromAttach(attach) {
     var formData = new FormData();
     formData.append("file", attach.file);
     formData.append("comment", attach.comment);

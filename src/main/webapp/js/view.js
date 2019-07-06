@@ -148,11 +148,12 @@ var view = {
       return attach;
     },
 
-    collectMail: function(){
-      var receivers = document.getElementById("reciever").value.split(',');
-      var msg = document.getElementById("mail-text").value;
-      var subject = document.getElementById("topic").value;
-      var mailParams = new MailParams(receivers, msg, subject);
+    
+    collectMail: function () {
+    
+      var tempName = document.getElementById("mail-template-select").value;
+      var temp = templates.find( template => template.name === tempName);
+      var mailParams = new MailParams(selectedContacts, temp);
       return mailParams;
     }
   },
@@ -172,8 +173,41 @@ var view = {
     },
 
     addListenersForMailForm: function () {
+      var workField = document.getElementById("mail-text");
+      var select = document.getElementById("mail-template-select");
+      var subjField = document.getElementById("subj");
+
+      select.addEventListener('change', function () {
+        var value = select.value;
+        if (value != "NoTemplate") {
+          var templ = templates.find(temp => temp.name === value);
+
+          workField.value = templ.message;
+          workField.disabled = true;
+
+          subjField.value = templ.subject;
+          subjField.disabled = true;
+
+        } else {
+          workField.value = "";
+          workField.disabled = false;
+
+          subjField.value = "";
+          subjField.disabled = false;
+        }
+
+      })
+
       var sendMailButton = document.getElementById("send-mail");
-      sendMailButton.addEventListener("click", controller.sendMail);
+      sendMailButton.addEventListener("click", function(){
+        var form = document.getElementById("mail-form");
+        if (form.checkValidity()){
+          controller.sendMail();
+        } else{
+          alert("Заполните все поля со *");
+        }
+      });
+
       var cancelMailButton = document.getElementById("cancel-mail");
       cancelMailButton.addEventListener("click", controller.toMainPage);
     },

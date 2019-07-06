@@ -59,10 +59,9 @@ function Contact(id, fullName, birthDate, sex, nationality, maritalStatus, websi
     this.isSingle = function(){ return maritalStatus === "SINGLE";}
 }
 
-function MailParams(receivers, message, subject){
+function MailParams(receivers, template){
     this.receivers = receivers || null;
-    this.message = message || null;
-    this.subject = subject || null;
+    this.template = template || {};
 }
 
 function Avatar(decodedImg, path){

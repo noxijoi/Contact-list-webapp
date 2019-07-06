@@ -56,7 +56,7 @@ public class MailService {
                     String text = new TemplateHandler().generateMessageForContact(template.getName(), receiver);
                     msg.setText(text, "UTF-8");
                 } else  {
-                    msg.setText(template.getMessageTemplate(),"UTF-8");
+                    msg.setText(template.getMessage(),"UTF-8");
                 }
                 msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receivers.get(i).getEmail()));
                 Transport.send(msg);
