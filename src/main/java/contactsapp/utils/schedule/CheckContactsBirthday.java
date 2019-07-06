@@ -5,6 +5,7 @@ import contactsapp.utils.mail.MailParam;
 import contactsapp.service.ContactService;
 import contactsapp.service.MailService;
 import contactsapp.utils.PropertiesManager;
+import contactsapp.utils.mail.Template;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -51,7 +52,8 @@ public class CheckContactsBirthday implements Job {
             String subject = "birthDays";
             Contact admin = new Contact();
             admin.setEmail(adminMail);
-            MailParam mailParam = new MailParam(Arrays.asList(admin),Arrays.asList(message),subject);
+            Template template = new Template(null,"birth days",message);
+            MailParam mailParam = new MailParam(Arrays.asList(admin), template);
             mailService.sendMessage(mailParam);
         } catch (IOException e) {
             e.printStackTrace();

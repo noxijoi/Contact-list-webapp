@@ -456,6 +456,15 @@
                 <label for="reciever">Кому</label>
                 <input class="form-control" type="text" id="reciever" value ="{{emails}}">
             </div>
+            <did class="form-group">
+                <label for="mail-template-input"> Шаблон сообщения </label>
+                <select id="mail-template-input">
+                    <option value="NoTemplate">Своё сообщение</option>
+                    {{#templates}}
+                        <option value="{{name}}">{{name}}
+                    {{/templates}}
+                </select>
+            </div>
             <div class="form-group">
                     <label for="topic">Тема</label>
                     <input class="form-control" type="text" id="topic">

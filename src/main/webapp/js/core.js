@@ -157,7 +157,15 @@ function Controller() {
         var contacts = view.dataCollector.collectSelectedContacts();
         var emails = new Array();
         var data = {};
-        
+        data.templates = new Array();
+
+        communicator.sendGET()
+        .then(response =>{
+            return response.json();
+        })
+        .then(templates =>
+            data = templates);
+
         contactPageData.contacts.forEach(contact =>{
            if(contacts.includes(contact)){
                emails.push(contact.email);

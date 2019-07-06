@@ -3,10 +3,7 @@ package contactsapp.command;
 import contactsapp.command.DELETECommands.DeleteAttachCommand;
 import contactsapp.command.DELETECommands.DeleteContactCommand;
 import contactsapp.command.DELETECommands.DeletePhoneCommand;
-import contactsapp.command.GETCommands.DownloadFileCommand;
-import contactsapp.command.GETCommands.GetAttachmentCommand;
-import contactsapp.command.GETCommands.GetContactCommand;
-import contactsapp.command.GETCommands.GetContactPageCommand;
+import contactsapp.command.GETCommands.*;
 import contactsapp.command.POSTCommands.AddAttachCommand;
 import contactsapp.command.POSTCommands.AddContactCommand;
 import contactsapp.command.POSTCommands.AddPhoneCommand;
@@ -52,6 +49,7 @@ public class CommandManager {
         commandMap.put(GET + patterns.get(PAGE), new GetContactPageCommand());
         commandMap.put(GET + patterns.get(DOWNLOAD_ATTACH), new DownloadFileCommand());
         commandMap.put(GET + patterns.get(ATTACH), new GetAttachmentCommand());
+        commandMap.put(GET + patterns.get(MAIL), new GetMailTemplatesCommand());
 
         commandMap.put(POST + patterns.get(ADD_CONTACT), new AddContactCommand());
         commandMap.put(POST + patterns.get(PHONE), new AddPhoneCommand());

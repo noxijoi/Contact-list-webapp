@@ -3,18 +3,18 @@ package contactsapp.service;
 import contactsapp.core.entity.Contact;
 import contactsapp.utils.mail.MailParam;
 import contactsapp.utils.PropertiesManager;
+import contactsapp.utils.mail.Template;
+import contactsapp.utils.mail.TemplateHandler;
 
 import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class MailService {
+
     public void sendMessage(MailParam params){
         try {
             Properties mailProp = PropertiesManager.getMailProperties();
@@ -47,11 +47,17 @@ public class MailService {
             msg.setReplyTo(InternetAddress.parse(fromEmail, false));
 
             msg.setSentDate(new Date());
-
+            Template template = params.getTemplate();
             List<Contact> receivers = params.getReceivers();
             for (int i = 0; i < receivers.size(); i ++) {
-                msg.setSubject(params.getSubject(), "UTF-8");
-                msg.setText(params.getMessages().get(i), "UTF-8");
+                Contact receiver = receivers.get(i);
+                msg.setSubject(template.getSubject(), "UTF-8");
+                if(template.getName() != null) {
+                    String text = new TemplateHandler().generateMessageForContact(template.getName(), receiver);
+                    msg.setText(text, "UTF-8");
+                } else  {
+                    msg.setText(template.getMessageTemplate(),"UTF-8");
+                }
                 msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receivers.get(i).getEmail()));
                 Transport.send(msg);
             }
@@ -62,5 +68,8 @@ public class MailService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+    public List<Template> getTemplates(){
+        return new  TemplateHandler().getAllTemplates();
     }
 }

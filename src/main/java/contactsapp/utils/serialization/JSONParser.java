@@ -7,6 +7,7 @@ import contactsapp.core.entity.Attachment;
 import contactsapp.core.entity.Contact;
 import contactsapp.utils.mail.MailParam;
 import contactsapp.core.entity.Phone;
+import contactsapp.utils.mail.Template;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,6 +27,11 @@ public class JSONParser {
     public static String contactListToJson(List<Contact> contactList) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(contactList);
+        return json;
+    }
+    public String templateListToJSON(List<Template> templates) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(templates);
         return json;
     }
 
@@ -71,4 +77,6 @@ public class JSONParser {
         MailParam  mailParam= mapper.readValue(json, MailParam.class);
         return mailParam;
     }
+
+
 }
