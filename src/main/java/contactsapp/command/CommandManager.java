@@ -46,7 +46,7 @@ public class CommandManager {
         commandMap.put(null, new NoCommand());
 
         commandMap.put(GET + patterns.get(ONE_CONTACT), new GetContactCommand());
-        commandMap.put(GET + patterns.get(PAGE), new GetContactPageCommand());
+        commandMap.put(GET + patterns.get(PAGE), new GetContactPageCommand2());
         commandMap.put(GET + patterns.get(DOWNLOAD_ATTACH), new DownloadFileCommand());
         commandMap.put(GET + patterns.get(ATTACH), new GetAttachmentCommand());
         commandMap.put(GET + patterns.get(MAIL), new GetMailTemplatesCommand());

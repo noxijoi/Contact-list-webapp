@@ -29,6 +29,9 @@ var view = {
     collectSelectedContacts: function () {
       var contactsArray = new Array();
       var mainTable = document.getElementById("main-table");
+      if (!mainTable) {
+        return;
+      }
       var inputElements = mainTable.querySelectorAll(".checkContact");
       inputElements.forEach(item => {
         if (item.checked) {
@@ -49,6 +52,11 @@ var view = {
 
       var birthDate = document.getElementById("birth-date-input").value;
       contactData.contact.birthDate = birthDate;
+
+      if (!moment(birthDate).isValid()) {
+        view.showErr('incorrect date, use format: "YYYY-MM-DD"');
+        return;
+      }
 
       var nationality = document.getElementById("nationality-input").value;
       contactData.contact.nationality = nationality;
@@ -96,12 +104,18 @@ var view = {
 
     collectSearchParams: function () {
       var params = {};
-
+      params.size = PAGE_SIZE;
       params.firstName = document.getElementById("fName").value;
       params.lastName = document.getElementById("lName").value;
       params.parentName = document.getElementById("pName").value;
       params.dateFrom = document.getElementById("dateFrom").value;
+      if (!moment(params.dateFrom).isValid()) {
+        view.showErr('incorrect "from" date, use format: "YYYY-MM-DD"')
+      }
       params.dateTo = document.getElementById("dateTo").value;
+      if (!moment(params.dateTo).isValid()) {
+        view.showErr('incorrect "to" date, use format: "YYYY-MM-DD"')
+      }
       params.sex = document
         .querySelector('input[name="sexRadio"]:checked')
         .value.toUpperCase();
@@ -148,11 +162,23 @@ var view = {
       return attach;
     },
 
-    
+
     collectMail: function () {
-    
+
       var tempName = document.getElementById("mail-template-select").value;
-      var temp = templates.find( template => template.name === tempName);
+      var temp = templates.find(template => template.name === tempName);
+      if (!selectedContacts || selectedContacts.length == 0) {
+        selectedContacts = [];
+        var emailStr = document.getElementById("receiver").value.split(',');
+        emailStr.forEach(em => {
+          selectedContacts.push(new Contact(null, null, null, null, null, null, null, em));
+        })
+      }
+      if (!temp) {
+        temp = {};
+        temp.message = document.getElementById("mail-text").value;
+        temp.subject = document.getElementById("subj").value;
+      }
       var mailParams = new MailParams(selectedContacts, temp);
       return mailParams;
     }
@@ -176,7 +202,11 @@ var view = {
       var workField = document.getElementById("mail-text");
       var select = document.getElementById("mail-template-select");
       var subjField = document.getElementById("subj");
+      var receivers = document.getElementById("receiver");
 
+      if (receivers.value) {
+        receivers.disabled = true;
+      }
       select.addEventListener('change', function () {
         var value = select.value;
         if (value != "NoTemplate") {
@@ -199,12 +229,12 @@ var view = {
       })
 
       var sendMailButton = document.getElementById("send-mail");
-      sendMailButton.addEventListener("click", function(){
+      sendMailButton.addEventListener("click", function () {
         var form = document.getElementById("mail-form");
-        if (form.checkValidity()){
+        if (form.checkValidity()) {
           controller.sendMail();
-        } else{
-          alert("Заполните все поля со *");
+        } else {
+          view.showErr("Заполните все поля со *");
         }
       });
 
@@ -228,7 +258,7 @@ var view = {
         if (form.checkValidity()) {
           okButton.click();
         } else {
-          alert("Заполните все поля со звездочкой");
+          view.showErr("Заполните все поля со звездочкой");
         }
       });
 
@@ -284,6 +314,7 @@ var view = {
           var phoneModal = document.getElementById("phoneModal");
           phoneModal.innerHTML = view.generateTemplateHTML(TEMPLATE_NAMES.phoneModal, phoneToEdit);
           phoneModal.style.display = "block";
+
           var confirmPhoneButton = document.getElementById("confirmPhone");
           confirmPhoneButton.addEventListener("click", function () {
             var id = phoneToEdit.id;
@@ -293,6 +324,16 @@ var view = {
             contactData.phones[index] = phoneToEdit;
             view.rerenderSideTables();
             phoneModal.style.display = "none";
+          });
+
+          var submitButton = document.querySelector(".phone .submit");
+          submitButton.addEventListener('click', function () {
+            var form = document.querySelector("form");
+            if (form.checkValidity()) {
+              confirmPhoneButton.click();
+            } else {
+              view.showErr("Заполните все поля со звездочкой");
+            }
           });
           var cancelPhoneButton = document.getElementById("cancelPhone");
           cancelPhoneButton.addEventListener("click", function () {
@@ -331,6 +372,16 @@ var view = {
           });
           attachModal.style.display = "block";
         });
+
+        var downloadLinks = attachsTable.querySelectorAll("td a");
+        downloadLinks.forEach(link => {
+          var row = link.parentElement.parentElement;
+          var attachId = row.querySelector("input").value;
+
+          if (attachId.toString().endsWith("a")) {
+            link.parentElement.innerHTML = "не тык";
+          }
+        })
       });
 
     },
@@ -345,7 +396,7 @@ var view = {
         if (form.checkValidity()) {
           okButton.click();
         } else {
-          alert("Заполните все поля со звездочкой");
+          view.showErr("Заполните все поля со звездочкой");
         }
       });
 
@@ -386,7 +437,7 @@ var view = {
       if (form.checkValidity()) {
         confirmPhoneButton.click();
       } else {
-        alert("Заполните все поля со звездочкой");
+        view.showErr("Заполните все поля со звездочкой");
       }
     });
 
@@ -405,6 +456,15 @@ var view = {
     confirmAttachButton.addEventListener("click", function () {
       view.addAttachToTable();
       attachModal.style.display = "none";
+    });
+    var submitAttachButton = document.querySelector(".attach .submit");
+    submitAttachButton.addEventListener('click', function () {
+      var form = document.querySelector("form");
+      if (form.checkValidity()) {
+        confirmAttachButton.click();
+      } else {
+        view.showErr("Выберите файл");
+      }
     });
 
     var submitButton = document.querySelector(".attach .submit");
@@ -437,4 +497,20 @@ var view = {
     contactData.attachs.push(attach);
     view.rerenderSideTables();
   },
+
+
+  //уведомляшки
+  showErr: function (msg) {
+    var el = document.getElementById("msg-err");
+    el.querySelector("p").innerHTML = msg;
+    el.style.display = "block";
+    setTimeout(function () { el.style.display = "none" }, 2000);
+  },
+  showOk: function (msg) {
+    var el = document.getElementById("msg-success");
+    el.querySelector("p").innerHTML = msg;
+    el.style.display = "block";
+    setTimeout(function () { el.style.display = "none" }, 2000);
+  }
+
 };

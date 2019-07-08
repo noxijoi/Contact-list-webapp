@@ -5,6 +5,7 @@ import contactsapp.dao.*;
 import contactsapp.dao.connectionmanager.ConManager;
 import contactsapp.dao.connectionmanager.ConnectionManager;
 
+
 import javax.naming.NamingException;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -116,4 +117,13 @@ public class ContactService implements Service<Contact> {
         return contacts;
     }
 
+    public List<Contact> executeSelectQuery(String query) {
+        List<Contact> contacts = new ArrayList<>();
+        try(Connection connection = connectionManager.getConnection()) {
+            contacts = dao.exequtePreparedStatement(connection, connection.prepareStatement(query));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return contacts;
+    }
 }

@@ -27,7 +27,8 @@ public class AddPhoneCommand implements Command {
             for (int i = 0; i < parts.length; i++) {
                 if (parts[i].equals("contacts")){
                     ownerId = Integer.parseInt(parts[i+1]);
-                }        }
+                }
+            }
             while ((s = req.getReader().readLine()) != null) {
                 sb.append(s);
             }

@@ -177,6 +177,7 @@ function Controller() {
                 view.listenerManager.addListenersForMailForm()
             })
             .catch(e => {
+                view.showErr(e);
                 view.renderWorkArea(TEMPLATE_NAMES.mailToMain);
                 view.renderSidenav(TEMPLATE_NAMES.mailToSettings, data);
                 view.listenerManager.addListenersForMailForm();
@@ -189,7 +190,7 @@ function Controller() {
 
 
     this.searchByParams = function (params) {
-        params.size = PAGE_SIZE;
+        controller.toMainPage();
         var searchParams = router.getParamString(params);
         communicator.sendGET(location.pathname + "contacts/" + location.hash.slice(1) + location.search + searchParams)
             .then(response => {
@@ -197,17 +198,27 @@ function Controller() {
             })
             .then(data => {
                 view.renderWorkArea(TEMPLATE_NAMES.contactsTable, data);
-                view.renderSidenav(TEMPLATE_NAMES.searchBar, params);
+                //view.renderSidenav(TEMPLATE_NAMES.searchBar, params);
                 view.listenerManager.addListenersForTable();
                 view.listenerManager.addListenersForSearchForm();
-            });
+            })
+            .catch(e =>{
+                view.showErr(e);
+                controller.toMainPage();
+            })
     }
 
     this.sendMail = function () {
         var mailParams = view.dataCollector.collectMail();
         communicator.sendPOST(mailParams, location.pathname + "contacts/mail")
-            .then(response => controller.toMainPage())
-            .catch(error => console.log(error));
+            .then(response =>{
+                view.showOk("send"); 
+                controller.toMainPage();
+            })
+            .catch(error => {
+                view.showErr(e);
+                console.log(error)
+            });
     }
 
 
@@ -219,7 +230,12 @@ function Controller() {
     this.addContactToDB = function () {
         view.dataCollector.collectContactData();
         if (contactData.contact) {
-            communicator.sendPOST(contactData.contact);
+            communicator.sendPOST(contactData.contact)
+            .then(response => {
+                view.showOk("added");
+                controller.toMainPage();
+            })
+            .catch(e =>view.showErr(e));
         }
     }
 
@@ -252,15 +268,21 @@ function Controller() {
         }
         communicator.sendPUT(contactData.contact)
             .then(function () {
+                view.showOk("done");
                 controller.toMainPage();
             })
+            .catch(e => view.showErr(e));
 
     }
 
     this.deleteSelectedContact = function () {
         var contacts = view.dataCollector.collectSelectedContacts();
-        communicator.sendDELETE(contacts);
-        router.handlehash();
+        communicator.sendDELETE(contacts)
+        .then(response => {
+            view.showOk("deleted");
+            controller.toMainPage();
+        })
+        .catch(e => view.showErr(e));
     }
 
     //+-
@@ -328,6 +350,7 @@ function Router(controller) {
 
 //Validator
 var validator = {
+    
 
 }
 

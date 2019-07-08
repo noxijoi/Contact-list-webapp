@@ -19,8 +19,19 @@
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary fixed-top">
         <a class="navbar-brand" href="#page/1">Маскалева. Список контактов</a>
     </nav>
+    <div id='msg-err' class="msg alert-warning" >
+        <p>
+        </p>
+    </div>
+    
+    <div id='msg-success' class="msg alert-success">
+        <p>
+        </p>
+    </div>
+
 
     <div class="row workspace">
+            
         <div class="col-8" id="main"></div>
         <div class="col-4 sidenav" id="sidenav"></div>
 
@@ -211,8 +222,8 @@
                 <div class="form-group">
                     <label for="bDateSearch" class="col col-form-label">Дата рождения</label>
                     <div class="input-group" id="bDateSearch">
-                        <input type="text" class="form-control" id="dateFrom" placeholder="От" value="{{dateFrom}}">
-                        <input type="text" class="form-control" id="dateTo" placeholder="До" value="{{dateTo}}">
+                        <input type="date" class="form-control" id="dateFrom" placeholder="От" value="{{dateFrom}}">
+                        <input type="date" class="form-control" id="dateTo" placeholder="До" value="{{dateTo}}">
                     </div>
                 </div>
                 <div class="form-group-row">
@@ -224,13 +235,13 @@
                 <div class="form-group">
                         <label  class="col col-form-label">Пол</label>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="sexRadio" id="maleRadio" value="MALE" {{#isMale}} checked {{/isMale}}>
+                            <input class="form-check-input" type="radio" name="sexRadio" id="maleRadio" value="MALE">
                             <label class="form-check-label" for="maleRadio">
                               Мужской
                             </label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="sexRadio" id="femaleRadio" value="FEMALE" {{^isMale}} checked {{/isMale}}>
+                            <input class="form-check-input" type="radio" name="sexRadio" id="femaleRadio" value="FEMALE">
                             <label class="form-check-label" for="femaleRadio">
                               Женский
                             </label>
@@ -440,7 +451,7 @@
         <!--Форма для почтового сообщения-->
         <script id="mailToMainTemplate" type="text/template">
         <div class="form-group">
-            <label for="mailText">Текст сообщения</label>
+            <label for="mail-text">Текст сообщения</label>
             <textarea class="form-control" id="mail-text" rows="5">
             </textarea>
         </div>
@@ -454,8 +465,8 @@
         <div class="container-fluid" id="mailSettings">
             <form id="mail-form">
             <div class="form-group">
-                <label for="reciever">Кому*</label>
-                <input class="form-control" type="text" id="reciever" value ="{{emails}}" required disabled>
+                <label for="receiver">Кому*</label>
+                <input class="form-control" type="text" id="receiver" value ="{{emails}}" required>
             </div>
             <did class="form-group">
                 <label for="mail-template-select"> Шаблон сообщения </label>
@@ -496,6 +507,8 @@
             </div>
         </script>
     </div>
+
+    
 </body>
 
 </html>
