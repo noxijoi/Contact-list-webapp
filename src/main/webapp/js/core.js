@@ -290,9 +290,9 @@ function Controller() {
         var attachId = view.dataCollector.collectSelectedAttach();
         attachId.forEach(id => {
             for (var index = contactData.attachs.length - 1; index >= 0; index--) {
-                if (id === contactData.attachs[index].id) {
+                if (id === contactData.attachs[index].id.toString()) {
                     if (!id.toString().endsWith("a")) {
-                        deletedAttachs.put(contactData.attachs[index]);
+                        deletedAttachs.push(contactData.attachs[index]);
                     }
                     contactData.attachs.splice(index, 1);
                 }
@@ -306,9 +306,9 @@ function Controller() {
         var phonesId = view.dataCollector.collectSelectedPhones();
         phonesId.forEach(id => {
             for (var index = contactData.phones.length - 1; index >= 0; index--) {
-                if (id === contactData.phones[index].id) {
+                if (id === contactData.phones[index].id.toString()) {
                     if (!id.toString().endsWith("a")) {
-                        deletedPhones.put(contactData.phones[index]);
+                        deletedPhones.push(contactData.phones[index]);
                     }
                     contactData.phones.splice(index, 1);
                 }
@@ -329,8 +329,6 @@ function Router(controller) {
         this.handlehash();
     }
 
-
-
     this.handlehash = function () {
         var hash = location.hash.slice(1);
         this.controller.handlePage(hash);
@@ -348,14 +346,9 @@ function Router(controller) {
 
 }
 
-//Validator
-var validator = {
-    
-
-}
-
 function formDataFromAttach(attach) {
     var formData = new FormData();
+    formData.append("id", 0);
     formData.append("file", attach.file);
     formData.append("comment", attach.comment);
     formData.append("ownerId", attach.ownerId);

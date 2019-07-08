@@ -39,7 +39,7 @@ public class AddAttachCommand implements Command {
 
             String comment = req.getParameter("comment");
             Integer ownerId = Integer.parseInt(req.getParameter("ownerId"));
-
+            Integer id = Integer.parseInt(req.getParameter("id"));
             Part part = req.getPart("file");
             String fileName = part.getSubmittedFileName();
             String filePath = uploadFolder.getAbsolutePath() + File.separator + fileName;
@@ -49,6 +49,7 @@ public class AddAttachCommand implements Command {
             }
             part.write(filePath);
 
+            attachment.setId(id);
             attachment.setOwnerId(ownerId);
             attachment.setComment(comment);
             attachment.setFileName(file.getName());
@@ -60,9 +61,6 @@ public class AddAttachCommand implements Command {
             AttachmentValidator validator = new AttachmentValidator();
             validator.validate(attachment);
             service.insert(attachment);
-
-            int id = service.getLastInsertedId();
-            resp.getWriter().write("id=" + id);
             LOGGER.info("add 1 new Attachment to database");
         } catch (IOException e) {
             LOGGER.error(e);

@@ -9,7 +9,7 @@ public class AttachmentValidator implements Validator<Attachment> {
             throw new DataValidationException("Attachment don't have id");
         }
         if(attachment.getOwnerId() == null){
-            throw new DataValidationException("Attachment don't owner id");
+            throw new DataValidationException("Attachment don't have owner id");
         }
         if(attachment.getFileName() == null || attachment.getFileName().length() > 100){
             throw new DataValidationException("Attachment have incorrect file name");

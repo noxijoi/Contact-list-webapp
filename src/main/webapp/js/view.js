@@ -381,7 +381,7 @@ var view = {
           if (attachId.toString().endsWith("a")) {
             link.parentElement.innerHTML = "не тык";
           }
-        })
+        });
       });
 
     },
@@ -433,7 +433,7 @@ var view = {
 
     var submitButton = document.querySelector(".phone .submit");
     submitButton.addEventListener('click', function () {
-      var form = document.querySelector("form");
+      var form = document.querySelector(".phone form");
       if (form.checkValidity()) {
         confirmPhoneButton.click();
       } else {
@@ -459,9 +459,17 @@ var view = {
     });
     var submitAttachButton = document.querySelector(".attach .submit");
     submitAttachButton.addEventListener('click', function () {
-      var form = document.querySelector("form");
+      var form = document.querySelector(".attach form");
+      var fileName = document.getElementById("addFile").files[0].name;
+      var isKyr = function (str) {
+            return /[а-я]/i.test(str);
+        }
       if (form.checkValidity()) {
+        if(!isKyr(fileName)){
         confirmAttachButton.click();
+        }else{
+          view.showErr("Выберите файл без кирилицы в названии");
+        }
       } else {
         view.showErr("Выберите файл");
       }
