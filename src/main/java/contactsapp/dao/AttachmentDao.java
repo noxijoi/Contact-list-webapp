@@ -40,7 +40,7 @@ public class AttachmentDao extends AbstractDao<Attachment, Integer>{
 
     @Override
     protected String getSelectAllQuery() {
-        return "SELECT * FROM attachment";
+        return "SELECT * FROM attachment ORDER BY id";
     }
 
     @Override

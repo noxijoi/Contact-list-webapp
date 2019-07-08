@@ -82,8 +82,8 @@
 
                 <div class="form-group">
                     <caption>Пол</caption>
-                    <label class="radio-inline"><input type="radio" name="sex" value="MALE" {{#contact.isMale}} checked {{/contact.isMale}} >Мужской</label>
-                    <label class="radio-inline"><input type="radio" name="sex" value="FEMALE" {{^contact.isMale}} checked {{/contact.isMale}}>Женский</label>
+                    <label class="radio-inline"><input type="radio" name="sex" value="MALE" required>Мужской</label>
+                    <label class="radio-inline"><input type="radio" name="sex" value="FEMALE">Женский</label>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-2">
@@ -149,12 +149,13 @@
         <script id="contactsTableTempate" type="text/template">
         <div class="container-fluid col-7">
             <!--Таблица-->
-            <table id="main-table" class="table-striped table-bordered fluid">
+            <table id="main-table" class="table-striped table-bordered">
+                <caption class="caption">Всего {{pageInfo.recordsN}} записей, {{pageInfo.pageN}} страниц</caption>
                 <tr class="table-header">
                     <th></th>
-                    <th scope="col-4">Имя</th>
-                    <th scope="col-2">Дата рождения</th>
-                    <th scope="col-6">Адрес</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Дата рождения</th>
+                    <th scope="col">Адрес</th>
                 </tr>
                 {{#contacts}}
                     <tr>

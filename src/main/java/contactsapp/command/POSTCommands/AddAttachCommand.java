@@ -28,7 +28,6 @@ public class AddAttachCommand implements Command {
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
 
         try {
-            Properties uploadFilesProp = PropertiesManager.getAttachProperties();
             String directoryPath = FileManager.getInstance().getAttachmentDirectory();
             String folderName = Long.toString(new Date().getTime());
             File uploadFolder = new File(directoryPath + File.separator + folderName);
@@ -43,7 +42,8 @@ public class AddAttachCommand implements Command {
             Part part = req.getPart("file");
             String fileName = part.getSubmittedFileName();
             String filePath = uploadFolder.getAbsolutePath() + File.separator + fileName;
-            File file = new File(filePath);
+            LOGGER.info(filePath);
+            File file = new File(uploadFolder.getAbsolutePath(), fileName);
             if(!file.exists()){
                 file.createNewFile();
             }

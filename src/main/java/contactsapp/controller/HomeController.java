@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(value = "/contacts/*")
-@MultipartConfig
+@MultipartConfig(maxFileSize =1024*1024 *2, fileSizeThreshold = 1024 *1024)
 public class HomeController extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger(HomeController.class);
 

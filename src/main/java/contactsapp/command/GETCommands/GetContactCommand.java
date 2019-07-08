@@ -5,6 +5,7 @@ import contactsapp.command.GETCommands.dto.FullContactInfo;
 import contactsapp.core.entity.Attachment;
 import contactsapp.core.entity.Contact;
 import contactsapp.core.entity.Phone;
+import contactsapp.dao.DaoException;
 import contactsapp.service.AttachmentService;
 import contactsapp.service.ContactService;
 import contactsapp.service.PhoneService;
@@ -16,6 +17,7 @@ import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class GetContactCommand implements Command {
@@ -52,6 +54,8 @@ public class GetContactCommand implements Command {
             LOGGER.error(e);
         } catch (NamingException e) {
             LOGGER.warn(e);
+        }  catch (DaoException e) {
+            e.printStackTrace();
         }
     }
 

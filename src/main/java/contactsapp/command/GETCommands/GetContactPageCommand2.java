@@ -39,7 +39,6 @@ public class GetContactPageCommand2 implements Command {
             if (params.size() > 1) {
                 String query;
                 List<String> conditions = new ArrayList<>();
-                Integer finalPageN = pageN;
                 params.forEach((key, value) -> {
                     switch (key) {
                         case "firstName":
@@ -85,12 +84,10 @@ public class GetContactPageCommand2 implements Command {
                             break;
                     }
                 });
-                /*int startN = (finalPageN - 1) * pageSize;
-                String pageLimit = " LIMIT " + startN + " , " + pageSize;*/
+
                 String[] arr =  conditions.toArray(new String[0]);
 
                 query = String.join(" AND ", arr);
-                //query += pageLimit;
                 query = "SELECT * FROM contact WHERE " + query;
                 contacts = service.executeSelectQuery(query);
 
@@ -114,11 +111,6 @@ public class GetContactPageCommand2 implements Command {
                 resp.setCharacterEncoding("UTF-8");
                 resp.getWriter().write(resultJSON);
             }
-
-
-
-
-
         } catch (JsonProcessingException e) {
             LOGGER.error(e);
         } catch (IOException e) {

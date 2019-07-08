@@ -2,6 +2,7 @@ package contactsapp.command.DELETECommands;
 
 import contactsapp.command.Command;
 import contactsapp.core.entity.Contact;
+import contactsapp.dao.DaoException;
 import contactsapp.service.ContactService;
 import contactsapp.utils.serialization.JSONParser;
 import org.apache.log4j.LogManager;
@@ -11,6 +12,7 @@ import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class DeleteContactCommand implements Command {
@@ -32,6 +34,10 @@ public class DeleteContactCommand implements Command {
             LOGGER.warn(e);
         } catch (IOException e) {
             LOGGER.error(e);
+        } catch (DaoException e) {
+            LOGGER.error(e);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

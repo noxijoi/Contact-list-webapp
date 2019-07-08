@@ -2,6 +2,7 @@ package contactsapp.command.POSTCommands;
 
 import contactsapp.command.Command;
 import contactsapp.core.entity.Contact;
+import contactsapp.dao.DaoException;
 import contactsapp.service.ContactService;
 import contactsapp.utils.FileManager;
 import contactsapp.utils.serialization.JSONParser;
@@ -45,6 +46,8 @@ public class AddContactCommand  implements Command {
         } catch (DataValidationException e) {
             resp.setStatus(400);
             LOGGER.warn(e);
+        } catch (DaoException e) {
+            LOGGER.error(e);
         }
 
     }

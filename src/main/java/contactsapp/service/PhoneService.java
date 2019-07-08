@@ -24,20 +24,16 @@ public class PhoneService implements Service<Phone> {
     }
 
     @Override
-    public Phone getById(Number id) {
+    public Phone getById(Number id) throws SQLException {
         Phone phone = null;
         try(Connection connection = connectionManager.getConnection()) {
             phone = dao.getById(connection, id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (DaoException e) {
-            e.printStackTrace();
         }
         return phone;
     }
 
     @Override
-    public void delete(List<Phone> list) {
+    public void delete(List<Phone> list) throws DaoException {
         try (Connection connection = connectionManager.getConnection()) {
             connection.setAutoCommit(false);
             try {
@@ -47,20 +43,26 @@ public class PhoneService implements Service<Phone> {
                 connection.commit();
                 connection.setAutoCommit(false);
             } catch (DaoException e) {
-                connection.rollback();
-                e.printStackTrace();
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    throw new DaoException("can't delete all phones "  + e );
+                }
+
+            } catch (SQLException e) {
+                throw new DaoException(e);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException(e);
         }
     }
 
-    public List<Phone> getByOwnerId(Integer ownerId){
+    public List<Phone> getByOwnerId(Integer ownerId) throws DaoException {
         List<Phone> phones = new ArrayList<>();
         try(Connection connection = connectionManager.getConnection()){
             phones = dao.getByOwnerId(connection, ownerId);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException(e);
         }
         return phones;
     }
@@ -70,25 +72,21 @@ public class PhoneService implements Service<Phone> {
     }
 
     @Override
-    public void update(Phone phone) {
+    public void update(Phone phone) throws  DaoException {
         try(Connection connection = connectionManager.getConnection()){
             dao.update(connection, phone);
-        } catch (DaoException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException(e);
         }
     }
 
     @Override
-    public void insert(Phone phone) {
+    public void insert(Phone phone) throws DaoException {
 
         try(Connection connection = connectionManager.getConnection()){
             dao.insert(connection, phone);
-        } catch (DaoException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException(e);
         }
     }
 }

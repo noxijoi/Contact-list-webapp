@@ -24,7 +24,7 @@ public class AttachmentService implements Service<Attachment>
     }
 
     @Override
-    public void delete(List<Attachment> list) {
+    public void delete(List<Attachment> list) throws DaoException {
         try (Connection connection = connectionManager.getConnection()) {
             connection.setAutoCommit(false);
             try {
@@ -35,10 +35,10 @@ public class AttachmentService implements Service<Attachment>
                 connection.setAutoCommit(false);
             } catch (DaoException e) {
                 connection.rollback();
-                e.printStackTrace();
+                throw new DaoException("can't delete all attachments");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException(e);
         }
     }
 
@@ -48,8 +48,6 @@ public class AttachmentService implements Service<Attachment>
         try(Connection connection = connectionManager.getConnection()) {
             attachment = dao.getById(connection, id);
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (DaoException e) {
             e.printStackTrace();
         }
         return attachment;

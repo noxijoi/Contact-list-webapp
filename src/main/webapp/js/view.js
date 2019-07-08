@@ -116,9 +116,10 @@ var view = {
       if (!moment(params.dateTo).isValid()) {
         view.showErr('incorrect "to" date, use format: "YYYY-MM-DD"')
       }
-      params.sex = document
-        .querySelector('input[name="sexRadio"]:checked')
-        .value.toUpperCase();
+      var sexs =  document.querySelector('input[name="sexRadio"]:checked');
+      if(sexs){
+        params.sex = sexs.value.toUpperCase();
+      }
       params.company = document.getElementById("company-input").value;
       params.email = document.getElementById("email-input").value;
       params.country = document.getElementById("country-input").value;
@@ -499,7 +500,7 @@ var view = {
   addAttachToTable: function () {
     var attach = view.dataCollector.collectAttachData();
     //все атачи, которые ещё не добавлены в базу будут иметь индекс с меткой "а"
-    var id = contactData.phones.length + 1;
+    var id = contactData.attachs.length + 1;
     id += "a";
     attach.id = id;
     contactData.attachs.push(attach);

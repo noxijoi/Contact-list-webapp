@@ -20,7 +20,6 @@ CREATE TABLE contact (
   house_n           VARCHAR(10),
   post_index        INT UNSIGNED,
   avatar            VARCHAR(100)
-
 ) ENGINE=InnoDB DEFAULT CHARSET = utf8;
 
 CREATE TABLE phone_number(
@@ -34,6 +33,7 @@ CREATE TABLE phone_number(
   CONSTRAINT contact_fk
   FOREIGN KEY (owner_id)
   REFERENCES contact(id)
+                         ON DELETE CASCADE
 )ENGINE=InnoDB;
 
 
@@ -45,4 +45,5 @@ CREATE TABLE attachment(
   download_time    DATE             NOT NULL,
   comment          VARCHAR(200),
   FOREIGN KEY (owner_id) REFERENCES contact(id)
+                       ON DELETE  CASCADE
 )ENGINE=InnoDB;

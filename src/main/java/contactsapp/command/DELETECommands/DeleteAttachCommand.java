@@ -3,6 +3,7 @@ package contactsapp.command.DELETECommands;
 import contactsapp.command.Command;
 import contactsapp.core.entity.Attachment;
 import contactsapp.core.entity.Contact;
+import contactsapp.dao.DaoException;
 import contactsapp.service.AttachmentService;
 import contactsapp.utils.serialization.JSONParser;
 import org.apache.log4j.LogManager;
@@ -28,6 +29,8 @@ public class DeleteAttachCommand implements Command {
             service.delete(list);
             LOGGER.info("Delete " + list.size() + " attachments");
         } catch (IOException e) {
+            LOGGER.error(e);
+        } catch (DaoException e) {
             LOGGER.error(e);
         }
 

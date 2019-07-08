@@ -7,6 +7,7 @@ import contactsapp.utils.serialization.JSONParser;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -28,6 +29,8 @@ public class SendEmailCommand implements Command {
             service.sendMessage(params);
             LOGGER.info("send "+ params.getReceivers().size() + " messages");
         } catch (IOException e) {
+            LOGGER.error(e);
+        } catch (MessagingException e) {
             LOGGER.error(e);
         }
     }

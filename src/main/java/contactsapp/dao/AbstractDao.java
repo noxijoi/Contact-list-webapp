@@ -21,14 +21,12 @@ public abstract class AbstractDao<T extends Identified,PK extends Number> implem
 
 
     @Override
-    public List getAll(Connection connection) throws DaoException {
+    public List getAll(Connection connection) throws SQLException {
         List<T> list;
         String query = getSelectAllQuery();
         try(PreparedStatement statement = connection.prepareStatement(query)){
             ResultSet rs = statement.executeQuery();
             list = builder.buildList(rs);
-        } catch (SQLException e) {
-            throw new DaoException(e);
         }
         return list;
     }
@@ -41,7 +39,7 @@ public abstract class AbstractDao<T extends Identified,PK extends Number> implem
     }
 
     @Override
-    public T getById(Connection connection, Number number) throws DaoException {
+    public T getById(Connection connection, Number number) throws SQLException {
         T result;
         String query = getSelectByIdQuery();
         try(PreparedStatement statement = connection.prepareStatement(query)){
@@ -49,14 +47,12 @@ public abstract class AbstractDao<T extends Identified,PK extends Number> implem
             ResultSet rs = statement.executeQuery();
             rs.next();
             result = builder.buildSingle(rs);
-        } catch (SQLException e) {
-            throw new DaoException(e);
         }
         return result;
     }
 
     @Override
-    public T insert(Connection connection, Identified object) throws DaoException {
+    public T insert(Connection connection, Identified object) throws DaoException, SQLException {
         T result;
         String query = getInsertQuery();
         try(PreparedStatement statement = connection.prepareStatement(query)){
@@ -76,14 +72,12 @@ public abstract class AbstractDao<T extends Identified,PK extends Number> implem
             if(result == null){
                 throw  new DaoException("Can't find inserted record");
             }
-        } catch (SQLException e) {
-            throw new DaoException(e);
         }
         return result;
     }
 
     @Override
-    public void update(Connection connection, Identified object) throws DaoException {
+    public void update(Connection connection, Identified object) throws DaoException, SQLException {
         String query = getUpdateQuery();
         try(PreparedStatement statement = connection.prepareStatement(query)){
             prepareUpdateStatement(statement, object);
@@ -91,13 +85,11 @@ public abstract class AbstractDao<T extends Identified,PK extends Number> implem
             if (count != 1) {
                 throw new DaoException("On update modify more then 1 record: " + count);
             }
-        } catch (SQLException e) {
-            throw new DaoException(e);
         }
     }
 
     @Override
-    public void delete(Connection connection, Identified object) throws DaoException {
+    public void delete(Connection connection, Identified object) throws DaoException, SQLException {
         String query = getDeleteQuery();
         try(PreparedStatement statement = connection.prepareStatement(query)){
             prepareDeleteStatement(statement, object);
@@ -105,8 +97,6 @@ public abstract class AbstractDao<T extends Identified,PK extends Number> implem
             if(count != 1){
                 throw new DaoException("On delete modify more then 1 record: " + count);
             }
-        } catch (SQLException e) {
-            throw new DaoException(e);
         }
 
     }

@@ -3,6 +3,7 @@ package contactsapp.command.DELETECommands;
 import contactsapp.command.Command;
 import contactsapp.core.entity.Contact;
 import contactsapp.core.entity.Phone;
+import contactsapp.dao.DaoException;
 import contactsapp.service.PhoneService;
 import contactsapp.utils.serialization.JSONParser;
 import org.apache.log4j.LogManager;
@@ -29,6 +30,8 @@ public class DeletePhoneCommand implements Command {
             service.delete(list);
             LOGGER.info("delete "+ list.size() + " contacts");
         } catch (IOException e) {
+            LOGGER.error(e);
+        } catch (DaoException e) {
             LOGGER.error(e);
         }
     }

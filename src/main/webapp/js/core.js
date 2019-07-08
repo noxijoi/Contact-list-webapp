@@ -143,6 +143,21 @@ function Controller() {
                 view.renderWorkArea(TEMPLATE_NAMES.editContact, data);
                 view.renderSidenav(TEMPLATE_NAMES.phonesAttachBar, data);
                 view.listenerManager.addListenersForEditContactForm();
+                var sex = data.contact.sex;
+                var radios = document.querySelectorAll('input[name="sex"]');                
+                if(sex == "MALE"){
+                    if( radios[0].value == "MALE"){
+                        radios[0].checked = true;
+                    } else{
+                        radios[1].checked = true;
+                    }   
+                } else{
+                    if( radios[0].value == "FEMALE"){
+                        radios[0].checked = true;
+                    } else{
+                        radios[1].checked = true;
+                    }   
+                }
             })
     }
 

@@ -18,27 +18,27 @@ public class PhoneDao extends AbstractDao<Phone,Integer> {
     }
 
     @Override
-    public List getAll(Connection connection) throws DaoException {
+    public List getAll(Connection connection) throws  SQLException {
         return super.getAll(connection);
     }
 
     @Override
-    public Phone getById(Connection connection, Number number) throws DaoException {
+    public Phone getById(Connection connection, Number number) throws  SQLException {
         return (Phone)super.getById(connection, number);
     }
 
     @Override
-    public Phone insert(Connection connection, Identified object) throws DaoException {
+    public Phone insert(Connection connection, Identified object) throws SQLException, DaoException {
         return super.insert(connection, object);
     }
 
     @Override
-    public void update(Connection connection, Identified object) throws DaoException {
+    public void update(Connection connection, Identified object) throws DaoException, SQLException {
         super.update(connection, object);
     }
 
     @Override
-    public void delete(Connection connection, Identified object) throws DaoException {
+    public void delete(Connection connection, Identified object) throws DaoException, SQLException {
         super.delete(connection, object);
     }
 
@@ -66,7 +66,7 @@ public class PhoneDao extends AbstractDao<Phone,Integer> {
 
     @Override
     protected String getSelectAllQuery() {
-        return "SELECT * FROM phone_number";
+        return "SELECT * FROM phone_number ORDER BY id";
     }
 
     @Override

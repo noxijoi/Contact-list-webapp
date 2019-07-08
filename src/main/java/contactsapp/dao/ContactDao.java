@@ -20,27 +20,27 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
 
 
     @Override
-    public List getAll(Connection connection) throws DaoException {
+    public List getAll(Connection connection) throws SQLException {
         return super.getAll(connection);
     }
 
     @Override
-    public Contact getById(Connection connection, Number number) throws DaoException {
+    public Contact getById(Connection connection, Number number) throws  SQLException {
         return  super.getById(connection,number);
     }
 
     @Override
-    public Contact insert(Connection connection, Identified object) throws DaoException {
+    public Contact insert(Connection connection, Identified object) throws DaoException, SQLException {
         return  super.insert(connection, object);
     }
 
     @Override
-    public void update(Connection connection, Identified object) throws DaoException {
+    public void update(Connection connection, Identified object) throws DaoException, SQLException {
         super.update(connection, object);
     }
 
     @Override
-    public void delete(Connection connection, Identified object) throws DaoException {
+    public void delete(Connection connection, Identified object) throws DaoException, SQLException {
         super.delete(connection, object);
     }
 
@@ -148,7 +148,7 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
 
     @Override
     protected String getSelectAllQuery() {
-        return "SELECT * FROM contact";
+        return "SELECT * FROM contact ORDER BY id";
     }
 
     @Override
@@ -156,35 +156,31 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
         return "SELECT * FROM contact WHERE id = ?";
     }
 
-    public List<Contact> getPage(Connection connection, int pageN, int pageSize) throws DaoException {
+    public List<Contact> getPage(Connection connection, int pageN, int pageSize) throws SQLException {
         int startN = (pageN - 1) * pageSize;
-        String query = "SELECT * FROM contact LIMIT ? , ?";
+        String query = "SELECT * FROM contact ORDER BY id LIMIT ? , ? ";
         List<Contact> result = null;
         try(PreparedStatement statement = connection.prepareStatement(query)){
             statement.setInt(1, startN);
             statement.setInt(2, pageSize);
             ResultSet rs = statement.executeQuery();
             result = builder.buildList(rs);
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return result;
     }
 
-    public int getTableSize(Connection connection) {
+    public int getTableSize(Connection connection) throws SQLException {
         int result = 0;
         String query = "SELECT COUNT(*) from contact";
         try(Statement statement = connection.createStatement()) {
             ResultSet rs = statement.executeQuery(query);
             rs.next();
             result = rs.getInt("count(*)");
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return result;
     }
 
-    public List<Contact> getContactsBorn(Connection connection, int month, int day) {
+    public List<Contact> getContactsBorn(Connection connection, int month, int day) throws SQLException {
         List<Contact> contactList = new ArrayList<>();
         String query = "SELECT * FROM contact WHERE EXTRACT(MONTH FROM b_date) = ? AND EXTRACT(MONTH FROM b_date) = ?";
         try(PreparedStatement statement = connection.prepareStatement(query)){
@@ -193,8 +189,6 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
             ResultSet rs = statement.executeQuery();
             contactList = builder.buildList(rs);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return contactList;
     }

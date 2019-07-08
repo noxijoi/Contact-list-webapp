@@ -2,14 +2,18 @@ package contactsapp.command.PUTCommands;
 
 import contactsapp.command.Command;
 import contactsapp.core.entity.Phone;
+import contactsapp.dao.DaoException;
 import contactsapp.service.PhoneService;
 import contactsapp.utils.serialization.JSONParser;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class EditPhoneCommand implements Command {
+    private final static Logger LOGGER = LogManager.getLogger(EditContactCommand.class);
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
         try {
@@ -22,7 +26,10 @@ public class EditPhoneCommand implements Command {
             Phone phone = JSONParser.parsePhone(sb.toString());
             service.update(phone);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
+        } catch (DaoException e) {
+            LOGGER.error(e);
+
         }
     }
 }

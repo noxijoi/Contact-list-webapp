@@ -8,6 +8,8 @@ import contactsapp.utils.mail.MailParam;
 import contactsapp.utils.mail.Template;
 import org.junit.jupiter.api.Test;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 
@@ -18,7 +20,7 @@ class MailServiceTest {
 
 
     @Test
-    void testSendMessage() {
+    void testSendMessage() throws IOException, MessagingException {
         MailService mailService = new MailService();
         mailService.sendMessage(mailParams);
     }
