@@ -11,9 +11,10 @@
     height:20px;
 }
 
-/*уведомляшка*/
+/*уведомления*/
 .msg {
     position: absolute;
+    z-index: 5;
     display: none;
     right: 20px;
     top: 120px;

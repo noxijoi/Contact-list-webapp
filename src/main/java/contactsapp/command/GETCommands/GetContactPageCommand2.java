@@ -51,7 +51,7 @@ public class GetContactPageCommand2 implements Command {
                             conditions.add(" p_name LIKE " +"'"+ value[0] + "%' ");
                             break;
                         case "dateFrom":
-                            conditions.add(" d_date >= " +"'"+ value[0] + "' ");
+                            conditions.add(" b_date >= " +"'"+ value[0] + "' ");
                             break;
                         case "dateTo":
                             conditions.add(" b_date <= " +"'"+ value[0] + "' ");

@@ -116,8 +116,8 @@ var view = {
       if (!moment(params.dateTo).isValid()) {
         view.showErr('incorrect "to" date, use format: "YYYY-MM-DD"')
       }
-      var sexs =  document.querySelector('input[name="sexRadio"]:checked');
-      if(sexs){
+      var sexs = document.querySelector('input[name="sexRadio"]:checked');
+      if (sexs) {
         params.sex = sexs.value.toUpperCase();
       }
       params.company = document.getElementById("company-input").value;
@@ -251,16 +251,14 @@ var view = {
     addListersForEditMain: function () {
 
       var okButton = document.querySelector(".contact-ok");
-      okButton.addEventListener("click", controller.submitContact);
-
-      var submitButton = document.querySelector(".submit");
-      submitButton.addEventListener('click', function () {
+      okButton.addEventListener("click", function () {
         var form = document.querySelector("form");
         if (form.checkValidity()) {
-          okButton.click();
+          controller.submitContact();
         } else {
           view.showErr("Заполните все поля со звездочкой");
         }
+
       });
 
       //--
@@ -318,20 +316,15 @@ var view = {
 
           var confirmPhoneButton = document.getElementById("confirmPhone");
           confirmPhoneButton.addEventListener("click", function () {
-            var id = phoneToEdit.id;
-            phoneToEdit = view.dataCollector.collectPhoneData();
-            phoneToEdit.id = id;
-            var index = contactData.phones.findIndex(ph => ph.id.toString() === phoneToEdit.id.toString());
-            contactData.phones[index] = phoneToEdit;
-            view.rerenderSideTables();
-            phoneModal.style.display = "none";
-          });
-
-          var submitButton = document.querySelector(".phone .submit");
-          submitButton.addEventListener('click', function () {
             var form = document.querySelector("form");
             if (form.checkValidity()) {
-              confirmPhoneButton.click();
+              var id = phoneToEdit.id;
+              phoneToEdit = view.dataCollector.collectPhoneData();
+              phoneToEdit.id = id;
+              var index = contactData.phones.findIndex(ph => ph.id.toString() === phoneToEdit.id.toString());
+              contactData.phones[index] = phoneToEdit;
+              view.rerenderSideTables();
+              phoneModal.style.display = "none";
             } else {
               view.showErr("Заполните все поля со звездочкой");
             }
@@ -389,15 +382,17 @@ var view = {
 
     addListenersForContactForm: function () {
       var okButton = document.querySelector(".contact-ok");
-      okButton.addEventListener("click", controller.addContactToDB);
-
-      var submitButton = document.querySelector(".submit");
-      submitButton.addEventListener('click', function () {
+      okButton.addEventListener("click", function () {
         var form = document.querySelector("form");
         if (form.checkValidity()) {
-          okButton.click();
+          controller.addContactToDB();
         } else {
-          view.showErr("Заполните все поля со звездочкой");
+          var date = document.getElementById("birth-date-input");
+          if (!moment(date.value).isValid()) {
+            view.showErr("Неправильно заполена дата")
+          } else {
+            view.showErr("Заполните все поля со звездочкой");
+          }
         }
       });
 
@@ -428,15 +423,10 @@ var view = {
 
     var confirmPhoneButton = document.getElementById("confirmPhone");
     confirmPhoneButton.addEventListener("click", function () {
-      view.addPhoneToTable();
-      phoneModal.style.display = "none";
-    });
-
-    var submitButton = document.querySelector(".phone .submit");
-    submitButton.addEventListener('click', function () {
       var form = document.querySelector(".phone form");
       if (form.checkValidity()) {
-        confirmPhoneButton.click();
+        view.addPhoneToTable();
+        phoneModal.style.display = "none";
       } else {
         view.showErr("Заполните все поля со звездочкой");
       }
@@ -455,29 +445,19 @@ var view = {
 
     var confirmAttachButton = document.getElementById("confirmAttach");
     confirmAttachButton.addEventListener("click", function () {
-      view.addAttachToTable();
-      attachModal.style.display = "none";
-    });
-    var submitAttachButton = document.querySelector(".attach .submit");
-    submitAttachButton.addEventListener('click', function () {
       var form = document.querySelector(".attach form");
       var fileName = document.getElementById("addFile").files[0].name;
-      var isKyr = function (str) {
-            return /[а-я]/i.test(str);
-        }
       if (form.checkValidity()) {
-        if(!isKyr(fileName)){
-        confirmAttachButton.click();
-        }else{
+        if (!isKyr(fileName)) {
+          view.addAttachToTable();
+          attachModal.style.display = "none";
+        } else {
           view.showErr("Выберите файл без кирилицы в названии");
         }
       } else {
         view.showErr("Выберите файл");
       }
     });
-
-    var submitButton = document.querySelector(".attach .submit");
-    submitButton.addEventListener('submit', confirmAttachButton.click);
 
     var cancelAttachButton = document.getElementById("cancelAttach");
     cancelAttachButton.addEventListener("click", function () {
@@ -523,3 +503,6 @@ var view = {
   }
 
 };
+var isKyr = function (str) {
+  return /[а-я]/i.test(str);
+}

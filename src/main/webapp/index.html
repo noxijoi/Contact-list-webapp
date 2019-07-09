@@ -19,11 +19,11 @@
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary fixed-top">
         <a class="navbar-brand" href="#page/1">Маскалева. Список контактов</a>
     </nav>
-    <div id='msg-err' class="msg alert-warning" >
+    <div id='msg-err' class="msg alert-warning">
         <p>
         </p>
     </div>
-    
+
     <div id='msg-success' class="msg alert-success">
         <p>
         </p>
@@ -31,7 +31,7 @@
 
 
     <div class="row workspace">
-            
+
         <div class="col-8" id="main"></div>
         <div class="col-4 sidenav" id="sidenav"></div>
 
@@ -39,7 +39,7 @@
         <script id="editContactTemplate" type="text/template">
         <div class = "container">
             <div class="row">
-                <div class="header col-10">Контакт</div>
+                <div class="header col-10 h2">Контакт</div>
                 <div class="col-2">
                     <button class="btn rounded-circle avatar">
                         <input id="avatarUpload" type="file" accept=".jpg, .jpeg, .png" hidden>
@@ -81,7 +81,7 @@
                 </div>
 
                 <div class="form-group">
-                    <caption>Пол</caption>
+                    <caption>Пол*</caption>
                     <label class="radio-inline"><input type="radio" name="sex" value="MALE" required>Мужской</label>
                     <label class="radio-inline"><input type="radio" name="sex" value="FEMALE">Женский</label>
                 </div>
@@ -138,10 +138,9 @@
                         <input type="text" id="index-input" class="form-control" value="{{contact.address.index}}">
                     </div>
                 </div>
-                <input type="button" class="btn btn-success submit" value="OK" > 
             </form>
-            <button type="button" class="btn btn-success contact-ok" hidden>ОК</button>
-            <button type="button" class="btn btn-secondary contact-cancel" >НЕ ОК</button>
+            <button type="button" class="btn btn-primary contact-ok">ОК</button>
+            <button type="button" class="btn btn-secondary contact-cancel" >Отменить</button>
         </div>
         </script>
 
@@ -329,7 +328,7 @@
             <h3 class="h3">Файлы</h3>
             <div class="button-group attachbuttons" role="group" aria-label="Basic example">
                     <button class="add-button btn btn-outline-primary ">
-                            <img src="img/add.png" alt="add" class="sidenav-button-img">
+                        <img src="img/add.png" alt="add" class="sidenav-button-img">
                     </button>
                     <button class="delete-button btn btn-outline-primary ">
                         <img src="img/remove.png" alt="remove" class="sidenav-button-img"/>
@@ -362,102 +361,84 @@
         <!--Модальное окошко для телефона-->
         <script id="phoneModalTemplate" type="text/template">
         <div class="modal-content phone">
-                <div class="modal-header">Телефонный номер</div>
-                <div class="container">
-                    <form>
-                        <div class="form-row">
-                            <div class="form-group col-2">
-                                <label for="country-code-input">Код страны*</label>
-                                <input type="text" id="country-code-input" class="form-cotrol" value="{{countryCode}}" required maxlength="5">
+            <div class="container">
+                <div class="form-group">
+                        <h3 class="h3">Телефонный номер</h3>
+                        <form>
+                            <div class="form-row">
+                                <div class="form-group col-2">
+                                    <label for="country-code-input">Код страны*</label>
+                                    <input type="text" class="form-cotrol"  id="country-code-input" value="{{countryCode}}" required maxlength="5">
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="operator-code-input">Код оператора*</label>
+                                    <input type="text" class="form-control" id="operator-code-input" value="{{operatorCode}}" required maxlength="5">
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="number-input">Номер*</label>
+                                    <input type="text" class="form-control" id="number-input" value="{{number}}" required maxlength="10">
+                                </div>
                             </div>
-                            <div class="form-group col-2">
-                                <label for="operator-code-input">Код оператора*</label>
-                                <input type="text" class="form-control" id="operator-code-input" value="{{operatorCode}}" required maxlength="5">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="phoneType" value="HOME" id="homeRadio" {{#isHome}} checked {{/isHome}}>
+                                <label for="homeRadio">Домашний</label>
+                                <input class="form-check-input" type="radio" name="phoneType" value="MOBILE" id="mobileRadio" {{^isHome}} checked {{/isHome}}>
+                                <label for="mobileRadio">Мобильный</label>
                             </div>
-                            <div class="form-group col-2">
-                                <label for="number">Номер*</label>
-                                <input type="text" class="form-control" id="number-input" value="{{number}}" required maxlength="10">
+                            <div class="form-group">
+                                <label for="phoneComment">Комментарий</label>
+                                <input class="form-control" type="text" id="phone-comment-input" value="{{comment}}" maxlength="255">
                             </div>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="phoneType" value="HOME" id="homeRadio" {{#isHome}} checked {{/isHome}}>
-                            <label for="homeRadio">Домашний</label>
-                            <input class="form-check-input" type="radio" name="phoneType" value="MOBILE" id="mobileRadio" {{^isHome}} checked {{/isHome}}>
-                            <label for="mobileRadio">Мобильный</label>
-                        </div>
-                        <div class="form-group">
-                            <label for="phoneComment">Комментарий</label>
-                            <input class="form-control" type="text" id="phone-comment-input" value="{{comment}}" maxlength="255">
-                        </div>
-                        <input type="button" class="btn btn-success submit" value="OK" > 
-                    </form>
-                    <button class="btn btn-primary close-modal" id="confirmPhone" hidden>ОК</button>
-                    <button claas="btn btn-outline-primary close-modal" id="cancelPhone">Отменить</button>
+    
+                        </form>
+                        <button class="btn btn-primary close-modal" id="confirmPhone">ОК</button>
+                        <button class="btn btn-secondary close-modal" id="cancelPhone">Отменить</button>
                 </div>
+            </div>
         </div>
         </script>
 
         <!--Модальное окошко для атача-->
         <script id="attachModalTemplate" type="text/template">
         <div class="modal-content attach">
-            <form>
+            <div class="container">
                 <div class="form-group">
-                    <h3 class="h3">Файл</h3>
-                    <div class="form-group">
-                        <label for="addFile">Выберите файл*</label>
-                        <input type="file" id="addFile" class="form-cotrol-file" name="file" required>
-                    </div>
-                    <div class="container">
-                        <div class="form-group">
-                            <form id="attach-form">
-                                <input type="text" name="ownerId" value="{{ownerId}}" hidden>
-                                <label for="attachComment">Комментарий</label>
-                                <input class="form-control" type="text" id="attachComment" name="comment" maxlength="200">
-                            </form>
-                        </div>
-                    </div>
+                        <form>
+                            <h3 class="h3">Файл</h3>
+                            <div class="container">
+                                <div class="form-group">
+                                    <label for="addFile">Выберите файл*</label>
+                                    <input type="file" id="addFile" class="form-cotrol-file" name="file" required>
+                                </div>
+                                    
+                                <div class="form-group">
+                                    <form id="attach-form">
+                                        <input type="text" name="ownerId" value="{{ownerId}}" hidden>
+                                        <label for="attachComment">Комментарий</label>
+                                        <input class="form-control" type="text" id="attachComment" name="comment" maxlength="200">
+                                    </form>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary close-modal" id="confirmAttach" >ОК</button>
+                            <button class="btn btn-secondary close-modal" id="cancelAttach">Отменить</button>
+                        </form>
                 </div>
-                <input type="button" class="btn btn-success submit" value="OK" >
-            </form>
-            <button class="btn btn-primary close-modal" id="confirmAttach" hidden>ОК</button>
-            <button class="btn btn-outline-primary close-modal" id="cancelAttach">Отменить</button>
+            </div>
         </div>
         </script>
 
-        <!--Шаблон строки таблицы телефонов-->
-        <script id="phoneRowTemplate" type="text/template">
-        <tr>
-                <td><input type="checkbox" value="{{id}}"></td>
-                <td class="nameCell">
-                    <a href="#phone/{{id}}">
-                        {{countryCode}} {{operatorCode}} {{number}}
-                    </a>
-                </td>
-                <td>{{type}}</td>
-                <td>{{comment}}</td>
-            </tr>
-        </script>
-
-        <!--Шаблон строки таблицы атачей-->
-        <script id="attachRowTemplate" type="text/template">
-        <tr>
-                <td><input type="checkbox" value="{{attachId}}">{{id}}</td>
-                <td class="nameCell"><button class="btn btn-link" id="{{fileName}}">{{fileName}}</button></td>
-                <td>{{downloadTime}</td>
-                <td>{{comment}}</td>
-                <td><a class="hyperLink" href="{{filePath}}">тык</td>
-        </tr>
-        </script>
 
         <!--Форма для почтового сообщения-->
         <script id="mailToMainTemplate" type="text/template">
-        <div class="form-group">
-            <label for="mail-text">Текст сообщения</label>
-            <textarea class="form-control" id="mail-text" rows="5">
-            </textarea>
+        <div class="container">
+            <div class="form-group">
+                <label for="mail-text">Текст сообщения</label>
+                <textarea class="form-control" id="mail-text" rows="5">
+                </textarea>
+            </div>
+            <button class="btn btn-primary" id="send-mail">Отправить</button>
+            <button class ="btn btn-secondary" id="cancel-mail">Отменить</button>
         </div>
-        <button class="btn btn-primary" id="send-mail">Отправить</button>
-        <button class ="btn btn-secondary" id="cancel-mail">Отменить</button>
         </script>
 
 
@@ -465,24 +446,24 @@
         <script id="mailToSettingsTemplate" type="text/template">
         <div class="container-fluid" id="mailSettings">
             <form id="mail-form">
-            <div class="form-group">
-                <label for="receiver">Кому*</label>
-                <input class="form-control" type="text" id="receiver" value ="{{emails}}" required>
-            </div>
-            <did class="form-group">
-                <label for="mail-template-select"> Шаблон сообщения </label>
-                <select id="mail-template-select">
-                    <option value="NoTemplate" checked>Своё сообщение</option>
-                    {{#templates}}
-                        <option value="{{name}}">{{name}}
-                    {{/templates}}
-                </select>
-            </div>
-            <div class="form-group">
+                <div class="form-group">
+                    <label for="receiver">Кому*</label>
+                    <input class="form-control" type="text" id="receiver" value ="{{emails}}" required>
+                </div>
+                <div class="form-group">
+                    <label for="mail-template-select"> Шаблон сообщения </label>
+                    <select id="mail-template-select">
+                        <option value="NoTemplate" checked>Своё сообщение</option>
+                        {{#templates}}
+                            <option value="{{name}}">{{name}}
+                        {{/templates}}
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="subj">Тема</label>
                     <input class="form-control" type="text" id="subj" required>
-            </div>
-        </form>
+                </div>
+            </form>
         </div>
         </script>
 
@@ -492,7 +473,7 @@
 
         <!--форма редактирования данных атача-->
         <script id="editAttachModalTemplate" type="text/template">
-            <div class="modal-content">
+            <div class="modal-content attach">
                     <div class="form-group">
                         <h3 class="h3">Файл</h3>
                         <div class="container">
@@ -502,14 +483,14 @@
                                 <input class="form-control" type="text" id="attachComment" name="comment" value="{{comment}}">
                             </div>
                             <button class="btn btn-primary close-modal" id="confirmAttach" >ОК</button>
-                            <button class="btn btn-outline-primary close-modal" id="cancelAttach">Отменить</button>
+                            <button class="btn btn-secondary close-modal" id="cancelAttach">Отменить</button>
                         </div>
                     </div>
             </div>
         </script>
     </div>
 
-    
+
 </body>
 
 </html>

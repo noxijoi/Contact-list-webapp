@@ -7,9 +7,7 @@ const TEMPLATE_NAMES = {
     mailToMain: "mailToMainTemplate",
     mailToSettings: "mailToSettingsTemplate",
     phoneModal: "phoneModalTemplate",
-    phoneRow: "phoneRowTemplate",
     attachModal: "attachModalTemplate",
-    attachRow: "attachRowTemplate",
     attachEditModal: "editAttachModalTemplate",
     empty: "emptyTemplate"
 
