@@ -103,7 +103,6 @@ var view = {
     },
 
     collectSearchParams: function () {
-      var params = {};
       params.size = PAGE_SIZE;
       params.firstName = document.getElementById("fName").value;
       params.lastName = document.getElementById("lName").value;
@@ -119,6 +118,8 @@ var view = {
       var sexs = document.querySelector('input[name="sexRadio"]:checked');
       if (sexs) {
         params.sex = sexs.value.toUpperCase();
+      } else {
+        params.sex = null;
       }
       params.company = document.getElementById("company-input").value;
       params.email = document.getElementById("email-input").value;
@@ -211,7 +212,7 @@ var view = {
       select.addEventListener('change', function () {
         var value = select.value;
         if (value != "NoTemplate") {
-          var templ = templates.find(temp => temp.name === value);
+          var templ = templates.find(temp => temp.subject === value);
 
           workField.value = templ.message;
           workField.disabled = true;
@@ -233,7 +234,7 @@ var view = {
       sendMailButton.addEventListener("click", function () {
         var form = document.getElementById("mail-form");
         if (form.checkValidity()) {
-          controller.sendMail();
+          controller.sendMail()
         } else {
           view.showErr("Заполните все поля со *");
         }
@@ -409,8 +410,10 @@ var view = {
     addListenersForSearchForm: function () {
       var searchButton = document.getElementById("paramSearchButton");
       searchButton.addEventListener("click", function () {
-        var params = view.dataCollector.collectSearchParams();
-        controller.searchByParams(params);
+        view.dataCollector.collectSearchParams();
+        location.hash = router.startHash;
+        controller.contactsPage();
+        
       });
     },
   },

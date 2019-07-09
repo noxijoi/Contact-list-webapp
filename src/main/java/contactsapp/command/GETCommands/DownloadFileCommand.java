@@ -33,7 +33,12 @@ public class DownloadFileCommand implements Command {
             AttachmentService service = new AttachmentService();
             Attachment attachment = service.getById(attachN);
 
+            if (attachment == null){
+                resp.setStatus(404);
+                return;
+            }
             String fullPath = FileManager.getInstance().getAttachmentDirectory() + File.separator + attachment.getFilePath();
+
             File file = new File(fullPath);
             OutputStream ostream = null;
             FileInputStream fis = null;

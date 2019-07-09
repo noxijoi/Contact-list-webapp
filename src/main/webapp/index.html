@@ -148,7 +148,7 @@
         <script id="contactsTableTempate" type="text/template">
         <div class="container-fluid col-7">
             <!--Таблица-->
-            <table id="main-table" class="table-striped table-bordered">
+            <table id="main-table" class="table table-striped table-bordered justify-content-center">
                 <caption class="caption">Всего {{pageInfo.recordsN}} записей, {{pageInfo.pageN}} страниц</caption>
                 <tr class="table-header">
                     <th></th>
@@ -299,7 +299,7 @@
                         <img src="img/remove.png" alt="remove" class="sidenav-button-img"/>
                     </button>
             </div>
-            <table id="phones-table" class="table-striped table-bordered fluid">
+            <table id="phones-table" class="table table-striped table-bordered fluid">
                     <tr class="table-header">
                         <th>#</th>
                         <th scope="col-7">Номер</th>
@@ -334,7 +334,7 @@
                         <img src="img/remove.png" alt="remove" class="sidenav-button-img"/>
                     </button>
             </div>
-            <table id="attachs-table" class="table-striped table-bordered fluid">
+            <table id="attachs-table" class=" table table-striped table-bordered fluid">
                     <tr class="table-header">
                         <th>#</th>
                         <th scope="col-5">Имя</th>
@@ -455,7 +455,7 @@
                     <select id="mail-template-select">
                         <option value="NoTemplate" checked>Своё сообщение</option>
                         {{#templates}}
-                            <option value="{{name}}">{{name}}
+                            <option value="{{subject}}">{{subject}}
                         {{/templates}}
                     </select>
                 </div>

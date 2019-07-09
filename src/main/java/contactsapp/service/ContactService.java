@@ -116,4 +116,14 @@ public class ContactService implements Service<Contact> {
         }
         return contacts;
     }
+
+    public int getRecordsNum(String query) throws DaoException {
+        int num = 0;
+        try (Connection connection = connectionManager.getConnection()) {
+            num = dao.getTableSize(connection,query);
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return num;
+    }
 }

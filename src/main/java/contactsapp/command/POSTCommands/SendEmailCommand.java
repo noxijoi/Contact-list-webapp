@@ -31,7 +31,12 @@ public class SendEmailCommand implements Command {
         } catch (IOException e) {
             LOGGER.error(e);
         } catch (MessagingException e) {
-            LOGGER.error(e);
+            try {
+                resp.getWriter().write("invalid email address");
+            } catch (IOException e1) {
+                LOGGER.error(e1);
+                LOGGER.warn(e);
+            }
         }
     }
 }

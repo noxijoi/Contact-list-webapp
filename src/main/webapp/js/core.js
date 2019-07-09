@@ -23,6 +23,8 @@ var contactData = {};
 //список контактов страницы
 var contactPageData = {};
 
+var params = {};
+
 var selectedContacts = [];
 var deletedPhones = [];
 var deletedAttachs = [];
@@ -99,9 +101,7 @@ function Controller() {
     }
 
     this.contactsPage = function () {
-        var params = {
-            size: PAGE_SIZE
-        };
+        params.size = PAGE_SIZE;
         var paramStr = router.getParamString(params);
         communicator.sendGET(location.pathname + "contacts/" + location.hash.slice(1) + paramStr)
             .then(response => {
@@ -111,11 +111,10 @@ function Controller() {
                 contactPageData = {};
                 contactPageData = data;
                 data.contacts.forEach(contact =>
-                    contact.birthDate = moment(contact.birthDate).format("YYYY-MM-DD"))
-
-
+                    contact.birthDate = moment(contact.birthDate).format("YYYY-MM-DD")
+                );
                 view.renderWorkArea(TEMPLATE_NAMES.contactsTable, data);
-                view.renderSidenav(TEMPLATE_NAMES.searchBar, data);
+                view.renderSidenav(TEMPLATE_NAMES.searchBar, params);
 
                 view.listenerManager.addListenersForTable();
                 view.listenerManager.addListenersForSearchForm();
@@ -142,19 +141,19 @@ function Controller() {
                 view.renderSidenav(TEMPLATE_NAMES.phonesAttachBar, data);
                 view.listenerManager.addListenersForEditContactForm();
                 var sex = data.contact.sex;
-                var radios = document.querySelectorAll('input[name="sex"]');                
-                if(sex == "MALE"){
-                    if( radios[0].value == "MALE"){
+                var radios = document.querySelectorAll('input[name="sex"]');
+                if (sex == "MALE") {
+                    if (radios[0].value == "MALE") {
                         radios[0].checked = true;
-                    } else{
+                    } else {
                         radios[1].checked = true;
-                    }   
-                } else{
-                    if( radios[0].value == "FEMALE"){
+                    }
+                } else {
+                    if (radios[0].value == "FEMALE") {
                         radios[0].checked = true;
-                    } else{
+                    } else {
                         radios[1].checked = true;
-                    }   
+                    }
                 }
             })
     }
@@ -202,9 +201,9 @@ function Controller() {
 
 
 
-    this.searchByParams = function (params) {
+    this.searchByParams = function (parameters) {
         controller.toMainPage();
-        var searchParams = router.getParamString(params);
+        var searchParams = router.getParamString(parameters);
         communicator.sendGET(location.pathname + "contacts/" + location.hash.slice(1) + location.search + searchParams)
             .then(response => {
                 return response.json();
@@ -215,7 +214,7 @@ function Controller() {
                 view.listenerManager.addListenersForTable();
                 view.listenerManager.addListenersForSearchForm();
             })
-            .catch(e =>{
+            .catch(e => {
                 view.showErr(e);
                 controller.toMainPage();
             })
@@ -224,9 +223,16 @@ function Controller() {
     this.sendMail = function () {
         var mailParams = view.dataCollector.collectMail();
         communicator.sendPOST(mailParams, location.pathname + "contacts/mail")
-            .then(response =>{
-                view.showOk("send"); 
-                controller.toMainPage();
+            .then(response => {
+                response.text()
+                    .then(text => {
+                        if (text) {
+                            view.showErr(text)
+                        } else {
+                            view.showOk("send");
+                            controller.toMainPage();
+                        }
+                    });
             })
             .catch(error => {
                 view.showErr(e);
@@ -244,11 +250,11 @@ function Controller() {
         view.dataCollector.collectContactData();
         if (contactData.contact) {
             communicator.sendPOST(contactData.contact)
-            .then(response => {
-                view.showOk("added");
-                controller.toMainPage();
-            })
-            .catch(e =>view.showErr(e));
+                .then(response => {
+                    view.showOk("added");
+                    controller.toMainPage();
+                })
+                .catch(e => view.showErr(e));
         }
     }
 
@@ -290,17 +296,23 @@ function Controller() {
 
     this.deleteSelectedContact = function () {
         var contacts = view.dataCollector.collectSelectedContacts();
+        if (contacts.length === 0) {
+            return;
+        }
         communicator.sendDELETE(contacts)
-        .then(response => {
-            view.showOk("deleted");
-            controller.toMainPage();
-        })
-        .catch(e => view.showErr(e));
+            .then(response => {
+                view.showOk("deleted");
+                controller.toMainPage();
+            })
+            .catch(e => view.showErr(e));
     }
 
     //+-
     this.deleteSelectedAttach = function () {
         var attachId = view.dataCollector.collectSelectedAttach();
+        if (attachId.length === 0) {
+            return;
+        }
         attachId.forEach(id => {
             for (var index = contactData.attachs.length - 1; index >= 0; index--) {
                 if (id === contactData.attachs[index].id.toString()) {
@@ -317,6 +329,9 @@ function Controller() {
     //+-
     this.deleteSelectedPhones = function () {
         var phonesId = view.dataCollector.collectSelectedPhones();
+        if (phonesId.length === 0) {
+            return;
+        }
         phonesId.forEach(id => {
             for (var index = contactData.phones.length - 1; index >= 0; index--) {
                 if (id === contactData.phones[index].id.toString()) {

@@ -33,14 +33,14 @@ public class CommandManager {
 
     private  Map<String, Command> commandMap = new HashMap<>();
     public CommandManager(){
-        patterns.put(ONE_CONTACT,".*\\/contacts\\/\\d+");
+        patterns.put(ONE_CONTACT,".*\\/contacts\\/\\d+$");
         //выбивается
-        patterns.put(ADD_CONTACT, ".*\\/contacts\\/add");
-        patterns.put(PHONE, ".*\\/contacts\\/\\d+\\/phone");
-        patterns.put(ATTACH, ".*\\/contacts\\/\\d+\\/attach");
+        patterns.put(ADD_CONTACT, ".*\\/contacts\\/add$");
+        patterns.put(PHONE, ".*\\/contacts\\/\\d+\\/phone$");
+        patterns.put(ATTACH, ".*\\/contacts\\/\\d+\\/attach$");
         patterns.put(DOWNLOAD_ATTACH, ".*\\/contacts\\/attach\\/download\\/.*");
-        patterns.put(PAGE,".*\\/contacts\\/page\\/\\d+");
-        patterns.put(MAIL, ".*\\/contacts\\/mail");
+        patterns.put(PAGE,".*\\/contacts\\/page\\/\\d+$");
+        patterns.put(MAIL, ".*\\/contacts\\/mail$");
 
 
         commandMap.put(null, new NoCommand());

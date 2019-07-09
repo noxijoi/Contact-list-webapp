@@ -192,4 +192,14 @@ public class ContactDao extends AbstractDao<Contact, Integer> {
         }
         return contactList;
     }
+
+    public int getTableSize(Connection connection, String query) throws SQLException {
+        int result = 0;
+        try(Statement statement = connection.createStatement()) {
+            ResultSet rs = statement.executeQuery(query);
+            rs.next();
+            result = rs.getInt("count(*)");
+        }
+        return result;
+    }
 }

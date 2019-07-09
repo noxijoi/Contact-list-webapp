@@ -11,4 +11,8 @@
         <res-auth>Container</res-auth>
     </resource-ref>
 
+    <error-page>
+        <location>/html/error404.html</location>
+    </error-page>
+
 </web-app>

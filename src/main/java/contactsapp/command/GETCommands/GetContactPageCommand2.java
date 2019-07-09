@@ -21,6 +21,7 @@ import java.util.Map;
 
 public class GetContactPageCommand2 implements Command {
     private static final Logger LOGGER = LogManager.getLogger(GetContactPageCommand2.class);
+
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
         String uri = req.getRequestURI();
@@ -37,64 +38,67 @@ public class GetContactPageCommand2 implements Command {
             List<Contact> contacts = new ArrayList<>();
             ContactService service = new ContactService();
             if (params.size() > 1) {
-                String query;
+                String conditionStr;
                 List<String> conditions = new ArrayList<>();
                 params.forEach((key, value) -> {
                     switch (key) {
                         case "firstName":
-                            conditions.add(" f_name LIKE " +"'"+ value[0] + "%' ");
+                            conditions.add(" f_name LIKE " + "'" + value[0] + "%' ");
                             break;
                         case "lastName":
-                            conditions.add(" l_name LIKE " +"'"+ value[0] + "%' ");
+                            conditions.add(" l_name LIKE " + "'" + value[0] + "%' ");
                             break;
                         case "parentName":
-                            conditions.add(" p_name LIKE " +"'"+ value[0] + "%' ");
+                            conditions.add(" p_name LIKE " + "'" + value[0] + "%' ");
                             break;
                         case "dateFrom":
-                            conditions.add(" b_date >= " +"'"+ value[0] + "' ");
+                            conditions.add(" b_date >= " + "'" + value[0] + "' ");
                             break;
                         case "dateTo":
-                            conditions.add(" b_date <= " +"'"+ value[0] + "' ");
+                            conditions.add(" b_date <= " + "'" + value[0] + "' ");
                             break;
                         case "sex":
-                            conditions.add(" sex = " +"'"+ value[0] + "' ");
+                            conditions.add(" sex = " + "'" + value[0] + "' ");
                             break;
                         case "company":
-                            conditions.add(" company LIKE " +"'"+ value[0] + "%' ");
+                            conditions.add(" company LIKE " + "'" + value[0] + "%' ");
                             break;
                         case "website":
-                            conditions.add(" nationality LIKE " +"'"+ value[0] + "%' ");
+                            conditions.add(" nationality LIKE " + "'" + value[0] + "%' ");
                             break;
                         case "email":
-                            conditions.add(" email LIKE " +"'"+ value[0] + "%' ");
+                            conditions.add(" email LIKE " + "'" + value[0] + "%' ");
                             break;
                         case "country":
-                            conditions.add(" country LIKE " +"'"+ value[0] + "%' ");
+                            conditions.add(" country LIKE " + "'" + value[0] + "%' ");
                             break;
                         case "city":
-                            conditions.add(" city LIKE " +"'"+ value[0] + "%' ");
+                            conditions.add(" city LIKE " + "'" + value[0] + "%' ");
                             break;
                         case "street":
-                            conditions.add(" street LIKE " +"'"+ value[0] + "%' ");
+                            conditions.add(" street LIKE " + "'" + value[0] + "%' ");
                             break;
                         case "index":
-                            conditions.add(" index = " +"'"+ value[0] + "%' ");
+                            conditions.add(" index = " + "'" + value[0] + "%' ");
                             break;
                         default:
                             break;
                     }
                 });
 
-                String[] arr =  conditions.toArray(new String[0]);
+                String[] arr = conditions.toArray(new String[0]);
 
-                query = String.join(" AND ", arr);
-                query = "SELECT * FROM contact WHERE " + query;
+                String limit = " LIMIT " + ((pageN - 1) * pageSize) + " , " + pageSize;
+                String order = " ORDER BY id";
+                conditionStr = String.join(" AND ", arr);
+                String query = "SELECT * FROM contact WHERE " + conditionStr + order + limit;
                 contacts = service.executeSelectQuery(query);
 
                 PageDto dto = new PageDto();
                 dto.contacts = contacts;
 
-                PageInfo pageInfo = new PageInfo(1, 1, 1);
+                int count = service.getRecordsNum("SELECT COUNT(*) FROM contact WHERE " + conditionStr);
+                PageInfo pageInfo = new PageInfo(pageN, count, pageSize);
                 dto.pageInfo = pageInfo;
                 String resultJSON = JSONParser.toJson(dto);
                 resp.setCharacterEncoding("UTF-8");
