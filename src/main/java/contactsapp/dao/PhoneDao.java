@@ -1,7 +1,7 @@
 package contactsapp.dao;
 
+import contactsapp.core.entity.Identified;
 import contactsapp.core.entity.Phone;
-import contactsapp.dao.daobilder.DaoBuilder;
 import contactsapp.dao.daobilder.PhoneBuilder;
 
 import java.sql.Connection;

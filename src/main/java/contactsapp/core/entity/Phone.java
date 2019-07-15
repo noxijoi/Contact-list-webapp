@@ -1,8 +1,6 @@
 package contactsapp.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import contactsapp.dao.Identified;
-
 
 
 public class Phone implements Identified<Integer> {

@@ -1,12 +1,10 @@
 package contactsapp.dao;
 
 import contactsapp.core.entity.Attachment;
-import contactsapp.core.entity.Phone;
+import contactsapp.core.entity.Identified;
 import contactsapp.dao.daobilder.AttachmentBuilder;
 
 import java.sql.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 

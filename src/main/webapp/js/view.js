@@ -1,14 +1,22 @@
-
+function fooo(){
+  var prostovarChtobiObnovilos;
+  var ttuttutututtututut="тыгыдыкский конь";
+}
 var view = {
-  renderWorkArea: function (templateName, data) {
-    data = data || {};
-    var elementTo = document.getElementById("main");
-    elementTo.innerHTML = view.generateTemplateHTML(templateName, data);
-  },
   renderSidenav: function (templateName, data) {
     data = data || {};
     var elementTo = document.getElementById("sidenav");
     elementTo.innerHTML = view.generateTemplateHTML(templateName, data);
+  },
+  renderWorkArea: function (templateName, data) {
+    data = data || {};
+    var elementTo = document.getElementById("main");
+    elementTo.innerHTML = view.generateTemplateHTML(templateName, data);
+    fooo();
+  },
+  rerenderSideTables: function () {
+    view.renderSidenav(TEMPLATE_NAMES.phonesAttachBar, contactData);
+    view.listenerManager.addListenersForEditSide();
   },
 
   generateTemplateHTML: function (templateName, data) {
@@ -17,11 +25,7 @@ var view = {
     var templateSource = templateElement.innerHTML;
     return Mustache.to_html(templateSource, data);
   },
-
-  rerenderSideTables: function () {
-    view.renderSidenav(TEMPLATE_NAMES.phonesAttachBar, contactData);
-    view.listenerManager.addListenersForEditSide();
-  },
+  
 
 
   dataCollector: {
@@ -108,11 +112,11 @@ var view = {
       params.lastName = document.getElementById("lName").value;
       params.parentName = document.getElementById("pName").value;
       params.dateFrom = document.getElementById("dateFrom").value;
-      if (!moment(params.dateFrom).isValid()) {
+      if (params.dateFrom && !moment(params.dateFrom).isValid()) {
         view.showErr('incorrect "from" date, use format: "YYYY-MM-DD"')
       }
       params.dateTo = document.getElementById("dateTo").value;
-      if (!moment(params.dateTo).isValid()) {
+      if (params.dateTo && !moment(params.dateTo).isValid()) {
         view.showErr('incorrect "to" date, use format: "YYYY-MM-DD"')
       }
       var sexs = document.querySelector('input[name="sexRadio"]:checked');
@@ -200,6 +204,7 @@ var view = {
       });
     },
 
+    
     addListenersForMailForm: function () {
       var workField = document.getElementById("mail-text");
       var select = document.getElementById("mail-template-select");
@@ -212,7 +217,7 @@ var view = {
       select.addEventListener('change', function () {
         var value = select.value;
         if (value != "NoTemplate") {
-          var templ = templates.find(temp => temp.subject === value);
+          var templ = templates.find(temp => temp.name === value);
 
           workField.value = templ.message;
           workField.disabled = true;
@@ -413,7 +418,7 @@ var view = {
         view.dataCollector.collectSearchParams();
         location.hash = router.startHash;
         controller.contactsPage();
-        
+
       });
     },
   },
@@ -506,6 +511,8 @@ var view = {
   }
 
 };
+
+
 var isKyr = function (str) {
   return /[а-я]/i.test(str);
 }

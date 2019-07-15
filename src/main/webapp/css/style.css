@@ -2,6 +2,9 @@
     margin-top: 100px;
 }
 
+.workspace {
+    width: 100%;
+}
 .tablebuttons {
     position: fixed;
 }

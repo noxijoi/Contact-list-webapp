@@ -1,6 +1,5 @@
 package contactsapp.dao;
 
-import contactsapp.dao.connectionmanager.StupidConnectionManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

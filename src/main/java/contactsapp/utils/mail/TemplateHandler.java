@@ -17,8 +17,8 @@ public class TemplateHandler {
 
 
     public TemplateHandler(){
-        temptlateSubjectMap.put("/autowin", "выигрыш призов");
-        temptlateSubjectMap.put("/invitation", "приглашение на курсы");
+        temptlateSubjectMap.put("/autowin", "you are winner");
+        temptlateSubjectMap.put("/invitation", "invitation");
     }
 
 
@@ -26,7 +26,7 @@ public class TemplateHandler {
     public String generateMessageForContact(String templateName, Contact contact){
         STGroup group = new STGroupFile(TemplateHandler.class.getClassLoader().getResource(templateFile).getPath());
         ST st = group.getInstanceOf(templateName);
-        st.add("name", contact.getFullName());
+        st.add("contact", contact);
         return st.render();
     }
 

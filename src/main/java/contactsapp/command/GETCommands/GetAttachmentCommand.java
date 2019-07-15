@@ -34,6 +34,7 @@ public class GetAttachmentCommand implements Command {
             AttachmentService service = new AttachmentService();
             List<Attachment> attachments = service.getByOwnerId(contactN);
             Attachment attachment = attachments.get(attachN);
+            resp.setCharacterEncoding("utf-8");
         } catch (IOException e) {
             LOGGER.error(e);
         }

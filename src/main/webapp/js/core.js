@@ -96,8 +96,9 @@ function Controller() {
         for (const key in this.hashPatterns) {
             if (this.hashPatterns[key].test(hash)) {
                 return this.getFunction(key)();
-            }
+            } 
         }
+        view.showErr("incorrect link");
     }
 
     this.contactsPage = function () {

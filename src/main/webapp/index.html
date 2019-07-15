@@ -30,7 +30,7 @@
     </div>
 
 
-    <div class="row workspace">
+    <div class="row workspace col-12">
 
         <div class="col-8" id="main"></div>
         <div class="col-4 sidenav" id="sidenav"></div>
@@ -149,7 +149,7 @@
         <div class="container-fluid col-7">
             <!--Таблица-->
             <table id="main-table" class="table table-striped table-bordered justify-content-center">
-                <caption class="caption">Всего {{pageInfo.recordsN}} записей, {{pageInfo.pageN}} страниц</caption>
+                <caption class="caption">Всего {{pageInfo.recordsN}} записей,  страницa {{pageInfo.currentPage}} из {{pageInfo.pageN}} </caption>
                 <tr class="table-header">
                     <th></th>
                     <th scope="col">Имя</th>
@@ -177,7 +177,7 @@
         </div>
         <!--кнопки-->
         <div class="col-1">
-                <div class="button-group-vertical col-1 tablebuttons" role="group" aria-label="Basic example">
+                <div class="btn-group-vertical tablebuttons" aria-label="Basic example">
                         <button class="add-button btn btn-outline-primary">
                             <a href="#add">
                                 <img src="img/add.png" alt="add">
@@ -221,7 +221,7 @@
                 </div>
                 <div class="form-group">
                     <label for="bDateSearch" class="col col-form-label">Дата рождения</label>
-                    <div class="input-group" id="bDateSearch">
+                    <div class="input-group col-12" id="bDateSearch">
                         <input type="date" class="form-control" id="dateFrom" placeholder="От" value="{{dateFrom}}">
                         <input type="date" class="form-control" id="dateTo" placeholder="До" value="{{dateTo}}">
                     </div>
@@ -232,7 +232,7 @@
                         <input type="text" class="form-control" id="company-input" value="{{company}}" maxlength="100">
                     </div>
             </div>
-                <div class="form-group">
+                <div class="form-group col-12">
                         <label  class="col col-form-label">Пол</label>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="sexRadio" id="maleRadio" value="MALE">
@@ -365,16 +365,16 @@
                 <div class="form-group">
                         <h3 class="h3">Телефонный номер</h3>
                         <form>
-                            <div class="form-row">
-                                <div class="form-group col-2">
+                            <div class="form-row form-inline">
+                                <div class="form-group ">
                                     <label for="country-code-input">Код страны*</label>
-                                    <input type="text" class="form-cotrol"  id="country-code-input" value="{{countryCode}}" required maxlength="5">
+                                    <input type="text" class="form-control"  id="country-code-input" value="{{countryCode}}" required maxlength="5">
                                 </div>
-                                <div class="form-group col-2">
+                                <div class="form-group ">
                                     <label for="operator-code-input">Код оператора*</label>
                                     <input type="text" class="form-control" id="operator-code-input" value="{{operatorCode}}" required maxlength="5">
                                 </div>
-                                <div class="form-group col-2">
+                                <div class="form-group ">
                                     <label for="number-input">Номер*</label>
                                     <input type="text" class="form-control" id="number-input" value="{{number}}" required maxlength="10">
                                 </div>
@@ -455,7 +455,7 @@
                     <select id="mail-template-select">
                         <option value="NoTemplate" checked>Своё сообщение</option>
                         {{#templates}}
-                            <option value="{{subject}}">{{subject}}
+                            <option value="{{name}}">{{subject}}
                         {{/templates}}
                     </select>
                 </div>

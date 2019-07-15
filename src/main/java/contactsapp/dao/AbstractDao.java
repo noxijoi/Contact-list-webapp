@@ -1,6 +1,7 @@
 package contactsapp.dao;
 
 
+import contactsapp.core.entity.Identified;
 import contactsapp.dao.daobilder.DaoBuilder;
 
 import java.sql.*;
@@ -64,16 +65,7 @@ public abstract class AbstractDao<T extends Identified,PK extends Number> implem
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        query = getSelectAllQuery() + " WHERE id = last_insert_id();";
-        try(PreparedStatement statement = connection.prepareStatement(query)){
-            ResultSet rs = statement.executeQuery();
-            rs.next();
-            result = builder.buildSingle(rs);
-            if(result == null){
-                throw  new DaoException("Can't find inserted record");
-            }
-        }
-        return result;
+        return null;
     }
 
     @Override
